@@ -1,6 +1,6 @@
 # Django Practice Assessment
 
-__Name:__
+__Name: 
 
 __Computing ID:__
 
