@@ -1,4 +1,4 @@
-# Django Practice Assessment
+#CS3240 TutorMe Repo
 
 __Name: 
 
