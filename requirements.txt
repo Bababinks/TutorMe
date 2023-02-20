@@ -6,4 +6,4 @@ psycopg2-binary==2.9.5
 sqlparse==0.4.3
 tzdata==2022.7
 whitenoise==6.3.0
-django-bootstrap5==3.1.1
+django-bootstrap-v5==1.0.11
