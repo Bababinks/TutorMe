@@ -91,11 +91,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'practice',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': '127.0.0.1',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd1l6a9nnduu54',
+        'USER': 'uxubwjrscdpgxt',
+        'PASSWORD': '881faa7ca807f228e2457e90876acb05e3d2e683db469958acb160abb427455b',
+        'HOST': 'ec2-44-197-128-108.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -197,7 +197,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-SITE_ID = 3
+SITE_ID = 4
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
