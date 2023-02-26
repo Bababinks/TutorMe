@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tutor Check</title>
+</head>
+<body>
+    <h1>Are you a tutor?</h1>
+    <button id="yes-btn">Yes</button>
+    <button id="no-btn">No</button>
+
+    <script>
+        var yesBtn = document.getElementById('yes-btn');
+        var noBtn = document.getElementById('no-btn');
+
+        yesBtn.addEventListener('click', function() {
+            // redirect to tutor page
+            window.location.href = '/tutor/';
+        });
+
+        noBtn.addEventListener('click', function() {
+            // redirect to student page
+            window.location.href = '/student/';
+        });
+    </script>
+</body>
+</html>
