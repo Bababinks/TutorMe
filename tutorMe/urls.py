@@ -9,7 +9,7 @@ urlpatterns = [
     path('', views.Index.as_view(), name='index'),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
+    path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/',views.tutor_check),
-
 
 ]
