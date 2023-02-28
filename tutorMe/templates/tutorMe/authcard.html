@@ -1,5 +1,8 @@
 {% load static %}
 {% load socialaccount %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
 <link href="{% static 'tutorMe/auth.css' %}" rel="stylesheet">
 
@@ -10,17 +13,18 @@
         </div>
         <div class="form-group col">
             <div class="row-xs-3 p-3">
-                <button href="{% provider_login_url 'google' %}" aria-pressed="true" class="btn btn-outline-primary rounded-pill p-2" type="submit">
+                <a aria-pressed="true" class="btn btn-outline-primary rounded-pill p-2"
+                   href="{% provider_login_url 'google' %}" type="submit">
                     <text> &emsp;</text>
                     <img alt=" &emsp;  Sign in with Google &emsp;" class="img-fluid"
                          src="/static/tutorMe/images/google_G.png">
                     <text> &emsp; Sign in with Google &emsp; &emsp;</text>
-                </button>
+                </a>
             </div>
             <div class="row-xs-3 p-3">
-                <div class="divider"></div>
-                <div class="text-nowrap divider-text font-weight-bold"> or</div>
-                <div class="divider"></div>
+                    <div class="divider"></div>
+                    <div class="text-nowrap divider-text font-weight-bold"> or</div>
+                    <div class="divider"></div>
             </div>
             <div class="row-xs-3 p-3">
                 <input aria-label="E-mail" class="form-control" placeholder="E-mail" type="text">
