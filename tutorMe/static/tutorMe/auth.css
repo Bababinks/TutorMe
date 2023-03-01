@@ -36,3 +36,13 @@ body {
     padding-bottom: 1.2em;
     font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif
 }
+
+.select{
+    transition: background-image .25s;
+}
+
+
+.select:hover{
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
