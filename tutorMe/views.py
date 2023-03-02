@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
@@ -6,6 +8,7 @@ from django.views.generic import TemplateView
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe.models import tutorMeUser
+import requests
 
 
 class Index(TemplateView):
@@ -41,5 +44,13 @@ def TutorView(request):
     newuser.email = request.user.email
     newuser.is_tutor = True
     newuser.save()
+    total_classes = []
 
-    return render(request, 'tutorMeTutor.html')
+    response = requests.get(
+        "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1228&page=1&instructor_name=Horton").json()
+    for aClass in response:
+        word = aClass["subject_descr"]
+        total_classes.append(word)
+        print(word)
+
+    return render(request, 'tutorMeTutor.html', {'response', total_classes})

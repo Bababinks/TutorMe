@@ -2,7 +2,6 @@ from django.urls import path
 from django.urls import path, include
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
-
 from . import views
 
 urlpatterns = [
@@ -11,5 +10,4 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
     path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/',views.tutor_check),
-
 ]
