@@ -48,9 +48,5 @@ def TutorView(request):
 
     response = requests.get(
         "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1228&page=1&instructor_name=Horton").json()
-    for aClass in response:
-        word = aClass["subject_descr"]
-        total_classes.append(word)
-        print(word)
-
-    return render(request, 'tutorMeTutor.html', {'response', total_classes})
+    data_dict = json.loads(response)
+    return render(request, 'tutorMeTutor.html', data_dict)
