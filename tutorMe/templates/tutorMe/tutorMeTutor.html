@@ -17,8 +17,11 @@
 {% bootstrap_messages %}
 {% include "nav.html" %}
 	<h1>Welcome to the Tutor page</h1>
-
-
+	    <strong> List of all teachers </strong>
+        {% for i in response %}
+        {{ i }}
+        {% endfor %}
+</script>
 
 {% include "footer.html" %}
 
