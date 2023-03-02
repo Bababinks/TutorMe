@@ -12,12 +12,16 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+{% load static %}
+
+<link href="{% static 'tutorMe/auth.css' %}" rel="stylesheet">
+
 
 
 {% bootstrap_messages %}
 {% include "nav.html" %}
-	<h1>We need to edit this to be the log in page</h1>
 
+{% include "authcard.html" %}
 
 
 {% include "footer.html" %}
