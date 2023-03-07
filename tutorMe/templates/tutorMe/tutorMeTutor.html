@@ -15,17 +15,9 @@
 
 
 {% bootstrap_messages %}
-{% include "navTutor.html" %}
+{% include "nav.html" %}
 	<h1>Welcome to the Tutor page</h1>
-<form class="d-flex" method="POST" action="{% url 'Results' %}">
-<div class="input-group mb-2">
-    {% csrf_token %}
-  <input type="text" class="form-control" name="data" placeholder="Search for a class" aria-label="Search for a class" aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
-  </div>
-</div>
-    </form>
+
 
 
 {% include "footer.html" %}
