@@ -1,22 +1,19 @@
-<!DOCTYPE Html>
-<html>
-<title>Welcome Tutor</title>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-
-
-</head>
-
-
-<body>
-{% load bootstrap5 %}
+    <meta charset="UTF-8">
+    <title>Search Results for</title>
+    {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
-
-
+{% load static %}
+</head>
+<body>
 {% bootstrap_messages %}
 {% include "navTutor.html" %}
-	<h1>Welcome to the Tutor page</h1>
+{% include "footer.html" %}
+
 <form class="d-flex" method="POST" action="{% url 'Results' %}">
 <div class="input-group mb-2">
     {% csrf_token %}
@@ -26,11 +23,11 @@
   </div>
 </div>
     </form>
-
-
-{% include "footer.html" %}
+{% if query %}
+<h1>Search Results for {{query}}  </h1>
+{{junaid}}
+{% endif %}
 
 
 </body>
-
 </html>
