@@ -2,6 +2,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
+import requests
+
+
 
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
@@ -43,3 +46,17 @@ def TutorView(request):
     newuser.save()
 
     return render(request, 'tutorMeTutor.html')
+
+
+def searchResults(request):
+    if request.method == "POST":
+        url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1228&page=1&instructor_name=Horton"
+
+        response = requests.get(url)
+
+        data_json = response.json()
+        query = request.POST.get("data", "")
+        return render(request, 'searchResults.html', {"query": query,"junaid": data_json
+                                                      })
+    else:
+        return render(request, 'searchResults.html')
