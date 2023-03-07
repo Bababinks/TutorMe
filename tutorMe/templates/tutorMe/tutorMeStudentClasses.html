@@ -1,6 +1,6 @@
 <!DOCTYPE Html>
 <html>
-<title>Welcome Tutor</title>
+<title>Welcome Student</title>
 <head>
 
 
@@ -16,21 +16,19 @@
 
 {% bootstrap_messages %}
 {% include "nav.html" %}
-	<h1>Welcome to the Tutor page</h1>
-	    <strong> Choose the Subject You'd Like to Tutor </strong>
-
-		<form action="tutor/classes" form method="POST" class="form">
+	    <strong> Choose the Class You'd Like to find a Tutor for </strong>
+		<form action="/tutorMe/student" form method="POST" class="form">
     			{% csrf_token %}
 					<div class="form-group">
 						<select class="form-control" name="choice">
-						<option disabled="true" selected> Choose Subject</option>
+						<option disabled="true" selected> Choose Class</option>
 						<ul>
-							{%for i in items%}
+							{%for i in classes%}
 								<option>{{i}}</option>
 							{% endfor %}
 						</ul>
 						</select>
-						<input type="submit" value="submit">
+						<input type="submit" value="Submit">
 					</div>
 			</form>
 
