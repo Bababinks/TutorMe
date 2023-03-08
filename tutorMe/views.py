@@ -89,16 +89,16 @@ def Student_Classes_List_View(request):
 
 
 def Tutor_Classes_List_View(request):
-    class_choice = request.POST.get("class_choice")
+    class_choice = request.POST.get("class_choice","")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
-    if not TutorClasses.objects.filter(name=class_choice, tutor_id=cur_user).exists():
-        newclass = TutorClasses();
-        newclass.tutor = cur_user
-        mnemonic = request.session['0']
-        newclass.mnemonic = mnemonic
-        newclass.name = class_choice
-        newclass.save()
-    #if class_choice!="":
+    if class_choice!="":
+        if not TutorClasses.objects.filter(name=class_choice, tutor_id=cur_user).exists():
+            newclass = TutorClasses();
+            newclass.tutor = cur_user
+            mnemonic = request.session['0']
+            newclass.mnemonic = mnemonic
+            newclass.name = class_choice
+            newclass.save()
         #mnemonic = request.session['0']
 
         #if not TutorClasses.objects.filter(name=class_choice).exists():
