@@ -33,6 +33,7 @@
     {% endfor %}
 
 <form action="/tutorMe/student" method="get">
+    {% csrf_token %}
     <div class="position-absolute start-0">
           <button type="submit" class="btn btn-secondary">Go back to Subjects</button>
     </div>

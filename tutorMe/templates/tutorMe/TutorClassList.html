@@ -17,24 +17,61 @@
 {% bootstrap_messages %}
 {% include "nav.html" %}
 	    <strong> Classes you are currently tutoring </strong>
+{% if not list %}
 
-{% for class in list %}
-        <h4>
-            <div class="text-info">
-                <li>
-                    {{class}} <br>
-                </li>
+<!--If user does not have any classes that they are tutoring-->
+
+<h1>You are Not Currently Tutoring any classes.</h1>
+<p class="fw-bolder">Click <a href="/tutorMe/tutor">Here</a> to sign up for classes to tutor</p>
+
+{%else%}
+
+<div class="list-group p-3" style="margin-top:20px;">
+  {% for class in list %}
+    <div class="p-3">
+      <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{class}}</h5>
+          <!-- Button trigger modal -->
+          <small>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ forloop.counter }}">Remove</button>
+          </small>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModal{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ forloop.counter }}" aria-hidden="true" data-bs-backdrop="false">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Remove {{class}}</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <h6 style="color:black">Are you sure you want to do this? This action is undoable.</h6>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
             </div>
-        </h4>
-    {% endfor %}
+          </div>
+        </div>
+      </strong>
+    </div>
+  {% endfor %}
+</div>
+
 
 <form action="/tutorMe/tutor" method="get">
-    <div class="position-absolute start-0">
+    {% csrf_token %}
+    <div class="text-center">
           <button type="submit" class="btn btn-secondary">Go back to Subjects</button>
     </div>
 </form>
+{%endif%}
 
-</script>
+
+
+
 
 {% include "footer.html" %}
 
