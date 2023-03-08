@@ -121,17 +121,9 @@ def Tutor_Classes_List_View(request):
     return render(request, 'TutorClassList.html', {'list': list})
 
 
-# def TutoredClasses(request):
-#     cur_user = tutorMeUser.objects.get(email=request.user.email)
-#
-#     query = TutorClasses.objects.filter(tutor=cur_user)
-#
-#     list = []
-#     for i in query:
-#         curmneonic = i.mnemonic
-#         curname = i.name
-#         curmneonic += " "
-#         curmneonic += curname
-#         list.append(curmneonic)
-#
-#     return render(request, 'TutorClassList.html', {'list': list})
+def deleteClass(request,Class):
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+
+    TutorClasses.objects.filter(name=Class, tutor_id=cur_user).delete()
+
+    return Tutor_Classes_List_View(request)
