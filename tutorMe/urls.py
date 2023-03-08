@@ -10,9 +10,14 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
     path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/', views.tutor_check),
+
     path('student', views.StudentView),
     path('tutor', views.TutorView),
+
     path('student/classes', views.Student_Classes_View),
-    path('tutor/classes', views.Tutor_Classes_View)
+    path('tutor/classes', views.Tutor_Classes_View),
+
+    path('student/classes/list', views.Student_Classes_List_View),
+    path('tutor/classes/list', views.Tutor_Classes_List_View)
 
 ]

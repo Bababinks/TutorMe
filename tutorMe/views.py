@@ -1,14 +1,14 @@
+from django.db.models import Model
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 
-
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects
-from tutorMe.models import tutorMeUser
+from tutorMe.models import tutorMeUser, TutorClasses
 import requests
 
 
@@ -23,7 +23,6 @@ def google_login(request):
 
 
 def tutor_check(request):
-
     if tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
         return redirect('/tutorMe/student')
 
@@ -38,20 +37,22 @@ def StudentView(request):
         newuser = tutorMeUser();
         newuser.email = request.user.email
         newuser.is_tutor = False
+        newuser.first_name = request.user.first_name
+        newuser.last_name = request.user.last_name
         newuser.save()
 
     items = get_JSON_Subjects("2023", "Spring");
-
 
     return render(request, 'tutorMeStudent.html', {'items': items})
 
 
 def TutorView(request):
-
     if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=True).exists():
         newuser = tutorMeUser();
         newuser.email = request.user.email
         newuser.is_tutor = True
+        newuser.first_name = request.user.first_name
+        newuser.last_name = request.user.last_name
         newuser.save()
 
     items = get_JSON_Subjects("2023", "Spring");
@@ -63,12 +64,50 @@ def Student_Classes_View(request):
     classes = Json.get_classes(choice, "2023", "Spring")
     return render(request, 'tutorMeStudentClasses.html', {'classes': classes})
 
+
 def Tutor_Classes_View(request):
     choice = request.POST.get("choice")
     classes = Json.get_classes(choice, "2023", "Spring")
 
+    request.session[0] = choice
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
+def Student_Classes_List_View(request):
+    class_choice = request.POST.get("class_choice")
+    query = TutorClasses.objects.filter(name=class_choice)
+
+    list = []
+    for i in query:
+        tutor = i.tutor
+        first = tutor.first_name
+        last = tutor.last_name
+        full_name = first + " " + last
+        list.append(full_name)
+
+    return render(request, 'StudentClassList.html', {'list': list})
+
+
+def Tutor_Classes_List_View(request):
+    class_choice = request.POST.get("class_choice")
+    mnemonic = request.session['0']
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    if not TutorClasses.objects.filter(name=class_choice).exists():
+        newclass = TutorClasses();
+        newclass.tutor = cur_user
+        newclass.mnemonic = mnemonic
+        newclass.name = class_choice
+        newclass.save()
+
+    query = TutorClasses.objects.filter(tutor=cur_user)
+
+    list = []
+    for i in query:
+        curmneonic = i.mnemonic
+        curname = i.name
+        curmneonic += " "
+        curmneonic += curname
+        list.append(curmneonic)
 
 
 
+    return render(request, 'TutorClassList.html', {'list': list})

@@ -17,10 +17,10 @@
 {% bootstrap_messages %}
 {% include "nav.html" %}
 	    <strong> Choose the Class You'd Like to find a Tutor for </strong>
-		<form action="/tutorMe/student" form method="POST" class="form">
+		<form action="/tutorMe/student/classes/list" form method="POST" class="form">
     			{% csrf_token %}
 					<div class="form-group">
-						<select class="form-control" name="choice">
+						<select class="form-control" name="class_choice">
 						<option disabled="true" selected> Choose Class</option>
 						<ul>
 							{%for i in classes%}
