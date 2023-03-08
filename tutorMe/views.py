@@ -92,10 +92,10 @@ def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice","")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if class_choice!="":
-        if not TutorClasses.objects.filter(name=class_choice, tutor=cur_user).exists():
-            newclass = TutorClasses();
+        mnemonic = request.session['0']
+        if not TutorClasses.objects.filter(name=class_choice, tutor=cur_user, mnemonic=mnemonic).exists():
+            newclass = TutorClasses()
             newclass.tutor = cur_user
-            mnemonic = request.session['0']
             newclass.mnemonic = mnemonic
             newclass.name = class_choice
             newclass.save()
@@ -124,8 +124,9 @@ def Tutor_Classes_List_View(request):
 def deleteClass(request,Class):
     cur_user = tutorMeUser.objects.get(email=request.user.email)
 
+    mnemonic = Class.split(' ', 1)[0]
     namewithoutmneonic = Class.split(' ', 1)[1]
-    query = TutorClasses.objects.filter(name=namewithoutmneonic, tutor_id=cur_user)
+    query = TutorClasses.objects.filter(name=namewithoutmneonic, tutor_id=cur_user, mnemonic=mnemonic)
     query.delete()
 
     return Tutor_Classes_List_View(request)
