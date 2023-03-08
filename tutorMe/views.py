@@ -91,7 +91,7 @@ def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice")
     mnemonic = request.session['0']
     cur_user = tutorMeUser.objects.get(email=request.user.email)
-    if not TutorClasses.objects.filter(name=class_choice).exists():
+    if not TutorClasses.objects.filter(name=class_choice, tutor_id=cur_user).exists():
         newclass = TutorClasses();
         newclass.tutor = cur_user
         newclass.mnemonic = mnemonic
