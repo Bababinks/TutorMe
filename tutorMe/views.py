@@ -72,6 +72,7 @@ def Tutor_Classes_View(request):
     request.session[0] = choice
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
+
 def Student_Classes_List_View(request):
     class_choice = request.POST.get("class_choice")
     query = TutorClasses.objects.filter(name=class_choice)
@@ -89,14 +90,23 @@ def Student_Classes_List_View(request):
 
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice")
-    mnemonic = request.session['0']
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if not TutorClasses.objects.filter(name=class_choice, tutor_id=cur_user).exists():
         newclass = TutorClasses();
         newclass.tutor = cur_user
+        mnemonic = request.session['0']
         newclass.mnemonic = mnemonic
         newclass.name = class_choice
         newclass.save()
+    #if class_choice!="":
+        #mnemonic = request.session['0']
+
+        #if not TutorClasses.objects.filter(name=class_choice).exists():
+            #newclass = TutorClasses();
+            #newclass.tutor = cur_user
+            #newclass.mnemonic = mnemonic
+            #newclass.name = class_choice
+            #newclass.save()
 
     query = TutorClasses.objects.filter(tutor=cur_user)
 
@@ -108,6 +118,20 @@ def Tutor_Classes_List_View(request):
         curmneonic += curname
         list.append(curmneonic)
 
-
-
     return render(request, 'TutorClassList.html', {'list': list})
+
+
+# def TutoredClasses(request):
+#     cur_user = tutorMeUser.objects.get(email=request.user.email)
+#
+#     query = TutorClasses.objects.filter(tutor=cur_user)
+#
+#     list = []
+#     for i in query:
+#         curmneonic = i.mnemonic
+#         curname = i.name
+#         curmneonic += " "
+#         curmneonic += curname
+#         list.append(curmneonic)
+#
+#     return render(request, 'TutorClassList.html', {'list': list})

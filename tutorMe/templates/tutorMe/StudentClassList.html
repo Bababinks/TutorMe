@@ -15,9 +15,13 @@
 
 
 {% bootstrap_messages %}
-{% include "nav.html" %}
+{% include "navStudent.html" %}
 	    <strong> Tutors who are teaching the requested class </strong>
 
+{% if not list  %}
+
+<h1>No Tutors Found!</h1>
+{% endif %}
 {% for class in list %}
         <h4>
             <div class="text-info">
@@ -29,6 +33,7 @@
     {% endfor %}
 
 <form action="/tutorMe/student" method="get">
+    {% csrf_token %}
     <div class="position-absolute start-0">
           <button type="submit" class="btn btn-secondary">Go back to Subjects</button>
     </div>
