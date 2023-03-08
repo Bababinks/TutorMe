@@ -1,0 +1,44 @@
+<!DOCTYPE Html>
+<html>
+<title>Welcome Tutor</title>
+<head>
+
+
+</head>
+
+
+<body>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+
+{% bootstrap_messages %}
+{% include "nav.html" %}
+	    <strong> Tutors who are teaching the requested class </strong>
+
+{% for class in list %}
+        <h4>
+            <div class="text-info">
+                <li>
+                    {{class}} <br>
+                </li>
+            </div>
+        </h4>
+    {% endfor %}
+
+<form action="/tutorMe/student" method="get">
+    <div class="position-absolute start-0">
+          <button type="submit" class="btn btn-secondary">Go back to Subjects</button>
+    </div>
+</form>
+
+</script>
+
+{% include "footer.html" %}
+
+
+</body>
+
+</html>
