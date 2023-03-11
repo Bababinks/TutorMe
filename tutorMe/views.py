@@ -69,6 +69,18 @@ def Tutor_Classes_View(request):
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
 
+
+@login_required
+@user_passes_test(is_tutor)
+def deleteClass(request,Class):
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+
+    mnemonic = Class.split(' ', 1)[0]
+    namewithoutmneonic = Class.split(' ', 1)[1]
+    query = TutorClasses.objects.filter(name=namewithoutmneonic, tutor_id=cur_user, mnemonic=mnemonic)
+    query.delete()
+
+    return Tutor_Classes_List_View(request)
 @login_required
 @user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
