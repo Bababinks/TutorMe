@@ -61,13 +61,13 @@ def TutorView(request):
 
 def Student_Classes_View(request):
     choice = request.POST.get("choice")
-    classes = Json.get_classes(choice, "2023", "Spring")
+    classes = Json.get_classes(choice, "2023", "Fall")
     return render(request, 'tutorMeStudentClasses.html', {'classes': classes})
 
 
 def Tutor_Classes_View(request):
     choice = request.POST.get("choice")
-    classes = Json.get_classes(choice, "2023", "Spring")
+    classes = Json.get_classes(choice, "2023", "Fall")
 
     request.session[0] = choice
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
@@ -130,3 +130,5 @@ def deleteClass(request,Class):
     query.delete()
 
     return Tutor_Classes_List_View(request)
+
+
