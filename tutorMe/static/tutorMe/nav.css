@@ -1,4 +1,23 @@
 
+.nav-link:link{
+    color:black;
+}
+
+.nav-link:visited{
+    color:black;
+    font-weight:bold;
+}
+
+.nav-link:active{
+    color:#38b6ff;
+    font-weight:bold;
+}
+
+.nav-link:hover{
+    color:#38b6ff;
+    font-weight:bold;
+}
+
 .divider {
     width: 30em;
     height: 0.01vw;
@@ -26,10 +45,6 @@
     margin-top: 10vw;
     transform: translate(-50%,-50%);
     text-align: center;
-}
-
-body {
-    background: center white url("images/login_background.png") no-repeat;
 }
 
 .title {
