@@ -24,5 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('student/', views.StudentView),
     path('tutor/', views.TutorView),
+    path('accounts/login/', RedirectView.as_view(url='/tutorMe/accounts/google/login/')),
 
 ]
