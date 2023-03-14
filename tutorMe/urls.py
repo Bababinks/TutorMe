@@ -13,7 +13,6 @@ urlpatterns = [
 
     path('student', views.StudentView),
     path('tutor', views.TutorView),
-    path('delete/<str:Class>/', views.deleteClass, name='delete_item'),
 
     path('student/classes', views.Student_Classes_View),
     path('tutor/classes', views.Tutor_Classes_View),
