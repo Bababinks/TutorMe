@@ -20,4 +20,13 @@ class TutorClasses(models.Model):
     mnemonic = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
 
+class Course(models.Model):
+    course_name = models.CharField(default="", max_length=255)
+    referenceLink =models.CharField(default="", max_length=100000)
+    descr= models.CharField(default="", max_length=1000)
+    Subject=models.CharField(default="",max_length=4)
+
+
+
+
 
