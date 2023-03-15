@@ -12,10 +12,22 @@ class userTest(TestCase):
         user.save()
         return user
 
-    def test_user(self):
+    def test_userCreated(self):
         x = self.create_user()
         self.assertTrue(isinstance(x, tutorMeUser))
+
+    def test_userStudent(self):
+        x = self.create_user()
         self.assertEqual(x.is_tutor, False)
+
+    def test_userTutorAttributes(self):
+        x = self.create_user()
+        x = tutorMeUser(email='1234@gmail.com', first_name='john', last_name='doe', is_tutor=True)
+        self.assertEqual(x.is_tutor, True)
+        self.assertEqual(x.email, '1234@gmail.com')
+        self.assertEqual(x.first_name, 'john')
+        self.assertEqual(x.last_name, 'doe')
+
 
 # class viewsTest(TestCase):
 #
