@@ -94,6 +94,9 @@ def get_classes(subject_name, year, semester):
 
 #print(get_JSON_Subjects("2023", "Spring"))
 
+
+#used this library  from this question:https://stackoverflow.com/questions/17388213/find-the-similarity-metric-between-two-strings
+
 def Searchereds(keyword):
     ClassesActual=[]
     ClassInfo=[]
