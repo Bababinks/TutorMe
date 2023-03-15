@@ -1,45 +1,34 @@
 import requests
-from tutorMe.models import tutorMeUser, Course
+from tutorMe.models import Course
+import time
 def Searcher():
     data = 1
-    page_num = 1
+    page_num = 84
     year ="23"
-
     semester = "2"
-    if semester == "Fall":
-        semester = "8"
-    Classes = []
-    class_filter = set()
-
     relevant_attrs = ['catalog_nbr', 'descr', 'subject']
-    while data and page_num<=5:
+    while data:
+        print(page_num)
         page_num_str = str(page_num)
-
         url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1"
         year_sem_num = year + semester
         url += year_sem_num
-
         url += "&page="
-
         url += page_num_str
-        r = requests.get(url)
+        try:
+            r = requests.get(url)
+        except:
+            print("at page number"+str(page_num))
+            time.sleep(5)
+            continue
         data = r.json()
         for index in data :
-            if not Course.objects.filter(course_name=index["descr"]).exist():
+            if not Course.objects.filter(course_name=index["descr"]).exists(): #if updating databse you should have a set and see if in set and remove this line
                 newCourse=Course()
                 newCourse.course_name=index["descr"]
                 newCourse.Subject=index["subject"]
-
+                newCourse.course_number=index["catalog_nbr"]
                 newCourse.referenceLink=url+"&class_nbr="+str(index["class_nbr"])
-                class_filter.add(index["descr"])
-                index['relevant_attrs'] = [index[attr] for attr in relevant_attrs]
-                index['relevant_attrs'].append(url+"&class_nbr="+str(index["class_nbr"]))
-                Classes.append(index['relevant_attrs'])
-
-        # filter out items with a low relevance score
-
-
+                newCourse.save()
         page_num += 1
-    return Classes
-
-print(Searcher("AFRICAN"))
+print(Searcher())
