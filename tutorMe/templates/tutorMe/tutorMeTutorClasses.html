@@ -26,10 +26,10 @@
             <form action="/tutorMe/tutor/classes/list" class="form" method="POST">
                 <div class="card" style="max-width: 50%">
                     <div class="card-header">
-                        Subject: {{result}}
+                        {{result.0}}{{result.2}} : {{result.1}}
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{result.course_name}} {{result.course_number}}</h5>
+                        <h5 class="card-title">{{result.1}} {{result.2}}</h5>
                         <input class="btn btn-primary" href="/tutorMe/tutor/classes/list" style="font-weight: bold"
                                type="submit" value="Add">
                     </div>
