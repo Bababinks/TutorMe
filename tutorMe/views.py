@@ -7,7 +7,7 @@ from django.views.generic import TemplateView
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
-from tutorMe.Json import get_JSON_Subjects
+from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses
 import requests
 
@@ -93,9 +93,9 @@ def searchView(request):
     searchResults = []
 
     if searchQuery:
-        mnemonic = request.session['0']
-
-
+        searchResults = Searchereds(searchQuery)
+    print(searchResults)
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
 
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")

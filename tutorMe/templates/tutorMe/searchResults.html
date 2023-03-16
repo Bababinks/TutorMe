@@ -6,15 +6,18 @@
 {% bootstrap_messages %}
 {% include "nav.html" %}
 
-{% if not list %}
-
-<!--If user does not have any classes that they are tutoring-->
+{% if not searchResults %}
 
 <h1>No classes match your current search!</h1>
 
 {%else%}
 
 <div class="list-group p-3">
-  {% for result in list %}
-    <
+    {% for result in searchResults %}
+    <div class="card">
+        <h5 class="card-title">{% result.course_name %} {% result.course_number %}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{% result.Subject %}</h6>
+    </div>
+    {% endfor %}
 </div>
+{% endif %}
