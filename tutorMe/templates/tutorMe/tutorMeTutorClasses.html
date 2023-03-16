@@ -1,12 +1,12 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-
 {% bootstrap_messages %}
+
+
 {% include "nav.html" %}
 
-<form class="form" method="POST">
+<form class="form align-center" method="POST">
     {% csrf_token %}
     <div class="form-group mb-3 p-5">
         <label class="form-label" for="searchBar">Find the class you want to tutor</label>
@@ -23,15 +23,18 @@
         {%else%}
         <div class="list-group p-3">
             {% for result in searchResults %}
-            <div class="card">
-                <div class="card-header">
-                    {{result}}
+            <form action="/tutorMe/tutor/classes/list" class="form" method="POST">
+                <div class="card" style="max-width: 50%">
+                    <div class="card-header">
+                        Subject: {{result}}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{result.course_name}} {{result.course_number}}</h5>
+                        <input class="btn btn-primary" href="/tutorMe/tutor/classes/list" style="font-weight: bold"
+                               type="submit" value="Add">
+                    </div>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{result}}</h5>
-                    <a href="/tutorMe/tutor/classes/list" style="font-weight: bold" class="btn btn-primary"> Add </a>
-                </div>
-            </div>
+            </form>
             {% endfor %}
         </div>
         {% endif %}

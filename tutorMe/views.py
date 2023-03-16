@@ -48,7 +48,7 @@ def StudentView(request):
 
 def TutorView(request):
     if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=True).exists():
-        newuser = tutorMeUser();
+        newuser = tutorMeUser()
         newuser.email = request.user.email
         newuser.is_tutor = True
         newuser.first_name = request.user.first_name
@@ -89,13 +89,16 @@ def Student_Classes_List_View(request):
 
 
 def searchView(request):
-    searchQuery = request.POST.get("searchBar")
-    searchResults = []
+    if request.method == 'POST':
+        searchQuery = request.POST.get("searchBar")
 
-    if searchQuery:
-        searchResults = Searchereds(searchQuery)
-    print(searchResults)
+        if searchQuery:
+            searchResults = Searchereds(searchQuery)
+        else:
+            searchResults = []
+
     return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+
 
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")
