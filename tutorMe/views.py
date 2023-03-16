@@ -88,10 +88,19 @@ def Student_Classes_List_View(request):
     return render(request, 'StudentClassList.html', {'list': list})
 
 
+def searchView(request):
+    searchQuery = request.POST.get("searchBar")
+    searchResults = []
+
+    if searchQuery:
+        mnemonic = request.session['0']
+
+
+
 def Tutor_Classes_List_View(request):
-    class_choice = request.POST.get("class_choice","")
+    class_choice = request.POST.get("class_choice", "")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
-    if class_choice!="":
+    if class_choice != "":
         mnemonic = request.session['0']
 
         if not TutorClasses.objects.filter(name=class_choice).exists():
@@ -112,7 +121,6 @@ def Tutor_Classes_List_View(request):
         list.append(curmneonic)
 
     return render(request, 'TutorClassList.html', {'list': list})
-
 
 # def TutoredClasses(request):
 #     cur_user = tutorMeUser.objects.get(email=request.user.email)

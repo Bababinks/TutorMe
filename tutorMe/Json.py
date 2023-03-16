@@ -12,7 +12,8 @@ def get_JSON_Subjects(year, semester):
         semester = "8"
     subjects = []
 
-    url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1"
+    url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula" \
+          ".IScript_ClassSearchOptions?institution=UVA01&term=1 "
     url += year
     url += semester
 
@@ -24,9 +25,9 @@ def get_JSON_Subjects(year, semester):
     for sub in temp:
         subjects.append(sub['subject'])
 
-
     return subjects
 
+
 def get_classes(subject_name, year, semester):
     classes = []
     data = 1
@@ -40,7 +41,8 @@ def get_classes(subject_name, year, semester):
     while data != []:
         page_num_str = str(page_num)
 
-        url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1"
+        url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula" \
+              ".IScript_ClassSearch?institution=UVA01&term=1 "
         year_sem_num = year + semester + "&subject="
         url += year_sem_num
 
@@ -59,7 +61,6 @@ def get_classes(subject_name, year, semester):
     return classes
 
 
-
 def get_classes(subject_name, year, semester):
     classes = []
     data = 1
@@ -73,7 +74,8 @@ def get_classes(subject_name, year, semester):
     while data != []:
         page_num_str = str(page_num)
 
-        url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1"
+        url = "https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula" \
+              ".IScript_ClassSearch?institution=UVA01&term=1 "
         year_sem_num = year + semester + "&subject="
         url += year_sem_num
 
@@ -92,14 +94,15 @@ def get_classes(subject_name, year, semester):
     return classes
 
 
-#print(get_JSON_Subjects("2023", "Spring"))
+# print(get_JSON_Subjects("2023", "Spring"))
 
 
-#used this library  from this question:https://stackoverflow.com/questions/17388213/find-the-similarity-metric-between-two-strings
+# used this library  from this question:https://stackoverflow.com/questions/17388213/find-the-similarity-metric
+# -between-two-strings
 
 def Searchereds(keyword):
-    ClassesActual=[]
-    ClassInfo=[]
+    ClassesActual = []
+    ClassInfo = []
     match = re.search(r'\d+', keyword)
     if match:
         number_str = match.group()  # extract the number string
@@ -108,38 +111,36 @@ def Searchereds(keyword):
         number_str = ''
         non_number_str = keyword
     for item in Course.objects.all():
-        ClassInfo=[item.Subject,item.course_name,item.course_number]
-        Sum=0
-        if  not number_str=='':
+        ClassInfo = [item.Subject, item.course_name, item.course_number]
+        Sum = 0
+        if not number_str == '':
             for items in non_number_str.lower().split(" "):
-                if (ClassInfo[0].lower() == items.lower()):
+                if ClassInfo[0].lower() == items.lower():
                     Sum += 1
-                elif (ClassInfo[0].lower() != items.lower()):
-                    Sum+=SequenceMatcher(None, ClassInfo[1].lower(), items.lower()).ratio()
-            if (number_str == ClassInfo[2]):
-                Sum +=1
+                elif ClassInfo[0].lower() != items.lower():
+                    Sum += SequenceMatcher(None, ClassInfo[1].lower(), items.lower()).ratio()
+            if number_str == ClassInfo[2]:
+                Sum += 1
             else:
                 Sum += SequenceMatcher(None, number_str, item.course_number).ratio()
         else:
-            if (keyword.lower() in item.course_name.lower()):
+            if keyword.lower() in item.course_name.lower():
                 Sum += 1
             else:
-                Sum+=SequenceMatcher(None, keyword, item.course_name.lower()).ratio()
-        rating=Sum
+                Sum += SequenceMatcher(None, keyword, item.course_name.lower()).ratio()
+        rating = Sum
         ClassInfo.append(number_str)
         ClassInfo.append(non_number_str)
         ClassInfo.append(rating)
         ClassesActual.append(ClassInfo)
     ClassesActual.sort(key=lambda x: x[-1], reverse=True)
-  # filter out items with a low relevance score
-    if  number_str == '':
+    # filter out items with a low relevance score
+    if number_str == '':
         threshold_score = 0.75
     else:
-        threshold_score = 1.5
-        # adjust this value to your liking
+        threshold_score = 1.5  # adjust this value to your liking
     ClassesActual = [course for course in ClassesActual if course[-1] >= threshold_score]
-    if len(ClassesActual)>10:
+    if len(ClassesActual) > 10:
         return ClassesActual[:10]
     else:
-        return  ClassesActual
-
+        return ClassesActual

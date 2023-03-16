@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class tutorMeUser(models.Model):
     email = models.EmailField(unique=True)
     is_tutor = models.BooleanField(default=False)
@@ -11,22 +12,15 @@ class tutorMeUser(models.Model):
     def __str__(self):
         return self.email
 
-class TutorClasses(models.Model):
 
-    tutor = models.ForeignKey(
-        'tutorMeUser',
-        on_delete=models.CASCADE,
-    )
+class TutorClasses(models.Model):
+    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
     mnemonic = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
 
+
 class Course(models.Model):
     course_name = models.CharField(default="", max_length=255)
-    referenceLink =models.CharField(default="", max_length=100000)
-    course_number= models.CharField(default="", max_length=1000)
-    Subject=models.CharField(default="",max_length=4)
-
-
-
-
-
+    referenceLink = models.CharField(default="", max_length=100000)
+    course_number = models.CharField(default="", max_length=1000)
+    Subject = models.CharField(default="", max_length=4)
