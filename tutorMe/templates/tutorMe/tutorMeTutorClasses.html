@@ -19,22 +19,47 @@
 
         {% if not searchResults %}
         <h1>No classes match your current search!</h1>
-        <h1>{{searchResults}}</h1>
         {%else%}
         <div class="list-group p-3">
+
             {% for result in searchResults %}
-            <form action="/tutorMe/tutor/classes/list" class="form" method="POST">
-                <div class="card" style="max-width: 50%">
-                    <div class="card-header">
-                        {{result.0}}{{result.2}} : {{result.1}}
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{result.1}} {{result.2}}</h5>
-                        <input class="btn btn-primary" href="/tutorMe/tutor/classes/list" style="font-weight: bold"
-                               type="submit" value="Add">
+            <div class="card p-3 mt-3" style="max-width: 50%">
+                <div class="card-header">
+                    {{result.0}} {{result.2}}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{result.1}} {{result.2}}</h5>
+                    <button class="btn btn-primary mt-1" data-bs-target="#confirm{{ forloop.counter }}"
+                            data-bs-toggle="modal" type="button"
+                            style="font-weight: bold"> Add
+                    </button>
+
+                    <div aria-hidden="true" aria-labelledby="confirm{{ forloop.counter }}" class="modal fade"
+                         data-bs-backdrop="false" id="confirm{{ forloop.counter }}"
+                         tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirm" style="color:black;">Add
+                                        {{result.0}} {{result.2}}</h5>
+                                    <button aria-label="Close" class="btn-close" data-bs-dismiss="modal"
+                                            formmethod="POST" href="/tutorMe/tutor/classes/list"
+                                            type="button"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 style="color:black">Are you sure you want to tutor {{result.1}}
+                                        {{result.2}}</h6>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-danger" data-bs-dismiss="modal" type="button">Cancel
+                                    </button>
+                                    <button class="btn btn-primary" type="button">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
             {% endfor %}
         </div>
         {% endif %}
