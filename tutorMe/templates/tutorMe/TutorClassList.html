@@ -27,11 +27,11 @@
 {%else%}
 
 <div class="list-group p-3" style="margin-top:20px;">
-  {% for class in list %}
+  {% for Class in list %}
     <div class="p-3">
       <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{class}}</h5>
+          <h5 class="mb-1">{{Class}}</h5>
           <!-- Button trigger modal -->
           <small>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ forloop.counter }}">Remove</button>
@@ -41,7 +41,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Remove {{class}}</h5>
+                  <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Remove {{Class}}</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -49,7 +49,10 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                      <form action="{% url 'delete_item' Class %}" method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                      </form>
                 </div>
               </div>
             </div>

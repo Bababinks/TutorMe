@@ -25,5 +25,7 @@ urlpatterns = [
     path('student/', views.StudentView),
     path('tutor/', views.TutorView),
     path('accounts/login/', RedirectView.as_view(url='/tutorMe/accounts/google/login/')),
+    path('delete/<str:Class>/', views.deleteClass, name='delete_item'),
+
 
 ]
