@@ -10,6 +10,13 @@ from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects
 from tutorMe.models import tutorMeUser, TutorClasses
 import requests
+-def is_tutor(user):
+    return tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
+
+
+
+def is_not_tutor(user):
+    return tutorMeUser.objects.filter(email=user.email, is_tutor=False).exists()
 
 
 class Index(TemplateView):
@@ -21,7 +28,7 @@ def google_login(request):
     if request.user.is_authenticated:
         return redirect('home')
 
-
+@login_required
 def tutor_check(request):
     if tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
         return redirect('/tutorMe/student')
@@ -31,7 +38,8 @@ def tutor_check(request):
 
     return render(request, 'tutorCheck.html')
 
-
+@login_required
+@user_passes_test(is_not_tutor)
 def StudentView(request):
     if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
         newuser = tutorMeUser();
@@ -45,7 +53,8 @@ def StudentView(request):
 
     return render(request, 'tutorMeStudent.html', {'items': items})
 
-
+@login_required
+@user_passes_test(is_tutor)
 def TutorView(request):
     if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=True).exists():
         newuser = tutorMeUser();
@@ -58,13 +67,15 @@ def TutorView(request):
     items = get_JSON_Subjects("2023", "Spring");
     return render(request, 'tutorMeTutor.html', {'items': items})
 
-
+@login_required
+@user_passes_test(is_not_tutor)
 def Student_Classes_View(request):
     choice = request.POST.get("choice")
     classes = Json.get_classes(choice, "2023", "Spring")
     return render(request, 'tutorMeStudentClasses.html', {'classes': classes})
 
-
+@login_required
+@user_passes_test(is_tutor)
 def Tutor_Classes_View(request):
     choice = request.POST.get("choice")
     classes = Json.get_classes(choice, "2023", "Spring")
@@ -72,7 +83,8 @@ def Tutor_Classes_View(request):
     request.session[0] = choice
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
-
+@login_required
+@user_passes_test(is_not_tutor)
 def Student_Classes_List_View(request):
     class_choice = request.POST.get("class_choice")
     query = TutorClasses.objects.filter(name=class_choice)
@@ -87,7 +99,8 @@ def Student_Classes_List_View(request):
 
     return render(request, 'StudentClassList.html', {'list': list})
 
-
+@login_required
+@user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice","")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
