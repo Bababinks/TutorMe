@@ -7,10 +7,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
-from tutorMe.Json import get_JSON_Subjects
+from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses
 import requests
 
+from django.urls import reverse
 
 def is_tutor(user):
     return tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
@@ -56,8 +57,7 @@ def TutorView(request):
         newuser.last_name = request.user.last_name
         newuser.save()
 
-    items = get_JSON_Subjects("2023", "Spring");
-    return render(request, 'tutorMeTutor.html', {'items': items})
+    return render(request, 'tutorMeTutor.html',)
 
 
 @login_required
@@ -82,23 +82,33 @@ def deleteClass(request,Class):
     query.delete()
 
     return Tutor_Classes_List_View(request)
+
+def searchView(request):
+    if request.method == 'POST':
+        searchQuery = request.POST.get("searchBar")
+
+        if searchQuery:
+            searchResults = Searchereds(searchQuery)
+        else:
+            searchResults = []
+
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
 @login_required
 @user_passes_test(is_tutor)
-
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if class_choice != "":
         mnemonic = request.session['0']
 
-        if not TutorClasses.objects.filter(name=class_choice).exists():
+        if not TutorClasses.objects.filter(name=class_choice, tutor=cur_user ).exists():
             newclass = TutorClasses();
             newclass.tutor = cur_user
             newclass.mnemonic = mnemonic
             newclass.name = class_choice
             newclass.save()
 
-    query = TutorClasses.objects.filter(tutor=cur_user)
+    query = TutorClasses.objects.filter(tutor=cur_user )
 
     list = []
     for i in query:
@@ -109,6 +119,17 @@ def Tutor_Classes_List_View(request):
         list.append(curmneonic)
 
     return render(request, 'TutorClassList.html', {'list': list})
+def addClass(request, mnemonic, name, number):
+    print("view called")
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    if not TutorClasses.objects.filter(name=name, tutor=cur_user).exists():
+        newclass = TutorClasses();
+        newclass.tutor = cur_user
+        newclass.mnemonic = mnemonic
+        newclass.name = name
+        newclass.number=number
+        newclass.save()
+    return redirect(reverse('tutor_classes_list_view'))
 
 
 @login_required
@@ -131,8 +152,8 @@ def StudentView(request):
 @user_passes_test(is_not_tutor)
 def Student_Classes_View(request):
     choice = request.POST.get("choice")
-    classes = Json.get_classes(choice, "2023", "Spring")
-    return render(request, 'tutorMeStudentClasses.html', {'classes': classes})
+    # classes = Json.get_classes(choice, "2023", "Spring")
+    return render(request, 'tutorMeStudentClasses.html')
 
 
 @login_required
