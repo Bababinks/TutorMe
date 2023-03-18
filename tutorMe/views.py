@@ -13,18 +13,23 @@ import requests
 
 from django.urls import reverse
 
+
 def is_tutor(user):
     return tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
 
 
-
 def is_not_tutor(user):
     return tutorMeUser.objects.filter(email=user.email, is_tutor=False).exists()
+
+
 def not_student(user):
     return not tutorMeUser.objects.filter(email=user.email, is_tutor=False).exists()
 
+
 def not_tutor(user):
     return not tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
+
+
 class Index(TemplateView):
     template_name = "index.html"
 
@@ -57,7 +62,16 @@ def TutorView(request):
         newuser.last_name = request.user.last_name
         newuser.save()
 
-    return render(request, 'tutorMeTutor.html',)
+    if request.method == 'POST':
+        initialSearchQuery = request.POST.get("searchBar")
+
+        if initialSearchQuery:
+            initialSearchResults = Searchereds(initialSearchQuery)
+            return render(request, 'tutorMeTutorClasses.html', {'searchResults': initialSearchResults})
+        else:
+            return render(request, 'tutorMeTutor.html', )
+
+    return render(request, 'tutorMeTutor.html')
 
 
 @login_required
@@ -70,10 +84,9 @@ def Tutor_Classes_View(request):
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
 
-
 @login_required
 @user_passes_test(is_tutor)
-def deleteClass(request,Class):
+def deleteClass(request, Class):
     cur_user = tutorMeUser.objects.get(email=request.user.email)
 
     mnemonic = Class.split(' ', 1)[0]
@@ -93,6 +106,8 @@ def searchView(request):
             searchResults = []
 
     return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+
+
 @login_required
 @user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
@@ -101,14 +116,14 @@ def Tutor_Classes_List_View(request):
     if class_choice != "":
         mnemonic = request.session['0']
 
-        if not TutorClasses.objects.filter(name=class_choice, tutor=cur_user ).exists():
+        if not TutorClasses.objects.filter(name=class_choice, tutor=cur_user).exists():
             newclass = TutorClasses();
             newclass.tutor = cur_user
             newclass.mnemonic = mnemonic
             newclass.name = class_choice
             newclass.save()
 
-    query = TutorClasses.objects.filter(tutor=cur_user )
+    query = TutorClasses.objects.filter(tutor=cur_user)
 
     list = []
     for i in query:
@@ -119,6 +134,8 @@ def Tutor_Classes_List_View(request):
         list.append(curmneonic)
 
     return render(request, 'TutorClassList.html', {'list': list})
+
+
 def addClass(request, mnemonic, name, number):
     print("view called")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
@@ -127,7 +144,7 @@ def addClass(request, mnemonic, name, number):
         newclass.tutor = cur_user
         newclass.mnemonic = mnemonic
         newclass.name = name
-        newclass.number=number
+        newclass.number = number
         newclass.save()
     return redirect(reverse('tutor_classes_list_view'))
 
