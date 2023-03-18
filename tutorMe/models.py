@@ -19,6 +19,7 @@ class TutorClasses(models.Model):
     )
     mnemonic = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
+    number=models.CharField(max_length=255, default="")
 
 class Course(models.Model):
     course_name = models.CharField(default="", max_length=255)
