@@ -1,10 +1,8 @@
 <!DOCTYPE Html>
-<html>
-<title>Welcome Tutor</title>
+<html lang="">
 <head>
-
+    <title>Tutor Home Page</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
 </head>
 
 
@@ -16,25 +14,50 @@
 
 {% bootstrap_messages %}
 {% include "nav.html" %}
-<h1>Welcome to the Tutor page</h1>
 
+<!-- HTML FROM https://bootstrapious.com/p/bootstrap-vertical-navbar -->
+<h1>Greetings, __name__</h1>
 <form action="/tutorMe/tutor/classes" class="form" method="POST">
-    {% csrf_token %}
-    <div class="container">
-        <div class="row justify-content-center align-items-center" style="height: 60vh;">
-            <div class="col-lg-7">
-                <div class="input-group input-group-lg">
-                    <label for="initialSearch"></label>
-                        <input class="form-control" name="initialSearch" id="initialSearch" placeholder="Search for a class" style="border-top-left-radius:20px; border-bottom-left-radius:20px;" type="text">
-                    <button class="btn btn-primary" style="border-top-right-radius:20px;
-border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i></button>
-                </div>
+                {% csrf_token %}
+                <button class="nav-link text-dark font-italic" type="submit">
+                    <i class="fa fa-search mr-3 text-primary fa-fw"></i>
+                    Find Classes
+                </button>
+            </form>
+<!--
+<div class="vertical-nav bg-white" id="dashboard">
+    <div class="py-4 px-3 mb-4 bg-light">
+        <div class="media d-flex align-items-center"><img alt="..."
+                                                          class="mr-3 rounded-circle img-thumbnail shadow-sm" src=""
+                                                          width="65">
+            <div class="media-body">
+                <h4 class="m-0">__name__</h4>
+                <p class="font-weight-light text-muted mb-0">Tutor</p>
             </div>
         </div>
     </div>
-</form>
 
+    <p class="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">Dashboard</p>
 
+    <ul class="nav flex-column bg-white mb-0">
+        <li class="nav-item">
+            <form action="/tutorMe/tutor/classes" class="form" method="POST">
+                {% csrf_token %}
+                <button class="nav-link text-dark font-italic" type="submit">
+                    <i class="fa fa-search mr-3 text-primary fa-fw"></i>
+                    Find Classes
+                </button>
+            </form>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark font-italic" href="#">
+                <i class="fa fa-calendar mr-3 text-primary fa-fw"></i>
+                Schedule
+            </a>
+        </li>
+    </ul>
+</div>
+-->
 {% include "footer.html" %}
 
 
