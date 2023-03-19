@@ -3,7 +3,7 @@
 <title>Welcome Tutor</title>
 <head>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
 
@@ -14,28 +14,22 @@
 {% bootstrap_javascript %}
 
 
-
 {% bootstrap_messages %}
 {% include "nav.html" %}
-	<h1>Welcome to the Tutor page</h1>
+<h1>Greetings, </h1>
 
-		<form action="/tutorMe/tutor/classes"  method="POST" class="form">
-    			{% csrf_token %}
-<div class="container">
-  <div class="row justify-content-center align-items-center" style="height: 60vh;">
-    <div class="col-lg-7">
-      <div class="input-group input-group-lg">
-        <input type="text" class="form-control" style="border-top-left-radius:20px;
-border-bottom-left-radius:20px;" placeholder="Search for a class">
-
-          <button type="submit" class="btn btn-primary" style="border-top-right-radius:20px;
-border-bottom-right-radius:20px;"><i class="fa fa-search"></i></button>
-      </div>
-    </div>
-  </div>
+<div class="form-group-sm">
+    <form action="/tutorMe/tutor/classes" class="form" method="POST">
+        {% csrf_token %}
+        <div class="container align-items-center">
+                    <button class="btn btn-primary rounded-pill" href="/tutorMe/tutor/classes"
+                            type="submit"><i
+                            class="fa fa-search"></i>
+                        <text>Find Classes</text>
+                    </button>
+        </div>
+    </form>
 </div>
-		</form>
-
 
 {% include "footer.html" %}
 
