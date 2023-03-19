@@ -96,6 +96,7 @@ def deleteClass(request, Class):
 
     return Tutor_Classes_List_View(request)
 
+
 def searchView(request):
     if request.method == 'POST':
         searchQuery = request.POST.get("searchBar")
@@ -106,6 +107,9 @@ def searchView(request):
             searchResults = []
 
     return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+
+
+
 
 
 @login_required
@@ -137,7 +141,6 @@ def Tutor_Classes_List_View(request):
 
 
 def addClass(request, mnemonic, name, number):
-    print("view called")
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if not TutorClasses.objects.filter(name=name, tutor=cur_user).exists():
         newclass = TutorClasses();
@@ -147,6 +150,8 @@ def addClass(request, mnemonic, name, number):
         newclass.number = number
         newclass.save()
     return redirect(reverse('tutor_classes_list_view'))
+
+
 
 
 @login_required
@@ -160,25 +165,31 @@ def StudentView(request):
         newuser.last_name = request.user.last_name
         newuser.save()
 
-    items = get_JSON_Subjects("2023", "Spring");
+    # items = get_JSON_Subjects("2023", "Spring");
 
-    return render(request, 'tutorMeStudent.html', {'items': items})
+    return render(request, 'tutorMeStudent.html')
 
 
 @login_required
 @user_passes_test(is_not_tutor)
 def Student_Classes_View(request):
-    choice = request.POST.get("choice")
-    # classes = Json.get_classes(choice, "2023", "Spring")
-    return render(request, 'tutorMeStudentClasses.html')
+    if request.method == 'POST':
+        searchQuery = request.POST.get("searchBar")
+
+        if searchQuery:
+            searchResults = Searchereds(searchQuery)
+        else:
+            searchResults = []
+    else:
+        return render(request, 'tutorMeStudentClasses.html')
+
+    return render(request, 'tutorMeStudentClasses.html', {'searchResults': searchResults})
 
 
 @login_required
 @user_passes_test(is_not_tutor)
-def Student_Classes_List_View(request):
-    class_choice = request.POST.get("class_choice")
-    query = TutorClasses.objects.filter(name=class_choice)
-
+def Student_Classes_List_View(request, mnemonic, name, number):
+    query = TutorClasses.objects.filter(name=name)
     list = []
     for i in query:
         tutor = i.tutor
