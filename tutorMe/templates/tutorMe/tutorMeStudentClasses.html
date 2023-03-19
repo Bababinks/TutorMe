@@ -4,7 +4,7 @@
 {% bootstrap_messages %}
 
 
-{% include "nav.html" %}
+{% include "navStudent.html" %}
 
 <form class="form align-center" method="POST">
     {% csrf_token %}
@@ -20,18 +20,6 @@
         {% if not searchResults %}
         <h1>No classes match your current search!</h1>
         {%else%}
-        <script>
-            document.getElementById("searchBtn").addEventListener("click", function () {
-                const button = document.getElementById("wrapIT");
-                const form = document.createElement("form");
-                form.setAttribute("method", "POST");
-                form.setAttribute("action", "");
-                form.appendChild(button.cloneNode(true));
-                button.parentNode.replaceChild(form, button);
-            });
-
-
-        </script>
         <div class="list-group p-3">
 
             {% for result in searchResults %}

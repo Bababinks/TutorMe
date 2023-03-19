@@ -96,7 +96,8 @@ def deleteClass(request, Class):
 
     return Tutor_Classes_List_View(request)
 
-
+@login_required
+@user_passes_test(not_student)
 def searchView(request):
     if request.method == 'POST':
         searchQuery = request.POST.get("searchBar")
