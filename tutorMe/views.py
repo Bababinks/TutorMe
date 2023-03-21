@@ -204,4 +204,4 @@ def Student_Classes_List_View(request, mnemonic, name, number):
     return render(request, 'StudentClassList.html', {'list': list})
 
 def schedule_view(request, name):
-    return render(request, 'tutorSchedule.html')
+    return render(request, 'tutorSchedule.html', {'name': name} )
