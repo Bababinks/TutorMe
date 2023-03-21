@@ -1,7 +1,16 @@
-<!DOCTYPE html>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+
+
+{% include "nav.html" %}
+
 <html>
 <head>
-	<title>Weekly Schedule</title>
+	{% for Class in list %}
+	<title>Weekly Schedule {{Class}} </title>
+	  {% endfor %}
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
@@ -35,46 +44,153 @@
 		}
 	</script>
 </head>
-<body>
-	<div class="container">
-		<h2 class="text-center my-3">Weekly Schedule</h2>
-		<table class="table">
-			<thead>
-				<tr>
-					<th scope="col">Time</th>
-					<th scope="col">Monday</th>
-					<th scope="col">Tuesday</th>
-					<th scope="col">Wednesday</th>
-					<th scope="col">Thursday</th>
-					<th scope="col">Friday</th>
-					<th scope="col">Saturday</th>
-					<th scope="col">Sunday</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<th scope="row">8:00 am</th>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-				</tr>
-				<tr>
-					<th scope="row">9:00 am</th>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-				</tr>
-				<!-- add more rows for each hour -->
-				<tr>
-					<th scope="row">8:00 pm</th>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</button></td>
-					<td><button onclick="buttonClicked(this)">Click</
+
+<form>
+  <div class="form-group">
+	<body>
+			<div class="container">
+				<h2 class="text-center my-3">Weekly Schedule {{name}} </h2>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Time</th>
+							<th scope="col">Monday</th>
+							<th scope="col">Tuesday</th>
+							<th scope="col">Wednesday</th>
+							<th scope="col">Thursday</th>
+							<th scope="col">Friday</th>
+							<th scope="col">Saturday</th>
+							<th scope="col">Sunday</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">8:00 am - 9:00 am</th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">9:00 am - 10:00 am </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">10:00 am - 11:00 am </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">11:00 am - 12:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">1:00 pm - 2:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">2:00 pm - 3:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">3:00 pm - 4:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">4:00 pm - 5:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">5:00 pm - 6:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">6:00 pm - 7:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<tr>
+							<th scope="row">7:00 pm - 8:00 pm </th>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button onclick="buttonClicked(this)">Click</button></td>
+						</tr>
+						<!-- add more rows for each hour -->
+					<tr>
+						<div class="input-group input-group-lg">
+							<div class="input-group-prepend">
+								<span class="input-group-text">Input hourly rate: </span>
+							</div>
+							<input type="text" class="form-control" id="inputRate" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+						</div>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+	</body>
+  </div>
+		<div class="container-fluid">
+			<div class = "text-center" >
+				<button2 type="submit" class="btn btn-primary btn-lg">Submit</button2>
+			</div>
+		</div>
+</form>
