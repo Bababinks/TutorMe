@@ -27,7 +27,14 @@ class Course(models.Model):
     course_number= models.CharField(default="", max_length=1000)
     Subject=models.CharField(default="",max_length=4)
 
-
+class Schedule(models.Model):
+    tutor = models.ForeignKey(
+        'tutorMeUser',
+        on_delete=models.CASCADE,
+    )
+    class_name = models.CharField(max_length=100)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
 
 
 

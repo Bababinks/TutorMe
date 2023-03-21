@@ -1,5 +1,5 @@
 <!DOCTYPE Html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <title>Welcome Tutor</title>
 <head>
 
@@ -31,7 +31,8 @@
     <div class="p-3">
       <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{Class}}</h5>
+          <h5 class="mb-1">{{Class}}
+            <a class="btn btn-primary" href="{% url 'schedule' Class %}" role="button">Edit Information</a>
           <!-- Button trigger modal -->
           <small>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ forloop.counter }}">Remove</button>

@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses
+from django.shortcuts import render, redirect
+from .forms import ScheduleForm
 import requests
 
 from django.urls import reverse
@@ -200,3 +202,6 @@ def Student_Classes_List_View(request, mnemonic, name, number):
         list.append(full_name)
 
     return render(request, 'StudentClassList.html', {'list': list})
+
+def schedule_view(request, name):
+    return render(request, 'tutorSchedule.html')
