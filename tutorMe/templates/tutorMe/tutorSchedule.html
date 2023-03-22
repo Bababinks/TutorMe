@@ -40,13 +40,20 @@
 	</style>
 	<script>
 		function buttonClicked(button) {
+		console.log("button clicked");
 			button.classList.add("clicked");
+		}
+
+		function buttonSubmit(button) {
+
+
 		}
 	</script>
 </head>
-
-<form method="POST">
+-- still need to add action to form to send it to view
+<form method="POST" >
   <div class="form-group">
+	  {% csrf_token %}
 	<body>
 			<div class="container">
 				<h2 class="text-center my-3">Weekly Schedule {{name}} </h2>
@@ -66,113 +73,113 @@
 					<tbody>
 						<tr>
 							<th scope="row">8:00 am - 9:00 am</th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">9:00 am - 10:00 am </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">10:00 am - 11:00 am </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">11:00 am - 12:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">1:00 pm - 2:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">2:00 pm - 3:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">3:00 pm - 4:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">4:00 pm - 5:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">5:00 pm - 6:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">6:00 pm - 7:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<tr>
 							<th scope="row">7:00 pm - 8:00 pm </th>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
-							<td><button onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
+							<td><button class="form-control" type="button" onclick="buttonClicked(this)">Click</button></td>
 						</tr>
 						<!-- add more rows for each hour -->
 					<tr>
