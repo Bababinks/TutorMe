@@ -12,6 +12,7 @@ from tutorMe.models import tutorMeUser, TutorClasses
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
+from .models import Schedule
 
 from django.urls import reverse
 
@@ -205,3 +206,37 @@ def Student_Classes_List_View(request, mnemonic, name, number):
 
 def schedule_view(request, name):
     return render(request, 'tutorSchedule.html', {'name': name} )
+
+
+def calendar_times(request, class_name):
+    if request.method == "POST":
+        tutor = tutorMeUser.objects.get(email=request.user.email)
+        schedule = Schedule(
+            tutor=tutor,
+            class_name=class_name,
+            input_rate=request.POST.get('inputRate')
+        )
+        print("information saved!")
+        print(schedule.tutor)
+        for button_name in request.POST:
+            if button_name.startswith('m'):
+                schedule.monday.append(int(button_name[1:]))
+            elif button_name.startswith('tu'):
+                schedule.tuesday.append(int(button_name[2:]))
+            elif button_name.startswith('w'):
+                schedule.wednesday.append(int(button_name[1:]))
+            elif button_name.startswith('th'):
+                schedule.thursday.append(int(button_name[2:]))
+            elif button_name.startswith('f'):
+                schedule.friday.append(int(button_name[1:]))
+            elif button_name.startswith('sa'):
+                schedule.saturday.append(int(button_name[2:]))
+            elif button_name.startswith('su'):
+                schedule.sunday.append(int(button_name[2:]))
+            elif button_name == "submit":
+                schedule.save()
+                print("success!")
+                return redirect('tutor_classes_list_view')
+    else:
+        schedule = Schedule()
+    return render(request, "tutorSchedule.html", {'schedule': schedule})
