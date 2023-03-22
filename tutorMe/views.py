@@ -39,10 +39,7 @@ class Index(TemplateView):
 def google_login(request):
     # Check if the user is already logged in
     if request.user.is_authenticated:
-        if tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
-            return redirect('/tutorMe/student')
-        else:
-            return redirect('/tutorMe/tutor')
+        return redirect('home')
 
 
 @login_required
