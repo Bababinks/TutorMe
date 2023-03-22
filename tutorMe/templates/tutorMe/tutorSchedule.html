@@ -50,7 +50,18 @@
 		}
 	</script>
 </head>
--- still need to add action to form to send it to view
+<--! still need to add action to form to send it to view
+ need to do some overhead such that if the tutor has already inputed things, it will show their old table
+
+{% if user.schedule %}
+
+ - print current schedule
+ - add update button
+ - send to another view to update schedule model
+
+!-->
+
+
 <form method="POST" >
   <div class="form-group">
 	  {% csrf_token %}
