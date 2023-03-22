@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class tutorMeUser(models.Model):
     email = models.EmailField(unique=True)
@@ -23,9 +24,10 @@ class TutorClasses(models.Model):
 
 class Course(models.Model):
     course_name = models.CharField(default="", max_length=255)
-    referenceLink =models.CharField(default="", max_length=100000)
-    course_number= models.CharField(default="", max_length=1000)
-    Subject=models.CharField(default="",max_length=4)
+    referenceLink = models.CharField(default="", max_length=100000)
+    course_number = models.CharField(default="", max_length=1000)
+    Subject = models.CharField(default="",max_length=4)
+
 
 class Schedule(models.Model):
     tutor = models.ForeignKey(
@@ -33,8 +35,16 @@ class Schedule(models.Model):
         on_delete=models.CASCADE,
     )
     class_name = models.CharField(max_length=100)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    # start_time = models.DateTimeField()
+    # end_time = models.DateTimeField()
+    monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    tuesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    wednesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    thursday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    friday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+
 
 
 
