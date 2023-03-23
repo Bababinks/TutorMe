@@ -9,7 +9,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses
+from django.shortcuts import render, redirect
+from .forms import ScheduleForm
 import requests
+from .models import Schedule
 
 from django.urls import reverse
 
@@ -200,3 +203,49 @@ def Student_Classes_List_View(request, mnemonic, name, number):
         list.append(full_name)
 
     return render(request, 'StudentClassList.html', {'list': list})
+
+def schedule_view(request, name):
+    return render(request, 'tutorSchedule.html', {'name': name} )
+
+
+def calendar_times(request, class_name):
+    if request.method == "POST":
+        tutor = tutorMeUser.objects.get(email=request.user.email)
+        schedule = Schedule(
+            tutor=tutor,
+            class_name=class_name,
+            input_rate=request.POST.get('inputRate')
+        )
+        print(schedule.input_rate)
+        print(schedule.tutor)
+        m = []
+        tu = []
+        w = []
+        th = []
+        f = []
+        sa = []
+        su = []
+        for button_name in request.POST.getlist("checkbox"):
+            if button_name.startswith('m'):
+                m.append(int(button_name[1:]))
+            elif button_name.startswith('tu'):
+                tu.append(int(button_name[2:]))
+            elif button_name.startswith('w'):
+                w.append(int(button_name[1:]))
+            elif button_name.startswith('th'):
+                th.append(int(button_name[2:]))
+            elif button_name.startswith('f'):
+                f.append(int(button_name[1:]))
+            elif button_name.startswith('sa'):
+                sa.append(int(button_name[2:]))
+            elif button_name.startswith('su'):
+                su.append(int(button_name[2:]))
+        schedule.monday = m
+        schedule.tuesday = tu
+        schedule.wednesday = w
+        schedule.thursday = th
+        schedule.friday = f
+        schedule.saturday = sa
+        schedule.sunday = su
+        schedule.save()
+    return redirect(reverse('tutor_classes_list_view'))
