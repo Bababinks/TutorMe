@@ -233,10 +233,6 @@ def calendar_times(request, class_name):
                 schedule.saturday.append(int(button_name[2:]))
             elif button_name.startswith('su'):
                 schedule.sunday.append(int(button_name[2:]))
-            elif button_name == "submit":
-                schedule.save()
-                print("success!")
-                return redirect('tutor_classes_list_view')
     else:
         schedule = Schedule()
     return render(request, "tutorSchedule.html", {'schedule': schedule})
