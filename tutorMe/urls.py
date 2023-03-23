@@ -23,5 +23,5 @@ urlpatterns = [
     path('tutor/classes', views.searchView),
     path('check/<str:mnemonic>/<str:name>/<str:number>/', views.Student_Classes_List_View, name='check'),
     path('tutor/classes/list/<str:name>', views.schedule_view, name='schedule'),
-    path('tutor/classes/<str:name>/times', views.calendar_times, name='calendar_times'),
+    path('tutor/classes/<str:class_name>/times', views.calendar_times, name='calendar_times'),
 ]

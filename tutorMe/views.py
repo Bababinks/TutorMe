@@ -216,23 +216,32 @@ def calendar_times(request, class_name):
             class_name=class_name,
             input_rate=request.POST.get('inputRate')
         )
-        print("information saved!")
+        print(schedule.input_rate)
         print(schedule.tutor)
-        for button_name in request.POST:
+        m = []
+        tu = []
+        w = []
+        th = []
+        f = []
+        sa = []
+        su = []
+        for button_name in request.POST.getlist("checkbox"):
             if button_name.startswith('m'):
-                schedule.monday.append(int(button_name[1:]))
+                m.append(int(button_name[1:]))
             elif button_name.startswith('tu'):
-                schedule.tuesday.append(int(button_name[2:]))
+                tu.append(int(button_name[2:]))
             elif button_name.startswith('w'):
-                schedule.wednesday.append(int(button_name[1:]))
+                w.append(int(button_name[1:]))
             elif button_name.startswith('th'):
-                schedule.thursday.append(int(button_name[2:]))
+                th.append(int(button_name[2:]))
             elif button_name.startswith('f'):
-                schedule.friday.append(int(button_name[1:]))
+                f.append(int(button_name[1:]))
             elif button_name.startswith('sa'):
-                schedule.saturday.append(int(button_name[2:]))
+                sa.append(int(button_name[2:]))
             elif button_name.startswith('su'):
-                schedule.sunday.append(int(button_name[2:]))
+                su.append(int(button_name[2:]))
+        schedule.monday = m
     else:
         schedule = Schedule()
-    return render(request, "tutorSchedule.html", {'schedule': schedule})
+        schedule.save()
+    return redirect(reverse('tutor_classes_list_view'))
