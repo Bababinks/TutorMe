@@ -241,7 +241,11 @@ def calendar_times(request, class_name):
             elif button_name.startswith('su'):
                 su.append(int(button_name[2:]))
         schedule.monday = m
-    else:
-        schedule = Schedule()
+        schedule.tuesday = tu
+        schedule.wednesday = w
+        schedule.thursday = th
+        schedule.friday = f
+        schedule.saturday = sa
+        schedule.sunday = su
         schedule.save()
     return redirect(reverse('tutor_classes_list_view'))
