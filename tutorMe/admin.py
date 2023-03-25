@@ -8,5 +8,9 @@ admin.site.register(tutorMeUser)
 class MyModelAdmin(admin.ModelAdmin):
     list_display =["Subject","course_name","course_number"]
 admin.site.register(Course,MyModelAdmin)
-admin.site.register(Schedule)
+
+class MySchedule(admin.ModelAdmin):
+    list_display =["tutor","class_name"]
+admin.site.register(Schedule,MySchedule)
+
 
