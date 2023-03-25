@@ -266,7 +266,7 @@ def calendar_times(request, class_name):
     return redirect(reverse('tutor_classes_list_view'))
 
 def EditClass(request, name):
-    query = Schedule.objects.get(class_name=name)
+    query = Schedule.objects.get(class_name=name, tutor__email=request.user.email)
     mon = query.monday
     tues = query.tuesday
     wed = query.wednesday
