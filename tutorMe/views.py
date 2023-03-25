@@ -264,3 +264,16 @@ def calendar_times(request, class_name):
         schedule.save()
 
     return redirect(reverse('tutor_classes_list_view'))
+
+def EditClass(request, name):
+    query = Schedule.objects.get(class_name=name)
+    mon = query.monday
+    tues = query.tuesday
+    wed = query.wednesday
+    thurs = query.thursday
+    fri = query.friday
+    sat = query.saturday
+    sun = query.sunday
+    rate = query.input_rate
+    prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
+    return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})

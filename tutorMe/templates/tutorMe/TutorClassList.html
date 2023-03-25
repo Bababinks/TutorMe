@@ -34,7 +34,7 @@
           <h5 class="mb-1">{{Class.0}}
 
               {% if Class.1 %}
-            <a class="btn btn-primary" href="{% url 'schedule' Class.0 %}" role="button">Edit Information</a>
+            <a class="btn btn-primary" href="{% url 'edit' Class.0 %}" role="button">Edit Information</a>
                 {% else %}
             <a class="btn btn-success" href="{% url 'schedule' Class.0 %}" role="button">Add Information</a>
                {% endif %}
