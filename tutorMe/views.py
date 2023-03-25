@@ -15,6 +15,7 @@ import requests
 from .models import Schedule
 
 from django.urls import reverse
+import traceback
 
 
 def is_tutor(user):
@@ -90,14 +91,20 @@ def Tutor_Classes_View(request):
 @login_required
 @user_passes_test(is_tutor)
 def deleteClass(request, Class):
-    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    theEmail = request.user.email
+    cur_user = tutorMeUser.objects.get(email=theEmail)
 
     mnemonic = Class.split(' ', 1)[0]
     namewithoutmneonic = Class.split(' ', 1)[1]
     query = TutorClasses.objects.filter(name=namewithoutmneonic, tutor_id=cur_user, mnemonic=mnemonic)
+    if Schedule.objects.filter(tutor__email=theEmail, class_name=Class).exists():
+        toBeDeleted = Schedule.objects.filter(tutor__email=theEmail, class_name=Class)
+        toBeDeleted.delete()
+
     query.delete()
 
     return Tutor_Classes_List_View(request)
+
 
 @login_required
 @user_passes_test(not_student)
@@ -113,13 +120,11 @@ def searchView(request):
     return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
 
 
-
-
-
 @login_required
 @user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")
+    theEmail = request.user.email
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if class_choice != "":
         mnemonic = request.session['0']
@@ -134,12 +139,20 @@ def Tutor_Classes_List_View(request):
     query = TutorClasses.objects.filter(tutor=cur_user)
 
     list = []
+    hasSchedule = []
     for i in query:
+        otherarr=[]
         curmneonic = i.mnemonic
         curname = i.name
         curmneonic += " "
         curmneonic += curname
-        list.append(curmneonic)
+        otherarr.append(curmneonic)
+        print(curmneonic)
+        if not Schedule.objects.filter(tutor__email=theEmail, class_name=curmneonic):
+            otherarr.append(False)
+        else:
+            otherarr.append(True)
+        list.append(otherarr)
 
     return render(request, 'TutorClassList.html', {'list': list})
 
@@ -154,8 +167,6 @@ def addClass(request, mnemonic, name, number):
         newclass.number = number
         newclass.save()
     return redirect(reverse('tutor_classes_list_view'))
-
-
 
 
 @login_required
@@ -204,20 +215,20 @@ def Student_Classes_List_View(request, mnemonic, name, number):
 
     return render(request, 'StudentClassList.html', {'list': list})
 
+
 def schedule_view(request, name):
-    return render(request, 'tutorSchedule.html', {'name': name} )
+    return render(request, 'tutorSchedule.html', {'name': name})
 
 
 def calendar_times(request, class_name):
     if request.method == "POST":
         tutor = tutorMeUser.objects.get(email=request.user.email)
-        schedule = Schedule(
+        schedule, created = Schedule.objects.get_or_create(
             tutor=tutor,
             class_name=class_name,
-            input_rate=request.POST.get('inputRate')
+
         )
-        print(schedule.input_rate)
-        print(schedule.tutor)
+        schedule.input_rate = request.POST.get('inputRate')
         m = []
         tu = []
         w = []
@@ -225,6 +236,7 @@ def calendar_times(request, class_name):
         f = []
         sa = []
         su = []
+
         for button_name in request.POST.getlist("checkbox"):
             if button_name.startswith('m'):
                 m.append(int(button_name[1:]))
@@ -240,6 +252,7 @@ def calendar_times(request, class_name):
                 sa.append(int(button_name[2:]))
             elif button_name.startswith('su'):
                 su.append(int(button_name[2:]))
+
         schedule.monday = m
         schedule.tuesday = tu
         schedule.wednesday = w
@@ -247,5 +260,7 @@ def calendar_times(request, class_name):
         schedule.friday = f
         schedule.saturday = sa
         schedule.sunday = su
+
         schedule.save()
+
     return redirect(reverse('tutor_classes_list_view'))

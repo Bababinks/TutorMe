@@ -31,8 +31,15 @@
     <div class="p-3">
       <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
         <div class="d-flex w-100 justify-content-between">
-          <h5 class="mb-1">{{Class}}
-            <a class="btn btn-primary" href="{% url 'schedule' Class %}" role="button">Edit Information</a>
+          <h5 class="mb-1">{{Class.0}}
+
+              {% if Class.1 %}
+            <a class="btn btn-primary" href="{% url 'schedule' Class.0 %}" role="button">Edit Information</a>
+                {% else %}
+            <a class="btn btn-success" href="{% url 'schedule' Class.0 %}" role="button">Add Information</a>
+               {% endif %}
+
+
           <!-- Button trigger modal -->
           <small>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{ forloop.counter }}">Remove</button>
@@ -42,7 +49,7 @@
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Remove {{Class}}</h5>
+                  <h5 class="modal-title" id="exampleModalLabel" style="color:black;">Remove {{Class.0}}</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -50,7 +57,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <form action="{% url 'delete_item' Class %}" method="POST">
+                      <form action="{% url 'delete_item' Class.0 %}" method="POST">
                         {% csrf_token %}
                         <button class="btn btn-danger" type="submit">Delete</button>
                       </form>

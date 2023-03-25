@@ -37,7 +37,7 @@ class Schedule(models.Model):
     class_name = models.CharField(max_length=100)
     # start_time = models.DateTimeField()
     # end_time = models.DateTimeField()
-    input_rate = models.DecimalField(max_digits=5, decimal_places=2)
+    input_rate = models.DecimalField(max_digits=5, decimal_places=2,  default=0)
 
     monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     tuesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
