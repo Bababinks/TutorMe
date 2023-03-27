@@ -11,7 +11,7 @@ urlpatterns = [
     path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/', views.tutor_check),
 
-    path('student', views.StudentView),
+    path('student', views.StudentView, name='student_default'),
     path('tutor', views.TutorView),
     path('delete/<str:Class>/', views.deleteClass, name='delete_item'),
     path('add/<str:mnemonic>/<str:name>/<str:number>/', views.addClass, name='add_item'),
@@ -22,6 +22,8 @@ urlpatterns = [
     path('tutor/classes/list', views.Tutor_Classes_List_View, name='tutor_classes_list_view'),
     path('tutor/classes', views.searchView),
     path('check/<str:mnemonic>/<str:name>/<str:number>/', views.Student_Classes_List_View, name='check'),
+    path('schedule/<str:tutor>/<str:name>/<str:mnemonic>', views.StudentMakeSchedule, name='student_make_schedule'),
+
     path('tutor/classes/list/<str:name>', views.schedule_view, name='schedule'),
     path('tutor/classes/list/edit/<str:name>', views.EditClass, name='edit'),
     path('tutor/classes/<str:class_name>/times', views.calendar_times, name='calendar_times'),

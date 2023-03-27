@@ -213,7 +213,7 @@ def Student_Classes_List_View(request, mnemonic, name, number):
         full_name = first + " " + last
         list.append(full_name)
 
-    return render(request, 'StudentClassList.html', {'list': list})
+    return render(request, 'StudentClassList.html', {'list': list, 'name': name, 'mnemonic': mnemonic})
 
 
 def schedule_view(request, name):
@@ -277,3 +277,27 @@ def EditClass(request, name):
     rate = query.input_rate
     prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
+
+def StudentMakeSchedule(request, tutor, name, mnemonic):
+    if " " in tutor:
+        tutor_name = tutor.split(' ')
+        query = tutorMeUser.objects.get(first_name=tutor_name[0], last_name=tutor_name[1])
+    else:
+        query = tutorMeUser.objects.get(first_name=tutor)
+
+    full_name = mnemonic + " " + name
+
+    tutor_schedule = Schedule.objects.get(class_name=full_name, tutor_id=query.id)
+
+    mon = tutor_schedule.monday
+    tues = tutor_schedule.tuesday
+    wed = tutor_schedule.wednesday
+    thurs = tutor_schedule.thursday
+    fri = tutor_schedule.friday
+    sat = tutor_schedule.saturday
+    sun = tutor_schedule.sunday
+    rate = tutor_schedule.input_rate
+    tutor_schedule = [mon, tues, wed, thurs, fri, sat, sun, rate]
+
+
+    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'tutor_schedule': tutor_schedule})

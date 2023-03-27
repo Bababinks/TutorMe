@@ -22,12 +22,16 @@
 
 <h1>No Tutors Found!</h1>
 {% endif %}
-{% for class in list %}
+{% for tutor in list %}
         <h4>
             <div class="text-info">
+                <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
+                <div class="d-flex w-100 justify-content-between">
                 <li>
-                    {{class}} <br>
+                    {{tutor}} <br> <a class="btn btn-success" href="{% url 'student_make_schedule' tutor name mnemonic%}" role="button">Schedule Times</a>
                 </li>
+                    </div>
+                </strong>
             </div>
         </h4>
     {% endfor %}
