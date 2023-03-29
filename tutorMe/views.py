@@ -409,16 +409,16 @@ def accepted(request, class_name, tutor, student):
     split_tutor = tutor.split()
     tutor_first = split_tutor[0]
     tutor_last = split_tutor[1]
-    tutor_name = tutorMeUser(first_name = tutor_first, last_name=tutor_last)
+    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last)
 
     split_student = student.split()
     student_first = split_student[0]
     student_last = split_student[1]
-    student_name = tutorMeUser(first_name=student_first, last_name=student_last)
+    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last)
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
-    apt, created = Appointment.objects.create(
+    apt = Appointment.objects.create(
         student=x.student,
         tutor=x.tutor,
         class_name=x.class_name,
@@ -430,6 +430,7 @@ def accepted(request, class_name, tutor, student):
     apt.friday = x.friday
     apt.saturday = x.saturday
     apt.sunday = x.saturday
+    apt.save()
     return render(request, 'appointments.html')
 
 
