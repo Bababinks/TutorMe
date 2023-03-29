@@ -50,7 +50,7 @@
 		}
 	</script>
 </head>
-<form action="{% url 'student_default' %}" method="POST">
+<form action="{% url 'calendar_student' tutor name mnemonic %}" method="POST">
   <div class="form-group">
 	  {% csrf_token %}
 	<body>

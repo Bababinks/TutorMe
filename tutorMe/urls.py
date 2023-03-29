@@ -27,4 +27,11 @@ urlpatterns = [
     path('tutor/classes/list/<str:name>', views.schedule_view, name='schedule'),
     path('tutor/classes/list/edit/<str:name>', views.EditClass, name='edit'),
     path('tutor/classes/<str:class_name>/times', views.calendar_times, name='calendar_times'),
+
+    path('schedule/<str:tutor>/<str:name>/<str:mnemonic>/times', views.calendarStudent, name='calendar_student'),
+    path('tutor/requests', views.tutorRequests, name='tutor_requests'),
+    path('delete/<str:class_name>/<str:tutor>/<str:student>/', views.deleteRequest, name='delete_request'),
+    path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
+    path('tutor/appointments', views.allAppointmentsTutor),
+    path('student/appointments', views.allAppointmentsStudent),
 ]

@@ -8,11 +8,11 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
-from tutorMe.models import tutorMeUser, TutorClasses
+from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
-from .models import Schedule
+from .models import Schedule, Appointment
 
 from django.urls import reverse
 import traceback
@@ -302,4 +302,250 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     tutor_schedule = [mon, tues, wed, thurs, fri, sat, sun, rate]
 
 
-    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'tutor_schedule': tutor_schedule})
+    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
+
+
+def calendarStudent(request, tutor, name, mnemonic):
+    split = tutor.split(" ")
+    first_name = split[0]
+    last_name = split[1]
+
+    full_name = mnemonic + " " + name
+    if request.method == "POST":
+        student = tutorMeUser.objects.get(email=request.user.email)
+        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name)
+        schedule, created = ScheduleStudent.objects.get_or_create(
+            student=student,
+            tutor=tutor,
+            class_name=full_name,
+        )
+        m = []
+        tu = []
+        w = []
+        th = []
+        f = []
+        sa = []
+        su = []
+
+        for button_name in request.POST.getlist("checkbox"):
+            if button_name.startswith('m'):
+                m.append(int(button_name[1:]))
+            elif button_name.startswith('tu'):
+                tu.append(int(button_name[2:]))
+            elif button_name.startswith('w'):
+                w.append(int(button_name[1:]))
+            elif button_name.startswith('th'):
+                th.append(int(button_name[2:]))
+            elif button_name.startswith('f'):
+                f.append(int(button_name[1:]))
+            elif button_name.startswith('sa'):
+                sa.append(int(button_name[2:]))
+            elif button_name.startswith('su'):
+                su.append(int(button_name[2:]))
+
+        schedule.monday = m
+        schedule.tuesday = tu
+        schedule.wednesday = w
+        schedule.thursday = th
+        schedule.friday = f
+        schedule.saturday = sa
+        schedule.sunday = su
+
+        schedule.save()
+
+    return redirect(reverse('student_default'))
+
+
+def tutorRequests(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+
+    query = ScheduleStudent.objects.filter(tutor=tutor)
+    list = []
+    for i in query:
+        each = []
+        each.append(i.class_name)
+
+        firstT = tutor.first_name
+        lastT = tutor.last_name
+        full_nameT = firstT + " " + lastT
+        each.append(full_nameT)
+
+        student = i.student
+        first = student.first_name
+        last = student.last_name
+        full_name = first + " " + last
+        each.append(full_name)
+
+        def time_slots(times):
+            slots = []
+            for i in range(len(times)):
+                start = times[i]
+                end = times[i] + 1
+                am_pm_start = "am"
+                am_pm_end = "am"
+                if start >= 12:
+                    am_pm_start = "pm"
+                    if start > 12:
+                        start -= 12
+                if end >= 12:
+                    am_pm_end = "pm"
+                    if end > 12:
+                        end -= 12
+                slots.append(f"{start}-{end}{am_pm_start}")
+            return ", ".join(slots)
+
+        each.append(time_slots(i.monday))
+        each.append(time_slots(i.tuesday))
+        each.append(time_slots(i.wednesday))
+        each.append(time_slots(i.thursday))
+        each.append(time_slots(i.friday))
+        each.append(time_slots(i.saturday))
+        each.append(time_slots(i.sunday))
+        list.append(each)
+    return render(request, 'tutorRequests.html', {'list': list})
+
+
+def accepted(request, class_name, tutor, student):
+    split_tutor = tutor.split()
+    tutor_first = split_tutor[0]
+    tutor_last = split_tutor[1]
+    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last)
+
+    split_student = student.split()
+    student_first = split_student[0]
+    student_last = split_student[1]
+    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last)
+
+    x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
+
+    apt = Appointment.objects.create(
+        student=x.student,
+        tutor=x.tutor,
+        class_name=x.class_name,
+        )
+    apt.monday = x.monday
+    apt.tuesday = x.tuesday
+    apt.wednesday = x.wednesday
+    apt.thursday = x.thursday
+    apt.friday = x.friday
+    apt.saturday = x.saturday
+    apt.sunday = x.saturday
+    apt.save()
+
+    x.delete()
+
+    return tutorRequests(request)
+
+
+def deleteRequest(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+
+    return tutorRequests(request)
+
+def allAppointmentsTutor(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+
+    query = Appointment.objects.filter(tutor=tutor)
+    list = []
+    for i in query:
+        each = []
+        each.append(i.class_name)
+
+        firstT = tutor.first_name
+        lastT = tutor.last_name
+        full_nameT = firstT + " " + lastT
+        each.append(full_nameT)
+
+        student = i.student
+        first = student.first_name
+        last = student.last_name
+        full_name = first + " " + last
+        each.append(full_name)
+
+        def time_slots(times):
+            slots = []
+            for i in range(len(times)):
+                start = times[i]
+                end = times[i] + 1
+                am_pm_start = "am"
+                am_pm_end = "am"
+                if start >= 12:
+                    am_pm_start = "pm"
+                    if start > 12:
+                        start -= 12
+                if end >= 12:
+                    am_pm_end = "pm"
+                    if end > 12:
+                        end -= 12
+                slots.append(f"{start}-{end}{am_pm_start}")
+            return ", ".join(slots)
+
+        each.append(time_slots(i.monday))
+        each.append(time_slots(i.tuesday))
+        each.append(time_slots(i.wednesday))
+        each.append(time_slots(i.thursday))
+        each.append(time_slots(i.friday))
+        each.append(time_slots(i.saturday))
+        each.append(time_slots(i.sunday))
+        list.append(each)
+    return render(request, 'appointments.html', {'list': list})
+
+def allAppointmentsStudent(request):
+    student = tutorMeUser.objects.get(email=request.user.email)
+
+    query = Appointment.objects.filter(student=student)
+    list = []
+    for i in query:
+        each = []
+        each.append(i.class_name)
+
+        tutor = i.tutor
+        firstT = tutor.first_name
+        lastT = tutor.last_name
+        full_nameT = firstT + " " + lastT
+        each.append(full_nameT)
+
+        first = student.first_name
+        last = student.last_name
+        full_name = first + " " + last
+        each.append(full_name)
+
+        def time_slots(times):
+            slots = []
+            for i in range(len(times)):
+                start = times[i]
+                end = times[i] + 1
+                am_pm_start = "am"
+                am_pm_end = "am"
+                if start >= 12:
+                    am_pm_start = "pm"
+                    if start > 12:
+                        start -= 12
+                if end >= 12:
+                    am_pm_end = "pm"
+                    if end > 12:
+                        end -= 12
+                slots.append(f"{start}-{end}{am_pm_start}")
+            return ", ".join(slots)
+
+        each.append(time_slots(i.monday))
+        each.append(time_slots(i.tuesday))
+        each.append(time_slots(i.wednesday))
+        each.append(time_slots(i.thursday))
+        each.append(time_slots(i.friday))
+        each.append(time_slots(i.saturday))
+        each.append(time_slots(i.sunday))
+        list.append(each)
+    return render(request, 'appointments.html', {'list': list})
+
