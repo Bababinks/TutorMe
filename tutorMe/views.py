@@ -220,12 +220,16 @@ def Student_Classes_List_View(request, mnemonic, name, number):
         # Position encodes what day it is 0 = Monday, 1 = Tuesday, etc.
         availabilityList = [tutorSchedule.monday, tutorSchedule.tuesday, tutorSchedule.wednesday,
                             tutorSchedule.thursday, tutorSchedule.friday, tutorSchedule.saturday, tutorSchedule.sunday]
+        rate = tutorSchedule.input_rate
 
-        availabilityList
+        print(availabilityList)
+        for m in range(len(availabilityList)):
+            for n in range(len(availabilityList[m])):
+                hour = availabilityList[m][n]
+                availabilityList[m][n] = f"{hour}:00 - {hour + 1}:00"
+                print(availabilityList[m][n])
 
-        hoursForDays = []
-
-        list.append(full_name)
+        list.append([full_name, rate, availabilityList])
 
     return render(request, 'StudentClassList.html', {'list': list})
 
