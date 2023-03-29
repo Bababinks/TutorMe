@@ -47,6 +47,7 @@ class Schedule(models.Model):
     saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
+
 class ScheduleStudent(models.Model):
     tutor = models.ForeignKey(
         'tutorMeUser',
@@ -68,6 +69,23 @@ class ScheduleStudent(models.Model):
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
 
+class Appointment(models.Model):
+    tutor = models.ForeignKey(
+        'tutorMeUser',
+        #related_name='tutor',
+        on_delete=models.CASCADE,
+    )
+    student = models.ForeignKey(
+        'tutorMeUser',
+        related_name='student',
+        on_delete=models.CASCADE,
+    )
+    class_name = models.CharField(max_length=100)
 
-
-
+    monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    tuesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    wednesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    thursday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    friday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+    sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)

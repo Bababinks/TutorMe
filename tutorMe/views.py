@@ -12,7 +12,7 @@ from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
-from .models import Schedule
+from .models import Schedule, Appointment
 
 from django.urls import reverse
 import traceback
@@ -355,6 +355,7 @@ def calendarStudent(request, tutor, name, mnemonic):
 
     return redirect(reverse('student_default'))
 
+
 def tutorRequests(request):
     tutor = tutorMeUser.objects.get(email=request.user.email)
 
@@ -402,6 +403,35 @@ def tutorRequests(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
+
+
+def accepted(request, class_name, tutor, student):
+    split_tutor = tutor.split()
+    tutor_first = split_tutor[0]
+    tutor_last = split_tutor[1]
+    tutor_name = tutorMeUser(first_name = tutor_first, last_name=tutor_last)
+
+    split_student = student.split()
+    student_first = split_student[0]
+    student_last = split_student[1]
+    student_name = tutorMeUser(first_name=student_first, last_name=student_last)
+
+    x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
+
+    apt, created = Appointment.objects.create(
+        student=x.student,
+        tutor=x.tutor,
+        class_name=x.class_name,
+        )
+    apt.monday = x.monday
+    apt.tuesday = x.tuesday
+    apt.wednesday = x.wednesday
+    apt.thursday = x.thursday
+    apt.friday = x.friday
+    apt.saturday = x.saturday
+    apt.sunday = x.saturday
+    return render(request, 'appointments.html')
+
 
 def deleteRequest(request, class_name, tutor, student):
     splitTutor = tutor.split(" ")
