@@ -32,4 +32,6 @@ urlpatterns = [
     path('tutor/requests', views.tutorRequests, name='tutor_requests'),
     path('delete/<str:class_name>/<str:tutor>/<str:student>/', views.deleteRequest, name='delete_request'),
     path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
+    path('tutor/appointments', views.allAppointmentsTutor),
+    path('student/appointments', views.allAppointmentsStudent),
 ]
