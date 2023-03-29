@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
-from tutorMe.models import tutorMeUser, TutorClasses
+from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
@@ -302,4 +302,55 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     tutor_schedule = [mon, tues, wed, thurs, fri, sat, sun, rate]
 
 
-    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'tutor_schedule': tutor_schedule})
+    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
+
+
+def calendarStudent(request, tutor, name, mnemonic):
+    split = tutor.split(" ")
+    first_name = split[0]
+    last_name = split[1]
+
+    full_name = mnemonic + " " + name
+    if request.method == "POST":
+        student = tutorMeUser.objects.get(email=request.user.email)
+        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name)
+        schedule, created = ScheduleStudent.objects.get_or_create(
+            student=student,
+            tutor=tutor,
+            class_name=full_name,
+        )
+        m = []
+        tu = []
+        w = []
+        th = []
+        f = []
+        sa = []
+        su = []
+
+        for button_name in request.POST.getlist("checkbox"):
+            if button_name.startswith('m'):
+                m.append(int(button_name[1:]))
+            elif button_name.startswith('tu'):
+                tu.append(int(button_name[2:]))
+            elif button_name.startswith('w'):
+                w.append(int(button_name[1:]))
+            elif button_name.startswith('th'):
+                th.append(int(button_name[2:]))
+            elif button_name.startswith('f'):
+                f.append(int(button_name[1:]))
+            elif button_name.startswith('sa'):
+                sa.append(int(button_name[2:]))
+            elif button_name.startswith('su'):
+                su.append(int(button_name[2:]))
+
+        schedule.monday = m
+        schedule.tuesday = tu
+        schedule.wednesday = w
+        schedule.thursday = th
+        schedule.friday = f
+        schedule.saturday = sa
+        schedule.sunday = su
+
+        schedule.save()
+
+    return redirect(reverse('student_default'))
