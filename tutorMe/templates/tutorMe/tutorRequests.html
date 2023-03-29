@@ -1,0 +1,10 @@
+
+    {% for x in list %}
+        <h1> total : {{x}} </h1>
+        <h1> class name : {{ x.0 }} </h1>
+        <h1> student : {{ x.1 }} </h1>
+        <h1> Monday : {{ x.2 }} </h1>
+        {% for times in x.2 %}
+        <h1> Tuesday : {{ x.3 }} </h1>
+
+    {% endfor %}

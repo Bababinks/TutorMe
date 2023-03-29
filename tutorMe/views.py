@@ -354,3 +354,28 @@ def calendarStudent(request, tutor, name, mnemonic):
         schedule.save()
 
     return redirect(reverse('student_default'))
+
+def tutorRequests(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+
+    query = ScheduleStudent.objects.filter(tutor=tutor)
+    list = []
+    for i in query:
+        each = []
+        each.append(i.class_name)
+
+        student = i.student
+        first = student.first_name
+        last = student.last_name
+        full_name = first + " " + last
+        each.append(full_name)
+
+        each.append(i.monday)
+        each.append(i.tuesday)
+        each.append(i.wednesday)
+        each.append(i.thursday)
+        each.append(i.friday)
+        each.append(i.saturday)
+        each.append(i.sunday)
+        list.append(each)
+    return render(request, 'tutorRequests.html', {'list': list})
