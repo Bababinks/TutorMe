@@ -204,14 +204,16 @@ def Student_Classes_View(request):
 @login_required
 @user_passes_test(is_not_tutor)
 def Student_Classes_List_View(request, mnemonic, name, number):
+    both = mnemonic + " " + name
     query = TutorClasses.objects.filter(name=name)
     list = []
     for i in query:
         tutor = i.tutor
-        first = tutor.first_name
-        last = tutor.last_name
-        full_name = first + " " + last
-        list.append(full_name)
+        if( Schedule.objects.filter(tutor=tutor, class_name=both).exists() ):
+            first = tutor.first_name
+            last = tutor.last_name
+            full_name = first + " " + last
+            list.append(full_name)
 
     return render(request, 'StudentClassList.html', {'list': list, 'name': name, 'mnemonic': mnemonic})
 
