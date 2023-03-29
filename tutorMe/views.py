@@ -141,7 +141,7 @@ def Tutor_Classes_List_View(request):
     list = []
     hasSchedule = []
     for i in query:
-        otherarr=[]
+        otherarr = []
         curmneonic = i.mnemonic
         curname = i.name
         curmneonic += " "
@@ -205,12 +205,26 @@ def Student_Classes_View(request):
 @user_passes_test(is_not_tutor)
 def Student_Classes_List_View(request, mnemonic, name, number):
     query = TutorClasses.objects.filter(name=name)
+
     list = []
+
     for i in query:
         tutor = i.tutor
         first = tutor.first_name
         last = tutor.last_name
         full_name = first + " " + last
+
+        currentTutor = tutorMeUser.objects.filter(first_name=first, last_name=last)
+        tutorSchedule = Schedule.objects.filter(tutor=currentTutor[0])[0]
+
+        # Position encodes what day it is 0 = Monday, 1 = Tuesday, etc.
+        availabilityList = [tutorSchedule.monday, tutorSchedule.tuesday, tutorSchedule.wednesday,
+                            tutorSchedule.thursday, tutorSchedule.friday, tutorSchedule.saturday, tutorSchedule.sunday]
+
+        availabilityList
+
+        hoursForDays = []
+
         list.append(full_name)
 
     return render(request, 'StudentClassList.html', {'list': list})
@@ -223,11 +237,9 @@ def schedule_view(request, name):
 def calendar_times(request, class_name):
     if request.method == "POST":
         tutor = tutorMeUser.objects.get(email=request.user.email)
-        schedule, created = Schedule.objects.get_or_create(
-            tutor=tutor,
-            class_name=class_name,
+        schedule, created = Schedule.objects.get_or_create(tutor=tutor, class_name=class_name,
 
-        )
+                                                           )
         schedule.input_rate = request.POST.get('inputRate')
         m = []
         tu = []
@@ -265,6 +277,7 @@ def calendar_times(request, class_name):
 
     return redirect(reverse('tutor_classes_list_view'))
 
+
 def EditClass(request, name):
     query = Schedule.objects.get(class_name=name, tutor__email=request.user.email)
     mon = query.monday
@@ -275,5 +288,5 @@ def EditClass(request, name):
     sat = query.saturday
     sun = query.sunday
     rate = query.input_rate
-    prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
+    prev = [mon, tues, wed, thurs, fri, sat, sun, rate]
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
