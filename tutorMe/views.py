@@ -404,6 +404,53 @@ def tutorRequests(request):
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
 
+def studentRequests(request):
+    student = tutorMeUser.objects.get(email=request.user.email)
+
+    query = ScheduleStudent.objects.filter(student=student)
+    list = []
+    for i in query:
+        each = []
+        each.append(i.class_name)
+
+        tutor = i.tutor
+        firstT = tutor.first_name
+        lastT = tutor.last_name
+        full_nameT = firstT + " " + lastT
+        each.append(full_nameT)
+
+        first = student.first_name
+        last = student.last_name
+        full_name = first + " " + last
+        each.append(full_name)
+
+        def time_slots(times):
+            slots = []
+            for i in range(len(times)):
+                start = times[i]
+                end = times[i] + 1
+                am_pm_start = "am"
+                am_pm_end = "am"
+                if start >= 12:
+                    am_pm_start = "pm"
+                    if start > 12:
+                        start -= 12
+                if end >= 12:
+                    am_pm_end = "pm"
+                    if end > 12:
+                        end -= 12
+                slots.append(f"{start}-{end}{am_pm_start}")
+            return ", ".join(slots)
+
+        each.append(time_slots(i.monday))
+        each.append(time_slots(i.tuesday))
+        each.append(time_slots(i.wednesday))
+        each.append(time_slots(i.thursday))
+        each.append(time_slots(i.friday))
+        each.append(time_slots(i.saturday))
+        each.append(time_slots(i.sunday))
+        list.append(each)
+    return render(request, 'studentRequests.html', {'list': list})
 
 def accepted(request, class_name, tutor, student):
     split_tutor = tutor.split()
@@ -499,7 +546,7 @@ def allAppointmentsTutor(request):
         each.append(time_slots(i.saturday))
         each.append(time_slots(i.sunday))
         list.append(each)
-    return render(request, 'appointments.html', {'list': list})
+    return render(request, 'appointmentsTutor.html', {'list': list})
 
 def allAppointmentsStudent(request):
     student = tutorMeUser.objects.get(email=request.user.email)
@@ -547,5 +594,5 @@ def allAppointmentsStudent(request):
         each.append(time_slots(i.saturday))
         each.append(time_slots(i.sunday))
         list.append(each)
-    return render(request, 'appointments.html', {'list': list})
+    return render(request, 'appointmentsStudent.html', {'list': list})
 
