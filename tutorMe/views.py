@@ -364,6 +364,11 @@ def tutorRequests(request):
         each = []
         each.append(i.class_name)
 
+        firstT = tutor.first_name
+        lastT = tutor.last_name
+        full_nameT = firstT + " " + lastT
+        each.append(full_nameT)
+
         student = i.student
         first = student.first_name
         last = student.last_name
@@ -397,3 +402,21 @@ def tutorRequests(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
+
+def deleteRequest(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+
+    return tutorRequests(request)
+
+

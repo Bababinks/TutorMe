@@ -85,12 +85,8 @@ td:nth-child(10) {
 			{% for schedule in list %}
 			<tr>
 				<td>{{ schedule.0 }}</td>
-				<td>{{ schedule.1 }}</td>
-                <td> {% for times in schedule.2 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.3 %}
+				<td>{{ schedule.2 }}</td>
+                <td> {% for times in schedule.3 %}
                             {{ times }}
                     {% endfor %}
                 </td>
@@ -114,10 +110,19 @@ td:nth-child(10) {
                             {{ times }}
                     {% endfor %}
                 </td>
+				<td> {% for times in schedule.9 %}
+                            {{ times }}
+                    {% endfor %}
+                </td>
                 <td>
 					<button type="button" class="btn btn-accept">Accept</button>
-					<button type="button" class="btn btn-reject">Reject</button>
-				</td>
+
+                    <form action="{% url 'delete_request' schedule.0 schedule.1 schedule.2 %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-reject">Reject</button>
+                    </form>
+
+                </td>
 			</tr>
 			{% endfor %}
 		</tbody>
