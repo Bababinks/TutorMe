@@ -370,12 +370,30 @@ def tutorRequests(request):
         full_name = first + " " + last
         each.append(full_name)
 
-        each.append(i.monday)
-        each.append(i.tuesday)
-        each.append(i.wednesday)
-        each.append(i.thursday)
-        each.append(i.friday)
-        each.append(i.saturday)
-        each.append(i.sunday)
+        def time_slots(times):
+            slots = []
+            for i in range(len(times)):
+                start = times[i]
+                end = times[i] + 1
+                am_pm_start = "am"
+                am_pm_end = "am"
+                if start >= 12:
+                    am_pm_start = "pm"
+                    if start > 12:
+                        start -= 12
+                if end >= 12:
+                    am_pm_end = "pm"
+                    if end > 12:
+                        end -= 12
+                slots.append(f"{start}-{end}{am_pm_start}")
+            return ", ".join(slots)
+
+        each.append(time_slots(i.monday))
+        each.append(time_slots(i.tuesday))
+        each.append(time_slots(i.wednesday))
+        each.append(time_slots(i.thursday))
+        each.append(time_slots(i.friday))
+        each.append(time_slots(i.saturday))
+        each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
