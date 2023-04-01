@@ -8,19 +8,22 @@
 {% bootstrap_javascript %}
 {% bootstrap_messages %}
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 {% include "nav.html" %}
 
-<form class="form align-center" method="POST">
+<form class="form" method="POST">
     {% csrf_token %}
     <div class="form-group mb-3 p-5">
-        <label class="form-label" for="searchBar">Find the class you want to tutor</label>
+        <label class="form-label" for="searchBar">Find the class you want to tutor!</label>
         <div class="input-group mb-3">
+          
             <input aria-describedby="searchBtn" class="form-control" formmethod="POST" id="searchBar"
                    name="searchBar"
                    placeholder="Search for classes..." style="max-width: 50%; text-align: center" type="search">
-<button class="btn btn-primary" style="border-top-right-radius:20px;
-border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i></button>
+
+                   <button class="btn btn-primary" style="border-top-right-radius:20px;
+                      border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i></button>
         </div>
 
         {% if not searchResults %}
