@@ -1,3 +1,9 @@
+<html>
+
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -11,10 +17,11 @@
     <div class="form-group mb-3 p-5">
         <label class="form-label" for="searchBar">Find the class you want a tutor for</label>
         <div class="input-group mb-3">
-            <button class="btn btn-primary" id="searchBtn" style="font-weight: bold" type="submit">Search</button>
             <input aria-describedby="searchBtn" class="form-control" formmethod="POST" id="searchBar"
                    name="searchBar"
                    placeholder="Search for classes..." style="max-width: 50%; text-align: center" type="search">
+            <button class="btn btn-primary" style="border-top-right-radius:20px;
+border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i></button>
         </div>
 
         {% if not searchResults %}
@@ -73,3 +80,5 @@
 </form>
 
 {% include "footer.html" %}
+
+</html>

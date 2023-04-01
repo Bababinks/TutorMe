@@ -1,4 +1,4 @@
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
@@ -110,8 +110,10 @@ def deleteClass(request, Class):
 @user_passes_test(not_student)
 def searchView(request):
     if request.method == 'POST':
-        searchQuery = request.POST.get("searchBar")
-
+        if request.POST.get("initialSearch"):
+            searchQuery = request.POST.get("initialSearch")
+        else:
+            searchQuery = request.POST.get("searchBar")
         if searchQuery:
             searchResults = Searchereds(searchQuery)
         else:
@@ -124,6 +126,7 @@ def searchView(request):
 @user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")
+
     theEmail = request.user.email
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if class_choice != "":
@@ -210,10 +213,14 @@ def Student_Classes_List_View(request, mnemonic, name, number):
     for i in query:
         tutor = i.tutor
         if( Schedule.objects.filter(tutor=tutor, class_name=both).exists() ):
+            info=[]
             first = tutor.first_name
             last = tutor.last_name
             full_name = first + " " + last
-            list.append(full_name)
+            info.append(full_name)
+            info.append(Schedule.objects.get(tutor=tutor, class_name=both).input_rate)
+            list.append(info)
+
 
     return render(request, 'StudentClassList.html', {'list': list, 'name': name, 'mnemonic': mnemonic})
 
@@ -278,8 +285,13 @@ def EditClass(request, name):
     sun = query.sunday
     rate = query.input_rate
     prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
+
+
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
 
+
+@login_required
+@user_passes_test(is_not_tutor)
 def StudentMakeSchedule(request, tutor, name, mnemonic):
     if " " in tutor:
         tutor_name = tutor.split(' ')
@@ -290,21 +302,72 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     full_name = mnemonic + " " + name
 
     tutor_schedule = Schedule.objects.get(class_name=full_name, tutor_id=query.id)
+    mon_filtered=[]
+    tues_filtered=[]
+    wen_filtered=[]
+    thurs_filtered=[]
+    fri_filtered=[]
+    sat_filtered=[]
+    sun_filtered=[]
 
-    mon = tutor_schedule.monday
-    tues = tutor_schedule.tuesday
-    wed = tutor_schedule.wednesday
-    thurs = tutor_schedule.thursday
-    fri = tutor_schedule.friday
-    sat = tutor_schedule.saturday
-    sun = tutor_schedule.sunday
+    Mon_set=set()
+    Tue_set=set()
+    Wed_set=set()
+    Thur_set=set()
+    Fri_set=set()
+    Sat_set=set()
+    Sun_set=set()
+
+
+    for obj in Appointment.objects.filter(class_name=full_name, tutor_id=query.id):
+
+        Mon_set.update(set(obj.monday))
+
+        Tue_set.update(set(obj.tuesday))
+        Wed_set.update(set(obj.wednesday))
+        Thur_set.update(set(obj.thursday))
+        Fri_set.update(set(obj.friday))
+        print(Fri_set)
+        Sat_set.update(set(obj.saturday))
+        Sun_set.update(set(obj.sunday))
+    for val in tutor_schedule.monday:
+
+        if val not in Mon_set:
+            mon_filtered.append(val)
+    for val in tutor_schedule.tuesday:
+        if val not in Tue_set:
+            tues_filtered.append(val)
+    for val in tutor_schedule.wednesday:
+        if val not in Wed_set:
+            wen_filtered.append(val)
+    for val in tutor_schedule.thursday:
+        if val not in Thur_set:
+            thurs_filtered.append(val)
+    for val in tutor_schedule.friday:
+        if val not in Fri_set:
+            fri_filtered.append(val)
+    for val in tutor_schedule.saturday:
+        if val not in Sat_set:
+            sat_filtered.append(val)
+    for val in tutor_schedule.sunday:
+        if val not in Sun_set:
+            sun_filtered.append(val)
+    # FIX THIS:  newMon=[item for item in tutor_schedule.monday if item not in ScheduleStudent.objects.get(tutor=tutor)] #check array of each object
+    mon = mon_filtered
+    tues = tues_filtered
+    wed = wen_filtered
+    thurs = thurs_filtered
+    fri = fri_filtered
+    sat = sat_filtered
+    sun = sun_filtered
     rate = tutor_schedule.input_rate
     tutor_schedule = [mon, tues, wed, thurs, fri, sat, sun, rate]
 
 
     return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
 
-
+@login_required
+@user_passes_test(is_not_tutor)
 def calendarStudent(request, tutor, name, mnemonic):
     split = tutor.split(" ")
     first_name = split[0]
@@ -355,7 +418,8 @@ def calendarStudent(request, tutor, name, mnemonic):
 
     return redirect(reverse('student_default'))
 
-
+@login_required
+@user_passes_test(not_student)
 def tutorRequests(request):
     tutor = tutorMeUser.objects.get(email=request.user.email)
 
@@ -500,6 +564,10 @@ def deleteRequest(request, class_name, tutor, student):
 
     return tutorRequests(request)
 
+
+
+@login_required
+@user_passes_test(not_student)
 def allAppointmentsTutor(request):
     tutor = tutorMeUser.objects.get(email=request.user.email)
 
@@ -547,7 +615,8 @@ def allAppointmentsTutor(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'appointmentsTutor.html', {'list': list})
-
+@login_required
+@user_passes_test(is_not_tutor)
 def allAppointmentsStudent(request):
     student = tutorMeUser.objects.get(email=request.user.email)
 

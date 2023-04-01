@@ -19,7 +19,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/js/bootstrap.min.js"></script>
-
 	<script>
 		function inputClicked(input) {
 		console.log("input clicked");
@@ -175,12 +174,11 @@
 							<td><input name="checkbox" value='sa7' class="form-check" type="checkbox" {% if 7 not in tutor_schedule.5 %} disabled = "true" {% endif %} onclick="inputClicked(this)">Click</input></td>
 							<td><input name="checkbox" value='su7' class="form-check" type="checkbox" {% if 7 not in tutor_schedule.6 %} disabled = "true" {% endif %} onclick="inputClicked(this)">Click</input></td>
 						</tr>
-						<!-- add more rows for each hour -->
 
-					</tbody>
-				</table>
-			</div>
-	</body>
+            </tbody>
+         </table>
+      </div>
+</body>
   </div>
 		<div class="container-fluid">
 			<div class = "text-center" >
@@ -190,3 +188,4 @@
 		</div>
 
 </form>
+</html>
