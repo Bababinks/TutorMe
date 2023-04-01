@@ -110,8 +110,10 @@ def deleteClass(request, Class):
 @user_passes_test(not_student)
 def searchView(request):
     if request.method == 'POST':
-        searchQuery = request.POST.get("searchBar")
-
+        if request.POST.get("initialSearch"):
+            searchQuery = request.POST.get("initialSearch")
+        else:
+            searchQuery = request.POST.get("searchBar")
         if searchQuery:
             searchResults = Searchereds(searchQuery)
         else:
@@ -124,6 +126,7 @@ def searchView(request):
 @user_passes_test(is_tutor)
 def Tutor_Classes_List_View(request):
     class_choice = request.POST.get("class_choice", "")
+
     theEmail = request.user.email
     cur_user = tutorMeUser.objects.get(email=request.user.email)
     if class_choice != "":
