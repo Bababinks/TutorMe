@@ -28,8 +28,11 @@
                 <strong class="list-group-item list-group-item-action active p-3" aria-current="true" style="background-color:#5a42f5;">
                 <div class="d-flex w-100 justify-content-between">
                 <li>
-                    {{tutor}} <br> <a class="btn btn-success" href="{% url 'student_make_schedule' tutor name mnemonic%}" role="button">Schedule Times</a>
+                    {{tutor.0}} <br> <a class="btn btn-success" href="{% url 'student_make_schedule' tutor name mnemonic%}" role="button">Schedule Times</a>
                 </li>
+                      <ul style="color:orange">
+                    Rate: ${{tutor.1}}
+                </ul>
                     </div>
                 </strong>
             </div>
