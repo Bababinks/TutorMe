@@ -210,10 +210,14 @@ def Student_Classes_List_View(request, mnemonic, name, number):
     for i in query:
         tutor = i.tutor
         if( Schedule.objects.filter(tutor=tutor, class_name=both).exists() ):
+            info=[]
             first = tutor.first_name
             last = tutor.last_name
             full_name = first + " " + last
-            list.append(full_name)
+            info.append(full_name)
+            info.append(Schedule.objects.get(tutor=tutor, class_name=both).input_rate)
+            list.append(info)
+
 
     return render(request, 'StudentClassList.html', {'list': list, 'name': name, 'mnemonic': mnemonic})
 
@@ -278,7 +282,10 @@ def EditClass(request, name):
     sun = query.sunday
     rate = query.input_rate
     prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
+
+
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
+
 
 @login_required
 @user_passes_test(is_not_tutor)
