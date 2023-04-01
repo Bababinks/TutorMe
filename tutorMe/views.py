@@ -287,7 +287,6 @@ def EditClass(request, name):
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
 
 
-
 @login_required
 @user_passes_test(is_not_tutor)
 def StudentMakeSchedule(request, tutor, name, mnemonic):
