@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+.navbar {
+
+
+}
+
+.nav-item {
+    font-family: 'Inter', sans-serif;
+}
+
+.nav-item:hover {
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+
+.nav-item:after {
+    font-weight: bold;
+}
