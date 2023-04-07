@@ -3,28 +3,32 @@
 
 <nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;">
 
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <a class="navbar-brand" href="/tutorMe/tutor">
             <img alt="TutorMe" src="/static/tutorMe/images/logo.png" style="max-width:25%;">
         </a>
 
-        <div class="navbar-nav d-flex justify-content-between flex-fill">
-            <ul class="navbar-nav flex-fill">
-                <li class="nav-item active flex-fill ">
+        <div class="navbar-nav d-flex justify-content-between flex-fill" >
+            <ul class="navbar-nav flex-fill" style="margin-left:-12em">
+
+                <li class="nav-item active flex-fill " >
                     <a class="nav-link" href="/tutorMe/tutor/classes/list"><i class="fa fa-home"></i> My Classes</a>
                 </li>
-                <li class="nav-item flex-fill ">
+                <li class="nav-item flex-fill " >
                     <a class="nav-link" href="/tutorMe/tutor/requests"><i class="fa fa-tasks"></i> Requests</a>
                 </li>
-                <li class="nav-item flex-fill ">
+                <li class="nav-item flex-fill " >
                     <a class="nav-link " href="/tutorMe/tutor/appointments"><i class="fa fa-calendar"></i> Scheduled Appointments</a>
                 </li>
-                <li class="nav-item flex-fill ">
+
+                <li class="nav-item flex-fill " >
                     <a class="nav-link " href="/tutorMe/tutor"><i class="fa fa-search-plus"></i> Search Classes</a>
                 </li>
-            </ul>
+                    </ul>
 
-            <div class="dropdown dropdown-menu-end dropdown-menu-lg-start">
+
+
+            <div class="dropdown dropdown-menu-end dropdown-menu-lg-start" style="margin-left:4em; margin-right:7em">
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
                 <button aria-expanded="false" class="btn rounded-circle" data-bs-toggle="dropdown"

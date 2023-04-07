@@ -9,7 +9,7 @@
         </a>
 
         <div class="navbar-nav d-flex justify-content-between flex-fill">
-            <ul class="navbar-nav flex-fill">
+            <ul class="navbar-nav flex-fill" style="margin-left:-12em">
                 <li class="nav-item active flex-fill ">
                     <a class="nav-link" href="/tutorMe/student/requests"><i class="fa fa-tasks"></i> Requests</a>
                 </li>
@@ -21,7 +21,7 @@
                 </li>
             </ul>
 
-            <div class="dropdown dropdown-menu-end dropdown-menu-lg-start">
+            <div class="dropdown dropdown-menu-end dropdown-menu-lg-start" style="margin-left:4em; margin-right:8.2em">
                 {% load socialaccount %}
                 {% if user.is_authenticated %}
                 <button aria-expanded="false" class="btn rounded-circle" data-bs-toggle="dropdown"
