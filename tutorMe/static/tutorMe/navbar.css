@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
-.navbar {
-
-
+html * {
+    font-family: 'Inter', sans-serif !important;
 }
 
 .nav-item {
@@ -16,4 +15,14 @@
 
 .nav-item:after {
     font-weight: bold;
+}
+
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid grey;
+    margin: 1em 0;
+    padding: 0;
 }
