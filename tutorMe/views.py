@@ -13,7 +13,8 @@ from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
 from .models import Schedule, Appointment
-
+from django.dispatch import receiver
+from allauth.socialaccount.signals import pre_social_login
 from django.urls import reverse
 import traceback
 
@@ -144,7 +145,7 @@ def Tutor_Classes_List_View(request):
     list = []
     hasSchedule = []
     for i in query:
-        otherarr=[]
+        otherarr = []
         curmneonic = i.mnemonic
         curname = i.name
         curmneonic += " "
@@ -212,15 +213,14 @@ def Student_Classes_List_View(request, mnemonic, name, number):
     list = []
     for i in query:
         tutor = i.tutor
-        if( Schedule.objects.filter(tutor=tutor, class_name=both).exists() ):
-            info=[]
+        if (Schedule.objects.filter(tutor=tutor, class_name=both).exists()):
+            info = []
             first = tutor.first_name
             last = tutor.last_name
             full_name = first + " " + last
             info.append(full_name)
             info.append(Schedule.objects.get(tutor=tutor, class_name=both).input_rate)
             list.append(info)
-
 
     return render(request, 'StudentClassList.html', {'list': list, 'name': name, 'mnemonic': mnemonic})
 
@@ -274,6 +274,7 @@ def calendar_times(request, class_name):
 
     return redirect(reverse('tutor_classes_list_view'))
 
+
 def EditClass(request, name):
     query = Schedule.objects.get(class_name=name, tutor__email=request.user.email)
     mon = query.monday
@@ -284,8 +285,7 @@ def EditClass(request, name):
     sat = query.saturday
     sun = query.sunday
     rate = query.input_rate
-    prev = [mon, tues, wed, thurs, fri, sat,sun, rate]
-
+    prev = [mon, tues, wed, thurs, fri, sat, sun, rate]
 
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
 
@@ -302,25 +302,23 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     full_name = mnemonic + " " + name
 
     tutor_schedule = Schedule.objects.get(class_name=full_name, tutor_id=query.id)
-    mon_filtered=[]
-    tues_filtered=[]
-    wen_filtered=[]
-    thurs_filtered=[]
-    fri_filtered=[]
-    sat_filtered=[]
-    sun_filtered=[]
+    mon_filtered = []
+    tues_filtered = []
+    wen_filtered = []
+    thurs_filtered = []
+    fri_filtered = []
+    sat_filtered = []
+    sun_filtered = []
 
-    Mon_set=set()
-    Tue_set=set()
-    Wed_set=set()
-    Thur_set=set()
-    Fri_set=set()
-    Sat_set=set()
-    Sun_set=set()
-
+    Mon_set = set()
+    Tue_set = set()
+    Wed_set = set()
+    Thur_set = set()
+    Fri_set = set()
+    Sat_set = set()
+    Sun_set = set()
 
     for obj in Appointment.objects.filter(class_name=full_name, tutor_id=query.id):
-
         Mon_set.update(set(obj.monday))
 
         Tue_set.update(set(obj.tuesday))
@@ -363,8 +361,9 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     rate = tutor_schedule.input_rate
     tutor_schedule = [mon, tues, wed, thurs, fri, sat, sun, rate]
 
+    return render(request, 'Student_Make_Schedule.html',
+                  {'tutor': tutor, 'name': name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
 
-    return render(request, 'Student_Make_Schedule.html', {'tutor':tutor, 'name':name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
 
 @login_required
 @user_passes_test(is_not_tutor)
@@ -418,6 +417,7 @@ def calendarStudent(request, tutor, name, mnemonic):
 
     return redirect(reverse('student_default'))
 
+
 @login_required
 @user_passes_test(not_student)
 def tutorRequests(request):
@@ -468,6 +468,7 @@ def tutorRequests(request):
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
 
+
 def studentRequests(request):
     student = tutorMeUser.objects.get(email=request.user.email)
 
@@ -516,6 +517,7 @@ def studentRequests(request):
         list.append(each)
     return render(request, 'studentRequests.html', {'list': list})
 
+
 def accepted(request, class_name, tutor, student):
     split_tutor = tutor.split()
     tutor_first = split_tutor[0]
@@ -533,7 +535,7 @@ def accepted(request, class_name, tutor, student):
         student=x.student,
         tutor=x.tutor,
         class_name=x.class_name,
-        )
+    )
     apt.monday = x.monday
     apt.tuesday = x.tuesday
     apt.wednesday = x.wednesday
@@ -563,7 +565,6 @@ def deleteRequest(request, class_name, tutor, student):
     toBeDeleted.delete()
 
     return tutorRequests(request)
-
 
 
 @login_required
@@ -615,6 +616,8 @@ def allAppointmentsTutor(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'appointmentsTutor.html', {'list': list})
+
+
 @login_required
 @user_passes_test(is_not_tutor)
 def allAppointmentsStudent(request):

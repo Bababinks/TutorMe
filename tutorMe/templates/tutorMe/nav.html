@@ -1,38 +1,76 @@
-	<nav class="navbar navbar-expand-lg navbar navbar-dark" style="background-color:#e38a17;">
-		<style>
-			
-			.helpME{
-				margin-left: 20px;
-			}
-		</style>
-  <a class="navbar-brand helpME" href="#">TutorMe</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse " id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-lg-0 w-50">
-      <li class="nav-item active helpME">
-        <a class="nav-link" href="/tutorMe/tutor/classes/list">My Classes</a>
-      </li>
-      <li class="nav-item helpME">
-        <a class="nav-link" href="/tutorMe/tutor/requests">Requests</a>
-      </li>
-      <li class="nav-item helpME">
-        <a class="nav-link " href="/tutorMe/tutor/appointments">Scheduled Appointments</a>
-      </li>
-      <li class="nav-item helpME">
-        <a class="nav-link " href="/tutorMe/tutor">Add Classes</a>
-      </li>
-    </ul>
-    {% load socialaccount %}
-    {% if user.is_authenticated %}
-    <a href="/tutorMe/logout" class="btn btn-primary btn-lg active position-absolute end-0" role="button" aria-pressed="true">Logout</a>
-    {% else %}
-    <a href="{% provider_login_url 'google' %}" class="btn btn-primary btn-lg active position-absolute end-0" role="button" aria-pressed="true">Login With Google</a>
-    {% endif %}
 
 
 
-  </div>
+<nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/tutorMe/tutor">
+            <img alt="TutorMe" src="/static/tutorMe/images/logo.png" style="max-width:25%;">
+        </a>
+
+        <div class="navbar-nav d-flex justify-content-between flex-fill">
+            <ul class="navbar-nav flex-fill">
+                <li class="nav-item active flex-fill ">
+                    <a class="nav-link" href="/tutorMe/tutor/classes/list"><i class="fa fa-home"></i> My Classes</a>
+                </li>
+                <li class="nav-item flex-fill ">
+                    <a class="nav-link" href="/tutorMe/tutor/requests"><i class="fa fa-tasks"></i> Requests</a>
+                </li>
+                <li class="nav-item flex-fill ">
+                    <a class="nav-link " href="/tutorMe/tutor/appointments"><i class="fa fa-calendar"></i>Scheduled Appointments</a>
+                </li>
+                <li class="nav-item flex-fill ">
+                    <a class="nav-link " href="/tutorMe/tutor"><i class="fa fa-search-plus"></i>Search Classes</a>
+                </li>
+            </ul>
+
+            <div class="dropdown dropdown-menu-end dropdown-menu-lg-start">
+                {% load socialaccount %}
+                {% if user.is_authenticated %}
+                <button aria-expanded="false" class="btn rounded-circle" data-bs-toggle="dropdown"
+                        id="options"
+                        style="max-width: 50%;" type="button">
+                    <img alt="T" class="img-fluid rounded-circle"
+                         src="{{ user.socialaccount_set.all.0.get_avatar_url }}">
+                </button>
+                <ul aria-labelledby="options" class="dropdown-menu">
+                    <li><a class="dropdown-item disabled">
+                        <div class="container">
+                            <div class="row">
+                                <!-- <img alt="T" class="img-fluid rounded-circle"
+                                     src="{{ user.socialaccount_set.all.0.get_avatar_url }}"
+                                     style="max-width: 50%;"> -->
+                                <div class="col-xs-2">
+                                    <div class="row"
+                                         style="font-family: 'Inter', sans-serif; font-weight: bold; color: black;">
+                                        {{ user.socialaccount_set.all.0.extra_data.name }}
+                                    </div>
+                                    <div class="row" style="font-family: 'Inter', sans-serif;">
+                                        {{ user.socialaccount_set.all.0.extra_data.email}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a></li>
+
+                    <li><a class="dropdown-item disabled">
+                        <hr/>
+                    </a></li>
+                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>Sign
+                        Out</a></li>
+                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>Report a Bug</a>
+                    </li>
+                </ul>
+                {% else %}
+                <ul aria-labelledby="options" class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>Sign In</a></li>
+                </ul>
+                {% endif %}
+            </div>
+
+
+        </div>
+
+    </div>
 </nav>
