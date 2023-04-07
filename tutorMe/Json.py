@@ -98,6 +98,10 @@ def get_classes(subject_name, year, semester):
 #used this library  from this question:https://stackoverflow.com/questions/17388213/find-the-similarity-metric-between-two-strings
 
 def Searchereds(keyword):
+
+    keyword = replaceslash(keyword)
+    print(keyword)
+
     ClassesActual=[]
     ClassInfo=[]
     match = re.search(r'\d+', keyword)
@@ -143,5 +147,12 @@ def Searchereds(keyword):
         return ClassesActual[:10]
     else:
         return  ClassesActual
+
+def replaceslash(keyword):
+    if (keyword == "/"):
+        keyword = "thisstringwillresultinnomatchessijodjasodajsidj"
+    elif ("/" in keyword):
+        keyword = keyword.replace("/", "")
+    return keyword
 
 
