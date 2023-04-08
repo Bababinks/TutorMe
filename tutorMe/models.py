@@ -30,12 +30,13 @@ class Course(models.Model):
 class Notification(models.Model):
 
     class requestState(models.TextChoices):
-        ACCEPTED = 'Accepted',
-        UNDECIDED = 'Undecided',
-        REJECTED = 'Rejected',
+        ACC = 'Accepted',
+        UND = 'Undecided',
+        REJ = 'Rejected',
 
-    app = models.ForeignKey('tutorMeUser', related_name='Appointment', on_delete=models.DO_NOTHING)
-    info = models.TextField(choices=requestState.choices)
+    state = models.TextField(choices=requestState.choices)
+    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
+    class_name = models.CharField(max_length=100)
 
 
 class Schedule(models.Model):
