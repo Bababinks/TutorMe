@@ -232,9 +232,7 @@ def schedule_view(request, name):
 def calendar_times(request, class_name):
     if request.method == "POST":
         tutor = tutorMeUser.objects.get(email=request.user.email)
-        schedule, created = Schedule.objects.get_or_create(
-            tutor=tutor,
-            class_name=class_name,
+        schedule, created = Schedule.objects.get_or_create(tutor=tutor, class_name=class_name,
 
         )
         schedule.input_rate = request.POST.get('inputRate')
@@ -376,11 +374,7 @@ def calendarStudent(request, tutor, name, mnemonic):
     if request.method == "POST":
         student = tutorMeUser.objects.get(email=request.user.email)
         tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name)
-        schedule, created = ScheduleStudent.objects.get_or_create(
-            student=student,
-            tutor=tutor,
-            class_name=full_name,
-        )
+        schedule, created = ScheduleStudent.objects.get_or_create(student=student, tutor=tutor, class_name=full_name, )
         m = []
         tu = []
         w = []
@@ -531,11 +525,7 @@ def accepted(request, class_name, tutor, student):
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
-    apt = Appointment.objects.create(
-        student=x.student,
-        tutor=x.tutor,
-        class_name=x.class_name,
-    )
+    apt = Appointment.objects.create(student=x.student, tutor=x.tutor, class_name=x.class_name, )
     apt.monday = x.monday
     apt.tuesday = x.tuesday
     apt.wednesday = x.wednesday
@@ -668,3 +658,9 @@ def allAppointmentsStudent(request):
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
 
+
+@login_required
+@user_passes_test(is_not_tutor)
+def allMessagesStudent(request):
+
+    return render(request, 'inbox.html')

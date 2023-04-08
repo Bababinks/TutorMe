@@ -12,32 +12,38 @@ class tutorMeUser(models.Model):
     def __str__(self):
         return self.email
 
-class TutorClasses(models.Model):
 
-    tutor = models.ForeignKey(
-        'tutorMeUser',
-        on_delete=models.CASCADE,
-    )
+class TutorClasses(models.Model):
+    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
     mnemonic = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
-    number=models.CharField(max_length=255, default="")
+    number = models.CharField(max_length=255, default="")
+
 
 class Course(models.Model):
     course_name = models.CharField(default="", max_length=255)
     referenceLink = models.CharField(default="", max_length=100000)
     course_number = models.CharField(default="", max_length=1000)
-    Subject = models.CharField(default="",max_length=4)
+    Subject = models.CharField(default="", max_length=4)
+
+
+class Notification(models.Model):
+
+    class requestState(models.TextChoices):
+        ACCEPTED = 'Accepted',
+        UNDECIDED = 'Undecided',
+        REJECTED = 'Rejected',
+
+    app = models.ForeignKey('tutorMeUser', related_name='Appointment', on_delete=models.DO_NOTHING)
+    info = models.TextField(choices=requestState.choices)
 
 
 class Schedule(models.Model):
-    tutor = models.ForeignKey(
-        'tutorMeUser',
-        on_delete=models.CASCADE,
-    )
+    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
     class_name = models.CharField(max_length=100)
     # start_time = models.DateTimeField()
     # end_time = models.DateTimeField()
-    input_rate = models.DecimalField(max_digits=5, decimal_places=2,  default=0)
+    input_rate = models.DecimalField(max_digits=5, decimal_places=2, default=0)
 
     monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     tuesday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
@@ -49,15 +55,8 @@ class Schedule(models.Model):
 
 
 class ScheduleStudent(models.Model):
-    tutor = models.ForeignKey(
-        'tutorMeUser',
-        related_name='tutor',
-        on_delete=models.CASCADE,
-    )
-    student = models.ForeignKey(
-        'tutorMeUser',
-        on_delete=models.CASCADE,
-    )
+    tutor = models.ForeignKey('tutorMeUser', related_name='tutor', on_delete=models.CASCADE, )
+    student = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
     class_name = models.CharField(max_length=100)
 
     monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
@@ -70,16 +69,8 @@ class ScheduleStudent(models.Model):
 
 
 class Appointment(models.Model):
-    tutor = models.ForeignKey(
-        'tutorMeUser',
-        #related_name='tutor',
-        on_delete=models.CASCADE,
-    )
-    student = models.ForeignKey(
-        'tutorMeUser',
-        related_name='student',
-        on_delete=models.CASCADE,
-    )
+    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
+    student = models.ForeignKey('tutorMeUser', related_name='student', on_delete=models.CASCADE, )
     class_name = models.CharField(max_length=100)
 
     monday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
