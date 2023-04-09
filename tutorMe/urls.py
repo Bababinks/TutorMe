@@ -38,4 +38,6 @@ urlpatterns = [
     path('student/appointments', views.allAppointmentsStudent),
 
     path('student/inbox', views.allMessagesStudent),
+    path('tutor/inbox', views.allMessagesTutor),
+
 ]

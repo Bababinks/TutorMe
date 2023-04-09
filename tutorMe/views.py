@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
-from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
+from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent, Notification
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
@@ -234,7 +234,7 @@ def calendar_times(request, class_name):
         tutor = tutorMeUser.objects.get(email=request.user.email)
         schedule, created = Schedule.objects.get_or_create(tutor=tutor, class_name=class_name,
 
-        )
+                                                           )
         schedule.input_rate = request.POST.get('inputRate')
         m = []
         tu = []
@@ -463,6 +463,28 @@ def tutorRequests(request):
     return render(request, 'tutorRequests.html', {'list': list})
 
 
+def generateRejectionMsgToStudent(student, tutor, class_name):
+    """
+
+    :param app:
+    """
+    print('WORKING Rejecion')
+    msg = Notification.objects.create(state=Notification.requestState.REJ, tutor=tutor, student=student,
+                                      class_name=class_name)
+    msg.save()
+
+
+def generateAcceptanceMsgToStudent(student, tutor, class_name):
+    """
+
+    :param app:
+    """
+    print('WORKING Acceptance')
+    msg = Notification.objects.create(state=Notification.requestState.ACC, tutor=tutor, student=student,
+                                      class_name=class_name)
+    msg.save()
+
+
 def studentRequests(request):
     student = tutorMeUser.objects.get(email=request.user.email)
 
@@ -525,6 +547,8 @@ def accepted(request, class_name, tutor, student):
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
+    generateAcceptanceMsgToStudent(x.student, x.tutor, x.class_name)
+
     apt = Appointment.objects.create(student=x.student, tutor=x.tutor, class_name=x.class_name, )
     apt.monday = x.monday
     apt.tuesday = x.tuesday
@@ -552,6 +576,7 @@ def deleteRequest(request, class_name, tutor, student):
 
     student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
     toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    generateRejectionMsgToStudent(tutor1, student1, class_name)
     toBeDeleted.delete()
 
     return tutorRequests(request)
@@ -662,5 +687,10 @@ def allAppointmentsStudent(request):
 @login_required
 @user_passes_test(is_not_tutor)
 def allMessagesStudent(request):
+    return render(request, 'inbox.html')
 
+
+@login_required
+@user_passes_test(is_tutor)
+def allMessagesTutor(request):
     return render(request, 'inbox.html')
