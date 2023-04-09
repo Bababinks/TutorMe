@@ -37,7 +37,7 @@ urlpatterns = [
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
 
-    path('student/inbox', views.allMessagesStudent),
-    path('tutor/inbox', views.allMessagesTutor),
+    path('student/inbox', views.allMessagesStudent, name='student_messages'),
+    path('tutor/inbox', views.allMessagesTutor, name='tutor_messages'),
 
 ]
