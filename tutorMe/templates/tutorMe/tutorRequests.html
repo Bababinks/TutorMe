@@ -118,7 +118,7 @@ td:nth-child(10) {
 					<form action="{% url 'accepted' schedule.0 schedule.1 schedule.2 %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-accept">Accept</button>
-
+                    </form>
                     <form action="{% url 'delete_request' schedule.0 schedule.1 schedule.2 %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-reject">Reject</button>
