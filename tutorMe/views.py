@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from django.db.models import Model, Q
+from django.db.models import Model, Q, DateTimeField
+from django.db.models.functions import Trunc
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
@@ -691,7 +692,7 @@ def allAppointmentsStudent(request):
 def allMessagesStudent(request):
     student = tutorMeUser.objects.get(email=request.user.email)
 
-    notifications = Notification.objects.get(student=student)
+    notifications = Notification.objects.filter(student=student).order_by = '-time'
 
     return render(request, 'inbox.html', {'msgs': notifications})
 

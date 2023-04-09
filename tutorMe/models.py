@@ -73,6 +73,8 @@ class Appointment(models.Model):
     saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
+from datetime import date, datetime
+
 
 class Notification(models.Model):
     class requestState(models.TextChoices):
@@ -85,6 +87,6 @@ class Notification(models.Model):
     tutor = models.CharField(max_length=100)
     student = models.CharField(max_length=100)
     class_name = models.CharField(max_length=100)
-    time = models.DateTimeField(auto_created=True)
+    time = models.DateTimeField(default=datetime.now, blank=True)
 
 
