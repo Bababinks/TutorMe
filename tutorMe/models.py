@@ -82,8 +82,9 @@ class Notification(models.Model):
         CAN = 'Canceled'
 
     state = models.TextField(choices=requestState.choices)
-    tutor = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, )
-    student = models.ForeignKey('tutorMeUser', related_name='appstudent', on_delete=models.CASCADE, )
+    tutor = models.CharField(max_length=100)
+    student = models.CharField(max_length=100)
     class_name = models.CharField(max_length=100)
+    time = models.DateTimeField(auto_created=True)
 
 

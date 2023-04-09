@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Model, Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -547,7 +549,7 @@ def accepted(request, class_name, tutor, student):
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
-    generateAcceptanceMsgToStudent(x.student, x.tutor, x.class_name)
+    generateAcceptanceMsgToStudent(tutor=tutor, student=student, class_name=class_name)
 
     apt = Appointment.objects.create(student=x.student, tutor=x.tutor, class_name=x.class_name, )
     apt.monday = x.monday
@@ -576,7 +578,7 @@ def deleteRequest(request, class_name, tutor, student):
 
     student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
     toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
-    generateRejectionMsgToStudent(tutor1, student1, class_name)
+    generateRejectionMsgToStudent(tutor=tutor, student=student, class_name=class_name)
     toBeDeleted.delete()
 
     return tutorRequests(request)
@@ -687,7 +689,11 @@ def allAppointmentsStudent(request):
 @login_required
 @user_passes_test(is_not_tutor)
 def allMessagesStudent(request):
-    return render(request, 'inbox.html')
+    student = tutorMeUser.objects.get(email=request.user.email)
+
+    notifications = Notification.objects.get(student=student)
+
+    return render(request, 'inbox.html', {'msgs': notifications})
 
 
 @login_required

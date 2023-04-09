@@ -7,9 +7,24 @@
 
 {% include "navStudent.html" %}
 
-
-
-
-
+<div class="container">
+    {% for msg in msgs %}
+    <div class="card">
+        {% if msg.state == 'Rejected' %}
+        <div class="card-header">
+            Important! Request status <i class="fa fa-times-circle"></i>
+        </div>
+        {% else %}
+        <div class="card-header">
+            Important! Request status <i class="fa fa-check-circle"></i>
+        </div>
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ msg.tutor }} has {{ msg.state }} your request for {{ msg.class_name }}
+                tutoring! </h5>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% include "footer.html" %}
