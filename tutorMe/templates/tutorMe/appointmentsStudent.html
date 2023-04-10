@@ -63,6 +63,7 @@ td:nth-child(10) {
 				<th>Friday</th>
 				<th>Saturday</th>
 				<th>Sunday</th>
+				<th>Chat</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -98,6 +99,9 @@ td:nth-child(10) {
                             {{ times }}
                     {% endfor %}
                 </td>
+				<td>
+					<a class="btn btn-primary chat-button" href="#">Chat</a>
+				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
