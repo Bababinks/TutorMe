@@ -89,3 +89,9 @@ class Appointment(models.Model):
     friday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
+
+class ChatMessage(models.Model):
+    sender = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, related_name='received_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)

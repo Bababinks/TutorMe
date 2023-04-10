@@ -100,7 +100,7 @@ td:nth-child(10) {
                     {% endfor %}
                 </td>
 				<td>
-					<a class="btn btn-primary chat-button" href="#">Chat</a>
+					<a class="btn btn-primary chat-button" href="{% url 'StudentChat' schedule.1 schedule.2 %}">Chat</a>
 				</td>
 			</tr>
 			{% endfor %}

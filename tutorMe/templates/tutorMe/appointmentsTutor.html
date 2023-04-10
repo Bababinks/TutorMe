@@ -99,6 +99,9 @@ td:nth-child(10) {
                             {{ times }}
                     {% endfor %}
                 </td>
+				<td>
+					<a class="btn btn-primary chat-button" href="{% url 'TutorChat' schedule.1 schedule.2 %}">Chat</a>
+				</td>
 			</tr>
 			{% endfor %}
 		</tbody>
