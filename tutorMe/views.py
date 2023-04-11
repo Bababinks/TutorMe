@@ -727,7 +727,6 @@ def TutorChat(request, tutor, student):
 def chat_list(request):
     student = tutorMeUser.objects.get(email=request.user.email)
     student_name = student.first_name + " " + student.last_name
-    print("name: " + student_name)
     chats = ChatMessage.objects.filter(sender=student) | ChatMessage.objects.filter(receiver=student)
     unique_chats = []
     unique_names = []
@@ -739,9 +738,30 @@ def chat_list(request):
                 unique_names.append(tutor_name)
         elif chat.receiver == student:
             if chat.sender not in unique_chats:
-                tutor_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                tutor_name = chat.sender.first_name + " " + chat.sender.last_name
                 unique_chats.append(chat.sender)
                 unique_names.append(tutor_name)
 
     return render(request, 'StudentChat_list.html', {'unique_names': unique_names, 'student_name': student_name})
+
+def Tutor_chat_list(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+    tutor_name = tutor.first_name + " " + tutor.last_name
+    chats = ChatMessage.objects.filter(sender=tutor) | ChatMessage.objects.filter(receiver=tutor)
+    unique_chats = []
+    unique_names = []
+    for chat in chats:
+        if chat.sender == tutor:
+            if chat.receiver not in unique_chats:
+                student_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                unique_chats.append(chat.receiver)
+                unique_names.append(student_name)
+        elif chat.receiver == tutor:
+            if chat.sender not in unique_chats:
+                student_name = chat.sender.first_name + " " + chat.sender.last_name
+                unique_chats.append(chat.sender)
+                unique_names.append(student_name)
+
+    return render(request, 'TutorChat_list.html', {'unique_names': unique_names, 'tutor_name': tutor_name})
+
 
