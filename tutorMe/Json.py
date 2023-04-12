@@ -100,7 +100,6 @@ def get_classes(subject_name, year, semester):
 def Searchereds(keyword):
 
     keyword = replaceslash(keyword)
-    print(keyword)
 
     ClassesActual=[]
     ClassInfo=[]
