@@ -668,3 +668,8 @@ def allAppointmentsStudent(request):
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
 
+
+def profile(request):
+    user = request.user
+    context = {'user': user}
+    return render(request, 'view_profile.html', context)

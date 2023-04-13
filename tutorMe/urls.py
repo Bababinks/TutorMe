@@ -36,4 +36,5 @@ urlpatterns = [
     path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
+    path('tutor/profile', views.profile, name='profile'),
 ]
