@@ -7,6 +7,9 @@ class tutorMeUser(models.Model):
     is_admin_set = models.BooleanField(default=False)
     first_name = models.CharField(default="", max_length=255)
     last_name = models.CharField(default="", max_length=255)
+    phone_number = models.CharField(default="", max_length=20)
+    preferred_contact = models.CharField(choices=[('phone', 'Phone'), ('email', 'Email')], default='email',
+                                         max_length=10)
 
     # other fields as needed
     def __str__(self):

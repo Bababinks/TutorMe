@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import EditProfileForm
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
@@ -673,3 +674,18 @@ def profile(request):
     user = request.user
     context = {'user': user}
     return render(request, 'view_profile.html', context)
+
+
+def edit_profile(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=user)
+
+    context = {'form': form, 'user': user}
+    return render(request, 'edit_profile.html', context)
