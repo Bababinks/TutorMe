@@ -1,12 +1,15 @@
-{% load bootstrap5 %}
+
+
+
+
+<html>
+<head>
+	{% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 {% bootstrap_messages %}
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-
-{% include "nav.html" %}
-<html>
-<head>
 	<title>Tutor Requests</title>
     <style>
         /* Define borders for the table */
@@ -59,6 +62,8 @@ td:nth-child(10) {
 
     </style>
 </head>
+{% include "nav.html" %}
+
 <body>
 	<h1>Appointments</h1>
 	<table>
