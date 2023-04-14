@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import platform
 from django.urls import reverse
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,8 +27,13 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@rrwgn5#191&17
 #SECRET_KEY = 'django-insecure-@rrwgn5#191&17b67^o!wx8ln*9q67$8e(u95b9)e-27hv^drh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+
+if platform.system() == 'Linux' and 'DYNO' in os.environ:
+    # Running on Heroku, set DEBUG to False
+    DEBUG = False
+else:
+    # Not running on Heroku, use default DEBUG setting
+    DEBUG = True
 
 ALLOWED_HOSTS = ['tutorfinder.herokuapp.com', '127.0.0.1', 'localhost']
 
