@@ -110,11 +110,16 @@ td:nth-child(10) {
                     {% endfor %}
                 </td>
 				<td>
+
+					<a class="btn btn-primary chat-button" href="{% url 'TutorChat' schedule.1 schedule.2 %}">Chat</a>
+				</td>
+
 					<form action="{% url 'cancel_tutor' schedule.0 schedule.1 schedule.2 %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-reject">Cancel</button>
 					</form>
 				</td>
+
 
 
 

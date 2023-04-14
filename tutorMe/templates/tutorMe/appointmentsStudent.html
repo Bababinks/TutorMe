@@ -72,7 +72,11 @@ td:nth-child(10) {
 				<th>Friday</th>
 				<th>Saturday</th>
 				<th>Sunday</th>
+
+				<th>Chat</th>
+
 				<th>Canceling</th>
+
 
 			</tr>
 		</thead>
@@ -111,11 +115,17 @@ td:nth-child(10) {
                 </td>
 
 				<td>
+					<a class="btn btn-primary chat-button" href="{% url 'StudentChat' schedule.1 schedule.2 %}">Chat</a>
+				</td>
+
+
+				<td>
 					<form action="{% url 'cancel_student' schedule.0 schedule.1 schedule.2 %}" method="POST">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-reject">Cancel</button>
 					</form>
 				</td>
+
 
 			</tr>
 			{% endfor %}

@@ -12,7 +12,7 @@ from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm
 import requests
-from .models import Schedule, Appointment
+from .models import Schedule, Appointment, ChatMessage
 from django.dispatch import receiver
 from allauth.socialaccount.signals import pre_social_login
 from django.urls import reverse
@@ -716,6 +716,103 @@ def allAppointmentsStudent(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
+
+
+def StudentChat(request, tutor, student):
+    student_sender = tutorMeUser.objects.get(email=request.user.email)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    messages = ChatMessage.objects.filter(sender=student_user, receiver=tutor_user) | \
+               ChatMessage.objects.filter(sender=tutor_user, receiver=student_user)
+
+    context = {
+        'user': student_user,
+        'other_user': tutor,
+        'messages': messages,
+    }
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ChatMessage.objects.create(sender=student_user, receiver=tutor_user, content=content)
+            return redirect('StudentChat', tutor=tutor, student=student)
+    return render(request, 'StudentChat.html', context)
+
+def TutorChat(request, tutor, student):
+    tutor_sender = tutorMeUser.objects.get(email=request.user.email)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    messages = ChatMessage.objects.filter(sender=tutor_user, receiver=student_user) | \
+               ChatMessage.objects.filter(sender=student_user, receiver=tutor_user)
+    context = {
+        'user': tutor_user,
+        'other_user': student,
+        'messages': messages,
+    }
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ChatMessage.objects.create(sender=tutor_user, receiver=student_user, content=content)
+            return redirect('TutorChat', tutor=tutor, student=student)
+    return render(request, 'TutorChat.html', context)
+
+def chat_list(request):
+    student = tutorMeUser.objects.get(email=request.user.email)
+    student_name = student.first_name + " " + student.last_name
+    chats = ChatMessage.objects.filter(sender=student) | ChatMessage.objects.filter(receiver=student)
+    unique_chats = []
+    unique_names = []
+    for chat in chats:
+        if chat.sender == student:
+            if chat.receiver not in unique_chats:
+                tutor_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                unique_chats.append(chat.receiver)
+                unique_names.append(tutor_name)
+        elif chat.receiver == student:
+            if chat.sender not in unique_chats:
+                tutor_name = chat.sender.first_name + " " + chat.sender.last_name
+                unique_chats.append(chat.sender)
+                unique_names.append(tutor_name)
+
+    return render(request, 'StudentChat_list.html', {'unique_names': unique_names, 'student_name': student_name})
+
+def Tutor_chat_list(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+    tutor_name = tutor.first_name + " " + tutor.last_name
+    chats = ChatMessage.objects.filter(sender=tutor) | ChatMessage.objects.filter(receiver=tutor)
+    unique_chats = []
+    unique_names = []
+    for chat in chats:
+        if chat.sender == tutor:
+            if chat.receiver not in unique_chats:
+                student_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                unique_chats.append(chat.receiver)
+                unique_names.append(student_name)
+        elif chat.receiver == tutor:
+            if chat.sender not in unique_chats:
+                student_name = chat.sender.first_name + " " + chat.sender.last_name
+                unique_chats.append(chat.sender)
+                unique_names.append(student_name)
+
+    return render(request, 'TutorChat_list.html', {'unique_names': unique_names, 'tutor_name': tutor_name})
 
 
 
