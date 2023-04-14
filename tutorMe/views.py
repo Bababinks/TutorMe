@@ -119,8 +119,17 @@ def searchView(request):
             searchResults = Searchereds(searchQuery)
         else:
             searchResults = []
+        print(searchResults)
 
-    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+
+        for i in range(len(searchResults)):
+            for j in range(len(searchResults[i])):
+                if ("/" in str(searchResults[i][j])):
+                    print(searchResults[i][j])
+                    searchResults[i][j] = searchResults[i][j].replace("/", " ")
+        #print(searchResults)
+
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults , 'slash': "%2F"})
 
 
 @login_required
@@ -163,6 +172,9 @@ def Tutor_Classes_List_View(request):
 
 def addClass(request, mnemonic, name, number):
     cur_user = tutorMeUser.objects.get(email=request.user.email)
+    # print(mnemonic)
+    # print(name)
+    # print(number)
     if not TutorClasses.objects.filter(name=name, tutor=cur_user).exists():
         newclass = TutorClasses();
         newclass.tutor = cur_user
@@ -201,6 +213,12 @@ def Student_Classes_View(request):
             searchResults = []
     else:
         return render(request, 'tutorMeStudentClasses.html')
+
+    for i in range(len(searchResults)):
+        for j in range(len(searchResults[i])):
+            if ("/" in str(searchResults[i][j])):
+                print(searchResults[i][j])
+                searchResults[i][j] = searchResults[i][j].replace("/", " ")
 
     return render(request, 'tutorMeStudentClasses.html', {'searchResults': searchResults})
 
@@ -566,6 +584,37 @@ def deleteRequest(request, class_name, tutor, student):
 
     return tutorRequests(request)
 
+def CancelTutor(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+    return allAppointmentsTutor(request)
+
+def CancelStudent(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+
+    return allAppointmentsStudent(request)
+
 
 @login_required
 @user_passes_test(not_student)
@@ -668,6 +717,7 @@ def allAppointmentsStudent(request):
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
 
+
 def StudentChat(request, tutor, student):
     student_sender = tutorMeUser.objects.get(email=request.user.email)
 
@@ -763,5 +813,6 @@ def Tutor_chat_list(request):
                 unique_names.append(student_name)
 
     return render(request, 'TutorChat_list.html', {'unique_names': unique_names, 'tutor_name': tutor_name})
+
 
 
