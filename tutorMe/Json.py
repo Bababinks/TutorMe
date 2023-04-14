@@ -2,7 +2,7 @@ import requests
 from tutorMe.models import Course
 import re
 from difflib import SequenceMatcher
-
+from django.utils.http import urlencode
 
 def get_JSON_Subjects(year, semester):
     year = year[-2:]
@@ -98,6 +98,9 @@ def get_classes(subject_name, year, semester):
 #used this library  from this question:https://stackoverflow.com/questions/17388213/find-the-similarity-metric-between-two-strings
 
 def Searchereds(keyword):
+
+    keyword = replaceslash(keyword)
+
     ClassesActual=[]
     ClassInfo=[]
     match = re.search(r'\d+', keyword)
@@ -129,17 +132,26 @@ def Searchereds(keyword):
         ClassInfo.append(number_str)
         ClassInfo.append(non_number_str)
         ClassInfo.append(rating)
+        ClassInfo.append(urlencode({'name': non_number_str}))
         ClassesActual.append(ClassInfo)
-    ClassesActual.sort(key=lambda x: x[-1], reverse=True)
+    ClassesActual.sort(key=lambda x: x[-2], reverse=True)
   # filter out items with a low relevance score
     if  number_str == '':
         threshold_score = 0.75
     else:
         threshold_score = 1.5
         # adjust this value to your liking
-    ClassesActual = [course for course in ClassesActual if course[-1] >= threshold_score]
+    ClassesActual = [course for course in ClassesActual if course[-2] >= threshold_score]
     if len(ClassesActual)>10:
         return ClassesActual[:10]
     else:
         return  ClassesActual
+
+def replaceslash(keyword):
+    if (keyword == "/"):
+        keyword = "thisstringwillresultinnomatchessijodjasodajsidj"
+    elif ("/" in keyword):
+        keyword = keyword.replace("/", "")
+    return keyword
+
 
