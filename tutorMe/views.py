@@ -119,8 +119,17 @@ def searchView(request):
             searchResults = Searchereds(searchQuery)
         else:
             searchResults = []
+        print(searchResults)
 
-    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+
+        for i in range(len(searchResults)):
+            for j in range(len(searchResults[i])):
+                if ("/" in str(searchResults[i][j])):
+                    print(searchResults[i][j])
+                    searchResults[i][j] = searchResults[i][j].replace("/", " ")
+        #print(searchResults)
+
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults , 'slash': "%2F"})
 
 
 @login_required
@@ -163,6 +172,9 @@ def Tutor_Classes_List_View(request):
 
 def addClass(request, mnemonic, name, number):
     cur_user = tutorMeUser.objects.get(email=request.user.email)
+    # print(mnemonic)
+    # print(name)
+    # print(number)
     if not TutorClasses.objects.filter(name=name, tutor=cur_user).exists():
         newclass = TutorClasses();
         newclass.tutor = cur_user
@@ -201,6 +213,12 @@ def Student_Classes_View(request):
             searchResults = []
     else:
         return render(request, 'tutorMeStudentClasses.html')
+
+    for i in range(len(searchResults)):
+        for j in range(len(searchResults[i])):
+            if ("/" in str(searchResults[i][j])):
+                print(searchResults[i][j])
+                searchResults[i][j] = searchResults[i][j].replace("/", " ")
 
     return render(request, 'tutorMeStudentClasses.html', {'searchResults': searchResults})
 
