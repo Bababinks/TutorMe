@@ -76,7 +76,7 @@
                </tr>
                <tr>
                   <th scope="row">10:00 am - 11:00 am </th>
-                  <td><input name="checkbox" value='m10' class="form-check" type="checkbox" {% if 10 not in tutor_schedule.0 %} disabled = "true" {% endif %} onclick="inputClicked(this)">{% if 10  in tutor_schedule.2 %}Available{% endif %}</input></td>
+                  <td><input name="checkbox" value='m10' class="form-check" type="checkbox" {% if 10 not in tutor_schedule.0 %} disabled = "true" {% endif %} onclick="inputClicked(this)">{% if 10  in tutor_schedule.0 %}Available{% endif %}</input></td>
                   <td><input name="checkbox" value='tu10' class="form-check" type="checkbox" {% if 10 not in tutor_schedule.1 %} disabled = "true" {% endif %} onclick="inputClicked(this)">{% if 10 in tutor_schedule.1 %}Available{% endif %}</input></td>
                   <td><input name="checkbox" value='w10' class="form-check" type="checkbox" {% if 10 not in tutor_schedule.2 %} disabled = "true" {% endif %} onclick="inputClicked(this)">{% if 10  in tutor_schedule.2 %}Available{% endif %}</input></td>
                   <td><input name="checkbox" value='th10' class="form-check" type="checkbox" {% if 10 not in tutor_schedule.3 %} disabled = "true" {% endif %} onclick="inputClicked(this)">{% if 10  in tutor_schedule.3 %}Available{% endif %}</input></td>

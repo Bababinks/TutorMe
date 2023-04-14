@@ -584,6 +584,37 @@ def deleteRequest(request, class_name, tutor, student):
 
     return tutorRequests(request)
 
+def CancelTutor(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+    return allAppointmentsTutor(request)
+
+def CancelStudent(request, class_name, tutor, student):
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+
+    return allAppointmentsStudent(request)
+
 
 @login_required
 @user_passes_test(not_student)
@@ -685,4 +716,6 @@ def allAppointmentsStudent(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
+
+
 
