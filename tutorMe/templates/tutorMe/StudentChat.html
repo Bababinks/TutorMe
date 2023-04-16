@@ -1,12 +1,17 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
 
+<link href="{% static 'tutorMe/chat.css' %}" rel="stylesheet">
 {% include "navStudent.html" %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
 
 {% block content %}
     <div class="container">
-        <h1 class="text-center mb-4">Chat with {{ other_user }} </h1>
+        <h1 class="text-center mb-4">Message {{ other_user }} </h1>
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="messages">
@@ -32,7 +37,7 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="text" name="content" class="form-control">
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i></button>
                     </div>
                 </form>
             </div>
