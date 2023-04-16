@@ -9,8 +9,8 @@
 {% include "nav.html" %}
 
 {% block content %}
-    <div class="card position-absolute top-50 start-50 translate-middle" style="max-width:60rem;">
-        <h1 class="card-tite text-center">Chat with {{ other_user }} </h1>
+    <div class="container">
+        <h1 class="text-center mb-4">Message {{ other_user }} </h1>
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="messages">
@@ -36,7 +36,7 @@
                     {% csrf_token %}
                     <div class="input-group">
                         <input type="text" name="content" class="form-control">
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-send-o"></i></button>
                     </div>
                 </form>
             </div>

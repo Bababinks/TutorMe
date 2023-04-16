@@ -12,16 +12,16 @@
         <div class="navbar-nav d-flex justify-content-between flex-fill">
             <ul class="navbar-nav flex-fill" style="margin-left:-12em">
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link" href="/tutorMe/student/requests"><i class="fa fa-tasks"></i> Requests</a>
+                    <a class="nav-link" href="/tutorMe/student/requests"><i class="fa fa-tasks"></i>&emsp; Requests</a>
                 </li>
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i> Scheduled Appointments</a>
+                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i>&emsp; Scheduled Appointments</a>
                 </li>
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link " href="/tutorMe/student"><i class="fa fa-search-plus"></i> Search Classes</a>
+                    <a class="nav-link " href="/tutorMe/student"><i class="fa fa-search-plus"></i>&emsp; Search Classes</a>
                 </li>
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link " href="{% url 'chat_list' %}"><i class="fa fa-search-plus"></i> Chat </a>
+                    <a class="nav-link " href="{% url 'chat_list' %}"><i class="fa fa-comments"></i>&emsp; Chat </a>
                 </li>
             </ul>
 
@@ -57,15 +57,15 @@
                     <li><a class="dropdown-item disabled">
                         <hr/>
                     </a></li>
-                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>Profile</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>Sign
+                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>&emsp; Profile</a></li>
+                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>&emsp; Sign
                         Out</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/reportBug" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>Report a Bug</a>
+                    <li><a class="dropdown-item" href="/tutorMe/reportBug" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>&emsp; Report a Bug</a>
                     </li>
                 </ul>
                 {% else %}
                 <ul aria-labelledby="options" class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>Sign In</a></li>
+                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>&emsp; Sign In</a></li>
                 </ul>
                 {% endif %}
             </div>
