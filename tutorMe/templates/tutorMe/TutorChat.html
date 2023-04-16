@@ -1,13 +1,16 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load static %}
+<link href="{% static 'tutorMe/chat.css' %}" rel="stylesheet">
+
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 {% include "nav.html" %}
 
 {% block content %}
-    <div class="container">
-        <h1 class="text-center mb-4">Chat with {{ other_user }} </h1>
+    <div class="card position-absolute top-50 start-50 translate-middle" style="max-width:60rem;">
+        <h1 class="card-tite text-center">Chat with {{ other_user }} </h1>
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="messages">
