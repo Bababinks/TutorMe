@@ -43,3 +43,7 @@
     -webkit-filter: invert(1);
     filter: invert(1);
 }
+
+.links {
+    text-decoration: none;
+}

@@ -18,10 +18,7 @@
             <div class="card-body">
 
                 {% for chat in unique_names %}
-                <div class="card">
-
-                </div>
-                <li class="list-group-item"><a href="{% url 'TutorChat' tutor_name chat %}">{{ chat }}</a></li>
+                <button class="btn btn-primary"><a style="color:white;" href="{% url 'TutorChat' tutor_name chat %}">{{ chat }} <i class="fa fa-commenting-o"></i></a></button>
 
                 {% empty %}
                 <li class="list-group-item">No chats available</li>
