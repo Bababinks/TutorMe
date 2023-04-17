@@ -30,3 +30,4 @@ urlpatterns = [
 
 ]
 
+handler404 = "tutorMe.views.page_not_found_view"
