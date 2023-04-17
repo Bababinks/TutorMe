@@ -1,3 +1,6 @@
+import smtplib
+
+from django.core.mail import send_mail
 from django.db.models import Model, Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, redirect
@@ -10,14 +13,19 @@ from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
 from django.shortcuts import render, redirect
-from .forms import ScheduleForm
+from .forms import ScheduleForm, BugReportForm
 import requests
 from .models import Schedule, Appointment, ChatMessage
 from django.dispatch import receiver
 from allauth.socialaccount.signals import pre_social_login
 from django.urls import reverse
 import traceback
+
 from django.contrib.auth.models import AnonymousUser
+
+
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def is_tutor(user):
@@ -141,15 +149,14 @@ def searchView(request):
             searchResults = []
         print(searchResults)
 
-
         for i in range(len(searchResults)):
             for j in range(len(searchResults[i])):
                 if ("/" in str(searchResults[i][j])):
                     print(searchResults[i][j])
                     searchResults[i][j] = searchResults[i][j].replace("/", " ")
-        #print(searchResults)
+        # print(searchResults)
 
-    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults , 'slash': "%2F"})
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults, 'slash': "%2F"})
 
 
 
@@ -610,6 +617,7 @@ def deleteRequest(request, class_name, tutor, student):
 
     return tutorRequests(request)
 
+
 def CancelTutor(request, class_name, tutor, student):
     checkifTutor(request)
     splitTutor = tutor.split(" ")
@@ -625,6 +633,7 @@ def CancelTutor(request, class_name, tutor, student):
     toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
     return allAppointmentsTutor(request)
+
 
 def CancelStudent(request, class_name, tutor, student):
     checkifStudent(request)
@@ -774,6 +783,7 @@ def StudentChat(request, tutor, student):
             return redirect('StudentChat', tutor=tutor, student=student)
     return render(request, 'StudentChat.html', context)
 
+
 def TutorChat(request, tutor, student):
     checkifTutor(request)
     tutor_sender = tutorMeUser.objects.get(email=request.user.email)
@@ -803,6 +813,7 @@ def TutorChat(request, tutor, student):
             return redirect('TutorChat', tutor=tutor, student=student)
     return render(request, 'TutorChat.html', context)
 
+
 def chat_list(request):
     student = tutorMeUser.objects.get(email=request.user.email)
     student_name = student.first_name + " " + student.last_name
@@ -822,6 +833,7 @@ def chat_list(request):
                 unique_names.append(tutor_name)
 
     return render(request, 'StudentChat_list.html', {'unique_names': unique_names, 'student_name': student_name})
+
 
 def Tutor_chat_list(request):
     checkifTutor(request)
@@ -846,6 +858,7 @@ def Tutor_chat_list(request):
 
 
 
+
 def page_not_found_view(request, exception):
     return render(request, '404.html', status=404) #taken from https://levelup.gitconnected.com/django-customize-404-error-page-72c6b6277317
 
@@ -858,4 +871,27 @@ def send_to_home(request):
             return redirect("student_default")
     else:
         return redirect("index")
+
+
+@login_required
+def bug_report_view(request):
+    name = tutorMeUser.objects.get(email=request.user.email)
+    if request.method == 'POST':
+        form = BugReportForm(request.POST)
+        if form.is_valid():
+
+            fullName = name.first_name + " " + name.last_name
+            email = name.email
+            bug_description = form.cleaned_data['bug_description']
+            message = f"{fullName} with email: ({email}) has reported a bug: {bug_description}"
+
+            send_mail(f"Bug report by {fullName}",message, "settings.EMAIL_HOST_USER",["errorsherokututor@gmail.com"], fail_silently=False)
+            if name.is_tutor:
+                return redirect("tutor")
+            else:
+                return redirect("student_default")
+
+    else:
+        form = BugReportForm()
+    return render(request, 'bug_report.html', {'form': form,"name":name})
 

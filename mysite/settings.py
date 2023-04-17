@@ -27,15 +27,12 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@rrwgn5#191&17
 #SECRET_KEY = 'django-insecure-@rrwgn5#191&17b67^o!wx8ln*9q67$8e(u95b9)e-27hv^drh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
 if platform.system() == 'Linux' and 'DYNO' in os.environ:
     # Running on Heroku, set DEBUG to False
     DEBUG = False
 else:
     # Not running on Heroku, use default DEBUG setting
     DEBUG = True
-
-
 
 ALLOWED_HOSTS = ['tutorfinder.herokuapp.com', '127.0.0.1', 'localhost']
 
@@ -217,3 +214,9 @@ LOGIN_REDIRECT_URL = '/tutorMe/tutorCheck'
 LOGOUT_REDIRECT_URL='/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='errorsherokututor@gmail.com'
+EMAIL_HOST_PASSWORD="eaoxcigwnvyrksnh"
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
