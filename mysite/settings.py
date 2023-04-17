@@ -35,6 +35,8 @@ else:
     # Not running on Heroku, use default DEBUG setting
     DEBUG = True
 
+
+
 ALLOWED_HOSTS = ['tutorfinder.herokuapp.com', '127.0.0.1', 'localhost']
 
 

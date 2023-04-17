@@ -6,13 +6,14 @@ from . import views
 
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
+    path('sendback',views.send_to_home,name="returnHome"),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
     path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/', views.tutor_check),
 
     path('student', views.StudentView, name='student_default'),
-    path('tutor', views.TutorView),
+    path('tutor', views.TutorView,name="tutor"),
     path('delete/<str:Class>/', views.deleteClass, name='delete_item'),
     path('add/<str:mnemonic>/<str:name>/<str:number>/', views.addClass, name='add_item'),
     path('student/classes', views.Student_Classes_View),
