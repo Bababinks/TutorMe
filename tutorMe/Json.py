@@ -140,18 +140,18 @@ def Searchereds(keyword):
     ClassesActual.sort(key=lambda x: x[-2], reverse=True)
   # filter out items with a low relevance score
     length_of_string = len(keyword.lower().split(" "))
-
+    X=False
     if  number_str == '':
        if (length_of_string)==1:
            X=True
            threshold_score = 2
        else:
-           x=False
+
            threshold_score = 0.75
 
 
     else:
-        X=False
+      
         if length_of_string > 1:
             threshold_score = 0.75
         else:
