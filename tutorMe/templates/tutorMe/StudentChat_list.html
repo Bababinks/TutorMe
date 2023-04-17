@@ -21,8 +21,9 @@
                 <div class="card">
 
                 </div>
-                <button class="btn btn-primary"><a style="color:white;" href="{% url 'StudentChat' chat student_name %}">{{ chat }} <i class="fa fa-commenting-o"></i></a></button>
-
+<a style="margin:1em;" class="btn btn-primary" style="color:white;" href="{% url 'StudentChat' chat student_name %}">
+    <span>{{ chat }} <i class="fa fa-commenting-o"></i></span>
+</a>
                 {% empty %}
                 <li class="list-group-item">No chats available</li>
                 {% endfor %}
