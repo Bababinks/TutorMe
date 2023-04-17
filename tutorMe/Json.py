@@ -124,6 +124,9 @@ def Searchereds(keyword):
             else:
                 Sum += SequenceMatcher(None, number_str, item.course_number).ratio()
         else:
+            if (keyword.lower() == item.Subject.lower()):
+                Sum+=2
+
             if (keyword.lower() in item.course_name.lower()):
                 Sum += 1
             else:
@@ -136,15 +139,31 @@ def Searchereds(keyword):
         ClassesActual.append(ClassInfo)
     ClassesActual.sort(key=lambda x: x[-2], reverse=True)
   # filter out items with a low relevance score
+    length_of_string = len(keyword.lower().split(" "))
+
     if  number_str == '':
-        threshold_score = 0.75
+       if (length_of_string)==1:
+           X=True
+           threshold_score = 2
+       else:
+           x=False
+           threshold_score = 0.75
+
+
     else:
-        threshold_score = 1.5
+        X=False
+        if length_of_string > 1:
+            threshold_score = 0.75
+        else:
+            threshold_score = 1
+
         # adjust this value to your liking
     ClassesActual = [course for course in ClassesActual if course[-2] >= threshold_score]
-    if len(ClassesActual)>10:
+    if len(ClassesActual)>10 and not X:
+        print(ClassesActual)
         return ClassesActual[:10]
     else:
+        print(ClassesActual)
         return  ClassesActual
 
 def replaceslash(keyword):
