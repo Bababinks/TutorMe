@@ -672,20 +672,35 @@ def allAppointmentsStudent(request):
 
 def profile(request):
     user = request.user
-    context = {'user': user}
-    return render(request, 'view_profile.html', context)
+    istutor = is_tutor(user)
+    print(istutor)
+
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    return render(request, 'view_profile.html', {'user': user, 'istutor': istutor, "phone": phone, 'contact': contact, 'first': first, "last": last})
 
 
 def edit_profile(request):
     user = request.user
+    istutor = is_tutor(user)
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
 
     if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=user)
+        form = EditProfileForm(request.POST, instance=cur_user)
         if form.is_valid():
             form.save()
             return redirect('profile')
     else:
-        form = EditProfileForm(instance=user)
+        form = EditProfileForm(instance=cur_user)
 
-    context = {'form': form, 'user': user}
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    context = {'form': form, 'istutor': istutor, 'user': user, "phone": phone, 'contact': contact, 'first': first, "last": last}
     return render(request, 'edit_profile.html', context)

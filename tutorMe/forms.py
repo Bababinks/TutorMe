@@ -10,6 +10,7 @@ class ScheduleForm(forms.ModelForm):
 
 
 class EditProfileForm(UserChangeForm):
+    first_name = forms.CharField(required=False, max_length=20)
     phone_number = forms.CharField(required=False, max_length=20)
     PREFERRED_CONTACT_CHOICES = [
         ('phone', 'Phone'),

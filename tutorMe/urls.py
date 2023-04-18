@@ -39,4 +39,10 @@ urlpatterns = [
     path('tutor/profile', views.profile, name='profile'),
     path('tutor/profile/edit', views.edit_profile, name='edit_profile'),
 
+    path('student/profile', views.profile, name='profile_student'),
+    path('student/profile/edit', views.edit_profile, name='edit_profile_student'),
+
+
+
+
 ]
