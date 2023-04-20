@@ -32,6 +32,8 @@ if platform.system() == 'Linux' and 'DYNO' in os.environ:
     DEBUG = False
     SECURE_SSL_REDIRECT=True
     ADMIN_ENABLED = False
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 
 else:
     # Not running on Heroku, use default DEBUG setting
