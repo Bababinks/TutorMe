@@ -30,10 +30,14 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@rrwgn5#191&17
 if platform.system() == 'Linux' and 'DYNO' in os.environ:
     # Running on Heroku, set DEBUG to False
     DEBUG = False
+    SECURE_SSL_REDIRECT=True
+    ADMIN_ENABLED = False
+
 else:
     # Not running on Heroku, use default DEBUG setting
     DEBUG = True
-
+    SECURE_SSL_REDIRECT = False
+    ADMIN_ENABLED = True
 ALLOWED_HOSTS = ['tutorfinder.herokuapp.com', '127.0.0.1', 'localhost']
 
 
