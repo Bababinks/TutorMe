@@ -2,33 +2,38 @@
 <html>
 <title>Welcome Tutor</title>
 <head>
-
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
 </head>
-
 
 <body>
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
-
 {% bootstrap_messages %}
+{% load static %}
+
+<link href="{% static 'tutorMe/homePage.css' %}" rel="stylesheet">
+
+
 {% include "nav.html" %}
 
 <form action="/tutorMe/tutor/classes" class="form" method="POST">
     {% csrf_token %}
-    <div class="container">
+    <div class="container" style="font-family: 'Inter', sans-serif;">
         <div class="row justify-content-center align-items-center" style="height: 60vh;">
             <div class="col-lg-7">
                 <div class="input-group input-group-lg">
 
                     <label for="searchBar"></label>
-                        <input class="form-control"  id="searchBar"
-                        name="searchBar" placeholder="Search for a class" style="border-top-left-radius:20px; border-bottom-left-radius:20px;" type="text">
-                      <button class="btn btn-primary" style="border-top-right-radius:20px;
-                      border-bottom-right-radius:20px;" type="submit">Search</button>
+                    <input class="form-control" id="searchBar"
+                           name="searchBar" placeholder="Search for a class"
+                           style="border-top-left-radius:20px; border-bottom-left-radius:20px;" type="text">
+                    <button class="btn btn-primary" style="border-top-right-radius:20px;
+                      border-bottom-right-radius:20px;" type="submit">Search
+                    </button>
                 </div>
             </div>
         </div>
