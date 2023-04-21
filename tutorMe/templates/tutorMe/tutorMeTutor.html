@@ -17,8 +17,10 @@
 
 <link href="{% static 'tutorMe/homePage.css' %}" rel="stylesheet">
 
-
 {% include "nav.html" %}
+
+
+
 
 <form action="/tutorMe/tutor/classes" class="form" method="POST">
     {% csrf_token %}
