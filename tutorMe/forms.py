@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 class ScheduleForm(forms.ModelForm):
     class Meta:
         model = Schedule
+
         fields = ['tutor', 'class_name', 'input_rate', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
 
@@ -27,3 +28,9 @@ class EditProfileForm(UserChangeForm):
             'phone_number',
             'preferred_contact'
         )
+
+        
+
+class BugReportForm(forms.Form):
+    bug_description = forms.CharField(label="enter any issues you may encounter", widget=forms.Textarea)
+

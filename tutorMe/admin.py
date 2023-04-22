@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import tutorMeUser,Course,Schedule, ScheduleStudent, Appointment
+from .models import tutorMeUser,Course,Schedule, ScheduleStudent, Appointment, ChatMessage
 admin.site.register(tutorMeUser)
+admin.site.register(ChatMessage)
 
 
 class MyModelAdmin(admin.ModelAdmin):
