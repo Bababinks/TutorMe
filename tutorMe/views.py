@@ -346,9 +346,9 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
     checkifStudent(request)
     if " " in tutor:
         tutor_name = tutor.split(' ')
-        query = tutorMeUser.objects.get(first_name=tutor_name[0], last_name=tutor_name[1])
+        query = tutorMeUser.objects.get(is_tutor=True,first_name=tutor_name[0], last_name=tutor_name[1])
     else:
-        query = tutorMeUser.objects.get(first_name=tutor)
+        query = tutorMeUser.objects.get(is_tutor=True, first_name=tutor)
 
     full_name = mnemonic + " " + name
 
