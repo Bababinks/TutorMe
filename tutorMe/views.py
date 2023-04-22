@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import EditProfileForm
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
@@ -754,6 +755,42 @@ def allAppointmentsStudent(request):
     return render(request, 'appointmentsStudent.html', {'list': list})
 
 
+
+def profile(request):
+    user = request.user
+    istutor = is_tutor(user)
+    print(istutor)
+
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    return render(request, 'view_profile.html', {'user': user, 'istutor': istutor, "phone": phone, 'contact': contact, 'first': first, "last": last})
+
+
+def edit_profile(request):
+    user = request.user
+    istutor = is_tutor(user)
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=cur_user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=cur_user)
+
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    context = {'form': form, 'istutor': istutor, 'user': user, "phone": phone, 'contact': contact, 'first': first, "last": last}
+    return render(request, 'edit_profile.html', context)
+
 def StudentChat(request, tutor, student):
     checkifStudent(request)
     student_sender = tutorMeUser.objects.get(email=request.user.email)
@@ -894,4 +931,5 @@ def bug_report_view(request):
     else:
         form = BugReportForm()
     return render(request, 'bug_report.html', {'form': form,"name":name})
+
 
