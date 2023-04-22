@@ -41,6 +41,17 @@ urlpatterns = [
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
 
+    path('tutor/profile', views.profile, name='profile'),
+    path('tutor/profile/edit', views.edit_profile, name='edit_profile'),
+
+    path('student/profile', views.profile, name='profile_student'),
+    path('student/profile/edit', views.edit_profile, name='edit_profile_student'),
+
+
+
+
+
+
     path('StudentChat/<str:tutor>/<str:student>/', views.StudentChat, name='StudentChat'),
     path('TutorChat/<str:tutor>/<str:student>/', views.TutorChat, name='TutorChat'),
     path('student/StudentChatList/', views.chat_list, name='chat_list'),
