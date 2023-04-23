@@ -574,12 +574,12 @@ def accepted(request, class_name, tutor, student):
     split_tutor = tutor.split()
     tutor_first = split_tutor[0]
     tutor_last = split_tutor[1]
-    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last)
+    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last, is_tutor=True)
 
     split_student = student.split()
     student_first = split_student[0]
     student_last = split_student[1]
-    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last)
+    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last, is_tutor=False)
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
@@ -606,14 +606,14 @@ def deleteRequest(request, class_name, tutor, student):
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
 
-    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
-    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name, )
     toBeDeleted.delete()
 
     return tutorRequests(request)
@@ -624,13 +624,13 @@ def CancelTutor(request, class_name, tutor, student):
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
 
-    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
     toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
     return allAppointmentsTutor(request)
@@ -641,13 +641,13 @@ def CancelStudent(request, class_name, tutor, student):
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
 
-    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
     toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
 
@@ -798,12 +798,12 @@ def StudentChat(request, tutor, student):
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
-    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
 
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     messages = ChatMessage.objects.filter(sender=student_user, receiver=tutor_user) | \
                ChatMessage.objects.filter(sender=tutor_user, receiver=student_user)
@@ -828,12 +828,12 @@ def TutorChat(request, tutor, student):
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
-    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
 
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     messages = ChatMessage.objects.filter(sender=tutor_user, receiver=student_user) | \
                ChatMessage.objects.filter(sender=student_user, receiver=tutor_user)
