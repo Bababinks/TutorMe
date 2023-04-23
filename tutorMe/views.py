@@ -426,7 +426,7 @@ def calendarStudent(request, tutor, name, mnemonic):
     full_name = mnemonic + " " + name
     if request.method == "POST":
         student = tutorMeUser.objects.get(email=request.user.email)
-        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name)
+        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name, is_tutor=True)
         schedule, created = ScheduleStudent.objects.get_or_create(
             student=student,
             tutor=tutor,
