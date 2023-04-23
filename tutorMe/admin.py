@@ -22,6 +22,6 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display =["student", "tutor","class_name"]
 admin.site.register(Appointment,AppointmentAdmin)
 
-@admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'state', 'tutor', 'student', 'class_name', 'time')
+    list_display = ('state', 'tutor', 'student', 'class_name', 'time')
+admin.site.register(Notification, NotificationAdmin)

@@ -73,6 +73,7 @@ class Appointment(models.Model):
     saturday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
+
 from datetime import date, datetime
 
 
@@ -84,9 +85,7 @@ class Notification(models.Model):
         CAN = 'Canceled'
 
     state = models.TextField(choices=requestState.choices)
-    tutor = models.CharField(max_length=100)
-    student = models.CharField(max_length=100)
+    tutor = models.ForeignKey('tutorMeUser', related_name='notifyTutor', on_delete=models.CASCADE, )
+    student = models.ForeignKey('tutorMeUser', related_name='notifyStudent', on_delete=models.CASCADE)
     class_name = models.CharField(max_length=100)
     time = models.DateTimeField(default=datetime.now, blank=True)
-
-

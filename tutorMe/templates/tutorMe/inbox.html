@@ -1,3 +1,11 @@
+<head>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -7,22 +15,37 @@
 
 {% include "navStudent.html" %}
 
-<div class="container">
+<div class="container" style="font-family: 'Inter', sans-serif;">
+    <h1 class="m-3"> Notifications </h1>
     {% for msg in msgs %}
-    <div class="card">
-        {% if msg.state == 'Rejected' %}
-        <div class="card-header">
-            Important! Request status <i class="fa fa-times-circle"></i>
-        </div>
-        {% else %}
-        <div class="card-header">
+    <div class="card mb-3 shadow">
+        {% if msg.1 %}
+        <div class="card-header text-white bg-success">
             Important! Request status <i class="fa fa-check-circle"></i>
         </div>
-        {% endif %}
         <div class="card-body">
-            <h5 class="card-title">{{ msg.tutor }} has {{ msg.state }} your request for {{ msg.class_name }}
+            <h5 class="card-title">{{ msg.1 }} has accepted your request for {{ msg.2 }}
                 tutoring! </h5>
+            <p class="card-text">
+                <small class="text-muted">
+                    Recieved {{msg.3}}
+                </small>
+            </p>
         </div>
+        {% else %}
+        <div class="card-header text-white bg-danger">
+            Important! Request status <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ msg.1 }} has rejected your request for {{ msg.2 }}
+                tutoring! </h5>
+            <p class="card-text">
+                <small class="text-muted">
+                    Recieved {{msg.3}}
+                </small>
+            </p>
+        </div>
+        {% endif %}
     </div>
     {% endfor %}
 </div>

@@ -550,7 +550,7 @@ def accepted(request, class_name, tutor, student):
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
-    generateAcceptanceMsgToStudent(tutor=tutor, student=student, class_name=class_name)
+    generateAcceptanceMsgToStudent(tutor=tutor_name, student=student_name, class_name=class_name)
 
     apt = Appointment.objects.create(student=x.student, tutor=x.tutor, class_name=x.class_name, )
     apt.monday = x.monday
@@ -579,7 +579,7 @@ def deleteRequest(request, class_name, tutor, student):
 
     student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
     toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
-    generateRejectionMsgToStudent(tutor=tutor, student=student, class_name=class_name)
+    generateRejectionMsgToStudent(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
 
     return tutorRequests(request)
@@ -692,9 +692,26 @@ def allAppointmentsStudent(request):
 def allMessagesStudent(request):
     student = tutorMeUser.objects.get(email=request.user.email)
 
-    notifications = Notification.objects.filter(student=student).order_by = '-time'
+    notifications = Notification.objects.filter(student=student).order_by('-time')
 
-    return render(request, 'inbox.html', {'msgs': notifications})
+    msgs = []
+    for n in notifications:
+        msg = []
+
+        print("State: ", n.state, " Tutor: ", n.tutor.first_name, " ClassName: ", n.class_name)
+        if n.state == "Rejected":
+            msg.append(False)
+        elif n.state == "Accepted":
+            msg.append(True)
+
+        fullName = n.tutor.first_name + ' ' + n.tutor.last_name
+        msg.append(fullName)
+        msg.append(n.class_name)
+        timeStr = ' at ' + str(n.time)[11:16] + ' on ' + str(n.time)[:10]
+        msg.append(timeStr)
+        msgs.append(msg)
+
+    return render(request, 'inbox.html', {'msgs': msgs})
 
 
 @login_required
