@@ -1,4 +1,8 @@
-
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
 
 
 <nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;">
@@ -11,13 +15,16 @@
         <div class="navbar-nav d-flex justify-content-between flex-fill">
             <ul class="navbar-nav flex-fill">
                 <li class="nav-item flex-fill ">
-                    <a class="nav-link" href="/tutorMe/student/inbox"><i class="fa fa-envelope"></i>&emsp; Inbox</a>
+                    <a class="nav-link" href="/tutorMe/student/inbox">
+                        <i class="fa fa-envelope" style="font-weight: bold; color: red">!</i>&emsp;
+                        Inbox</a>
                 </li>
                 <li class="nav-item active flex-fill ">
                     <a class="nav-link" href="/tutorMe/student/requests"><i class="fa fa-tasks"></i> Requests</a>
                 </li>
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i> Scheduled Appointments</a>
+                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i> Scheduled
+                        Appointments</a>
                 </li>
                 <li class="nav-item active flex-fill ">
                     <a class="nav-link " href="/tutorMe/student"><i class="fa fa-search-plus"></i> Search Classes</a>
@@ -56,15 +63,19 @@
                     <li><a class="dropdown-item disabled">
                         <hr/>
                     </a></li>
-                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>Profile</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>Sign
+                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i
+                            class="fa fa-user"></i>Profile</a></li>
+                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i
+                            class="fa fa-sign-out"></i>Sign
                         Out</a></li>
-                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>Report a Bug</a>
+                    <li><a class="dropdown-item" href="#" style="font-family: 'Inter', sans-serif;"><i
+                            class="fa fa-bug"></i>Report a Bug</a>
                     </li>
                 </ul>
                 {% else %}
                 <ul aria-labelledby="options" class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>Sign In</a></li>
+                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>Sign
+                        In</a></li>
                 </ul>
                 {% endif %}
             </div>
