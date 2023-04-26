@@ -15,6 +15,7 @@ class tutorMeUser(models.Model):
     def __str__(self):
         return self.email
 
+
 class TutorClasses(models.Model):
 
     tutor = models.ForeignKey(
