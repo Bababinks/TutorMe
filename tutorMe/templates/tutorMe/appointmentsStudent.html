@@ -16,14 +16,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{% static 'tutorMe/apointment.css' %}" rel="stylesheet">
 
-    <title>Student Requests</title>
+    <title>Student Appt</title>
 </head>
 
 {% include "navStudent.html" %}
 
 
-<body>
-<h1>Appointments</h1>
+<div class="container" style="font-family: 'Inter', sans-serif;">
+
+    <h5 class="text-center pt-5 pb-3" style="font-weight: bold;">
+        Appointments
+    </h5>
+</div>
+
 <table class="table table-bordered table-striped table-hover">
     <thead>
     <tr>
@@ -99,5 +104,4 @@
     {% endfor %}
     </tbody>
 </table>
-</body>
 </html>
