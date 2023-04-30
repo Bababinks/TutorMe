@@ -10,14 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
           rel="stylesheet">
-    <link href="{% static 'tutorMe/requests.css' %}" rel="stylesheet">
+    <link href="{% static 'tutorMe/apointment.css' %}" rel="stylesheet">
 
     <title>Tutor Requests</title>
 </head>
 
     {% include "nav.html" %}
 
-<div class="container" style="font-family: 'Inter', sans-serif;">
     <h1>Tutor Requests</h1>
     <table class="table table-bordered table-striped table-hover">
         <thead>
@@ -39,8 +38,8 @@
             <td>{{ schedule.0 }}</td>
             <td>
                 <div class="container">
-                    <div class="col">
-                        <div class="col">
+                    <div class="col p-2">
+                        <div class="col p-2">
                             {{ schedule.2 }}
                         </div>
                         <div class="row">

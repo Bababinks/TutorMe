@@ -8,6 +8,7 @@ body {
 }
 
 table {
+    table-layout: fixed;
     border-collapse: collapse;
     border: 2px solid #ccc;
     width: 100%;
@@ -23,6 +24,7 @@ th {
 
 /* Add background color and padding to the table cells */
 td {
+    width: 33%;
     background-color: #fff;
     padding: 0.5rem;
     border: 1px solid #ccc;
