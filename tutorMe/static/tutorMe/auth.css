@@ -18,6 +18,11 @@ html * {
     height:20em;
 }
 
+body {
+    background-color: #1ccdf6;
+    color: #1ccdf6;
+}
+
 .img-fluid {
     max-width: 1.5em;
 }
