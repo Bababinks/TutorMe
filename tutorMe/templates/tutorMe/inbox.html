@@ -1,0 +1,59 @@
+<head>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% bootstrap_messages %}
+{% load static %}
+<link href="{% static 'tutorMe/inbox.css' %}" rel="stylesheet">
+
+{% include "navStudent.html" %}
+
+<div class="container" style="font-family: 'Inter', sans-serif;">
+    <h1 class="m-3"> Notifications </h1>
+        {% for msg in msgs %}
+        <div class="card mb-3 shadow">
+            {% if msg.0 %}
+            <div class="card-header text-white bg-success">
+                Important! Request status <i class="fa fa-check-circle"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ msg.1 }} has accepted your request for {{ msg.2 }}
+                    tutoring! </h5>
+                <p class="d-flex card-text">
+                    <small class="text-muted me-auto p-2">
+                        Recieved {{msg.3}}
+                    </small>
+                    <small class="text-muted ms-3 mt-3">
+                        <i class="fa fa-trash-o"></i>
+                    </small>
+                </p>
+            </div>
+            {% else %}
+            <div class="card-header text-white bg-danger">
+                Important! Request status <i class="fa fa-times-circle"></i>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ msg.1 }} has rejected your request for {{ msg.2 }}
+                    tutoring! </h5>
+                <p class="d-flex card-text">
+                    <small class="text-muted me-auto p-2">
+                        Recieved {{msg.3}}
+                    </small>
+                    <small class="text-muted ms-3 mt-3">
+                        <i class="fa fa-trash-o"></i>
+                    </small>
+                </p>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% include "footer.html" %}

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import tutorMeUser,Course,Schedule, ScheduleStudent, Appointment, ChatMessage
+from .models import tutorMeUser,Course,Schedule, ScheduleStudent, Appointment, ChatMessage, Notification
 admin.site.register(tutorMeUser)
 admin.site.register(ChatMessage)
 
@@ -18,6 +18,11 @@ class studentSchedule(admin.ModelAdmin):
     list_display =["student", "tutor","class_name"]
 admin.site.register(ScheduleStudent,studentSchedule)
 
+
 class AppointmentAdmin(admin.ModelAdmin):
     list_display =["student", "tutor","class_name"]
 admin.site.register(Appointment,AppointmentAdmin)
+
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('state', 'tutor', 'student', 'class_name', 'time')
+admin.site.register(Notification, NotificationAdmin)
