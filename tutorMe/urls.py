@@ -29,6 +29,7 @@ urlpatterns = [
     path('tutor/classes/<str:class_name>/times', views.calendar_times, name='calendar_times'),
 
     path('schedule/<str:tutor>/<str:name>/<str:mnemonic>/times', views.calendarStudent, name='calendar_student'),
+
     path('tutor/requests', views.tutorRequests, name='tutor_requests'),
     path('student/requests', views.studentRequests, name='student_requests'),
 
@@ -36,6 +37,7 @@ urlpatterns = [
     path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
+    path('student/appointments/<str:tutor>/<str:state>/<str:className>', views.deleteNotification, name="deleteNotific"),
 
     path('student/inbox', views.allMessagesStudent, name='student_messages'),
     path('tutor/inbox', views.allMessagesTutor, name='tutor_messages'),

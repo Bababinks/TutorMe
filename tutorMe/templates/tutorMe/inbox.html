@@ -16,9 +16,11 @@
 {% include "navStudent.html" %}
 
 <div class="container" style="font-family: 'Inter', sans-serif;">
-    <h1 class="m-3"> Notifications </h1>
+    <h1 class="m-3"  > Notifications </h1>
         {% for msg in msgs %}
-        <div class="card mb-3 shadow">
+        <div style="margin-bottom:3.5rem" >
+
+        <div class="card mb-3 shadow" >
             {% if msg.0 %}
             <div class="card-header text-white bg-success">
                 Important! Request status <i class="fa fa-check-circle"></i>
@@ -31,12 +33,12 @@
                         Recieved {{msg.3}}
                     </small>
                     <small class="text-muted ms-3 mt-3">
-                        <i class="fa fa-trash-o"></i>
+ <a  href="{% url 'deleteNotific' msg.2  msg.2  msg.2  %}"><i class="fa fa-trash-o"></i></a>
                     </small>
                 </p>
             </div>
             {% else %}
-            <div class="card-header text-white bg-danger">
+            <div class="card-header text-white bg-danger" >
                 Important! Request status <i class="fa fa-times-circle"></i>
             </div>
             <div class="card-body">
@@ -47,13 +49,16 @@
                         Recieved {{msg.3}}
                     </small>
                     <small class="text-muted ms-3 mt-3">
-                        <i class="fa fa-trash-o"></i>
+                        <a  href="{% url 'deleteNotific' msg.2  msg.2  msg.2  %}"><i class="fa fa-trash-o"></i></a>
                     </small>
                 </p>
             </div>
             {% endif %}
         </div>
+
+            </div>
         {% endfor %}
+
     </div>
 
     {% include "footer.html" %}
