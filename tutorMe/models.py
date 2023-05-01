@@ -10,6 +10,9 @@ class tutorMeUser(models.Model):
     is_admin_set = models.BooleanField(default=False)
     first_name = models.CharField(default="", max_length=255)
     last_name = models.CharField(default="", max_length=255)
+    phone_number = models.CharField(default="", max_length=20)
+    preferred_contact = models.CharField(choices=[('phone', 'Phone'), ('email', 'Email')], default='email',
+                                         max_length=10)
 
     # other fields as needed
     def __str__(self):
@@ -74,6 +77,13 @@ class Appointment(models.Model):
     sunday = ArrayField(models.IntegerField(null=True, blank=True), null=True, blank=True)
 
 
+class ChatMessage(models.Model):
+    sender = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey('tutorMeUser', on_delete=models.CASCADE, related_name='received_messages')
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+
 from datetime import date, datetime
 
 
@@ -89,3 +99,4 @@ class Notification(models.Model):
     student = models.ForeignKey('tutorMeUser', related_name='notifyStudent', on_delete=models.CASCADE)
     class_name = models.CharField(max_length=100)
     time = models.DateTimeField(default=datetime.now, blank=True)
+

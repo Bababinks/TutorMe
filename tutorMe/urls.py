@@ -6,13 +6,17 @@ from . import views
 
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
+    path('sendback',views.send_to_home,name="returnHome"),
     path('accounts/', include('allauth.urls')),
     path('logout', LogoutView.as_view()),
+    path('reportBug',views.bug_report_view, name="bugReport"),
     path('tutorMe/logout', LogoutView.as_view()),
     path('tutorCheck/', views.tutor_check),
 
     path('student', views.StudentView, name='student_default'),
-    path('tutor', views.TutorView),
+
+    path('tutor', views.TutorView, name="tutor"),
+
     path('delete/<str:Class>/', views.deleteClass, name='delete_item'),
     path('add/<str:mnemonic>/<str:name>/<str:number>/', views.addClass, name='add_item'),
     path('student/classes', views.Student_Classes_View),
@@ -37,7 +41,33 @@ urlpatterns = [
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
 
+
+    path('tutor/profile', views.profile, name='profile'),
+    path('tutor/profile/edit', views.edit_profile, name='edit_profile'),
+
+    path('student/profile', views.profile, name='profile_student'),
+    path('student/profile/edit', views.edit_profile, name='edit_profile_student'),
+
+
+
+
+
+
+    path('StudentChat/<str:tutor>/<str:student>/', views.StudentChat, name='StudentChat'),
+    path('TutorChat/<str:tutor>/<str:student>/', views.TutorChat, name='TutorChat'),
+    path('student/StudentChatList/', views.chat_list, name='chat_list'),
+    path('tutor/TutorChatList/', views.Tutor_chat_list, name='Tutor_chat_list'),
+
+
+    path('canceltutor/<str:class_name>/<str:tutor>/<str:student>/', views.CancelTutor, name='cancel_tutor'),
+
+    path('cancelstudent/<str:class_name>/<str:tutor>/<str:student>/', views.CancelStudent, name='cancel_student')
+
+    
+
+
     path('student/inbox', views.allMessagesStudent, name='student_messages'),
     path('tutor/inbox', views.allMessagesTutor, name='tutor_messages'),
 
 ]
+

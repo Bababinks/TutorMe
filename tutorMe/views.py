@@ -1,3 +1,8 @@
+import smtplib
+
+from django.core.mail import send_mail
+from django.db.models import Model, Q
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from datetime import datetime
 
 from django.db.models import Model, Q, DateTimeField
@@ -7,19 +12,26 @@ from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import EditProfileForm
 # def index(request):
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
 from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent, Notification
 from django.shortcuts import render, redirect
-from .forms import ScheduleForm
+from .forms import ScheduleForm, BugReportForm
 import requests
-from .models import Schedule, Appointment
+from .models import Schedule, Appointment, ChatMessage
 from django.dispatch import receiver
 from allauth.socialaccount.signals import pre_social_login
 from django.urls import reverse
 import traceback
+
+from django.contrib.auth.models import AnonymousUser
+
+
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def is_tutor(user):
@@ -37,7 +49,24 @@ def not_student(user):
 def not_tutor(user):
     return not tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
 
+def checkifTutor(request):
+    if not isinstance(request.user, AnonymousUser):
+        if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
+            return
+        else:
+            raise Http404()
+    else:
+        raise Http404()
 
+
+def checkifStudent(request):
+    if not isinstance(request.user, AnonymousUser):
+        if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=True).exists():
+            return
+        else:
+            raise Http404()
+    else:
+        raise Http404()
 class Index(TemplateView):
     template_name = "index.html"
 
@@ -82,9 +111,10 @@ def TutorView(request):
     return render(request, 'tutorMeTutor.html')
 
 
-@login_required
-@user_passes_test(is_tutor)
+
+
 def Tutor_Classes_View(request):
+    checkifTutor(request)
     choice = request.POST.get("choice")
     classes = Json.get_classes(choice, "2023", "Spring")
 
@@ -92,9 +122,9 @@ def Tutor_Classes_View(request):
     return render(request, 'tutorMeTutorClasses.html', {'classes': classes})
 
 
-@login_required
-@user_passes_test(is_tutor)
 def deleteClass(request, Class):
+    checkifTutor(request)
+
     theEmail = request.user.email
     cur_user = tutorMeUser.objects.get(email=theEmail)
 
@@ -110,9 +140,10 @@ def deleteClass(request, Class):
     return Tutor_Classes_List_View(request)
 
 
-@login_required
-@user_passes_test(not_student)
+
 def searchView(request):
+    checkifTutor(request)
+
     if request.method == 'POST':
         if request.POST.get("initialSearch"):
             searchQuery = request.POST.get("initialSearch")
@@ -122,13 +153,21 @@ def searchView(request):
             searchResults = Searchereds(searchQuery)
         else:
             searchResults = []
+        print(searchResults)
 
-    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults})
+        for i in range(len(searchResults)):
+            for j in range(len(searchResults[i])):
+                if ("/" in str(searchResults[i][j])):
+                    print(searchResults[i][j])
+                    searchResults[i][j] = searchResults[i][j].replace("/", " ")
+        # print(searchResults)
+
+    return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults, 'slash': "%2F"})
 
 
-@login_required
-@user_passes_test(is_tutor)
+
 def Tutor_Classes_List_View(request):
+    checkifTutor(request)
     class_choice = request.POST.get("class_choice", "")
 
     theEmail = request.user.email
@@ -165,7 +204,11 @@ def Tutor_Classes_List_View(request):
 
 
 def addClass(request, mnemonic, name, number):
+    checkifTutor(request)
     cur_user = tutorMeUser.objects.get(email=request.user.email)
+    # print(mnemonic)
+    # print(name)
+    # print(number)
     if not TutorClasses.objects.filter(name=name, tutor=cur_user).exists():
         newclass = TutorClasses();
         newclass.tutor = cur_user
@@ -192,9 +235,9 @@ def StudentView(request):
     return render(request, 'tutorMeStudent.html')
 
 
-@login_required
-@user_passes_test(is_not_tutor)
+
 def Student_Classes_View(request):
+    checkifStudent(request)
     if request.method == 'POST':
         searchQuery = request.POST.get("searchBar")
 
@@ -205,12 +248,18 @@ def Student_Classes_View(request):
     else:
         return render(request, 'tutorMeStudentClasses.html')
 
+    for i in range(len(searchResults)):
+        for j in range(len(searchResults[i])):
+            if ("/" in str(searchResults[i][j])):
+                print(searchResults[i][j])
+                searchResults[i][j] = searchResults[i][j].replace("/", " ")
+
     return render(request, 'tutorMeStudentClasses.html', {'searchResults': searchResults})
 
 
-@login_required
-@user_passes_test(is_not_tutor)
+
 def Student_Classes_List_View(request, mnemonic, name, number):
+    checkifStudent(request)
     both = mnemonic + " " + name
     query = TutorClasses.objects.filter(name=name)
     list = []
@@ -229,6 +278,7 @@ def Student_Classes_List_View(request, mnemonic, name, number):
 
 
 def schedule_view(request, name):
+    checkifTutor(request)
     return render(request, 'tutorSchedule.html', {'name': name})
 
 
@@ -277,6 +327,8 @@ def calendar_times(request, class_name):
 
 
 def EditClass(request, name):
+    checkifTutor(request)
+
     query = Schedule.objects.get(class_name=name, tutor__email=request.user.email)
     mon = query.monday
     tues = query.tuesday
@@ -291,14 +343,15 @@ def EditClass(request, name):
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
 
 
-@login_required
-@user_passes_test(is_not_tutor)
+
+
 def StudentMakeSchedule(request, tutor, name, mnemonic):
+    checkifStudent(request)
     if " " in tutor:
         tutor_name = tutor.split(' ')
-        query = tutorMeUser.objects.get(first_name=tutor_name[0], last_name=tutor_name[1])
+        query = tutorMeUser.objects.get(is_tutor=True,first_name=tutor_name[0], last_name=tutor_name[1])
     else:
-        query = tutorMeUser.objects.get(first_name=tutor)
+        query = tutorMeUser.objects.get(is_tutor=True, first_name=tutor)
 
     full_name = mnemonic + " " + name
 
@@ -366,9 +419,9 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
                   {'tutor': tutor, 'name': name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
 
 
-@login_required
-@user_passes_test(is_not_tutor)
+
 def calendarStudent(request, tutor, name, mnemonic):
+    checkifStudent(request)
     split = tutor.split(" ")
     first_name = split[0]
     last_name = split[1]
@@ -376,8 +429,13 @@ def calendarStudent(request, tutor, name, mnemonic):
     full_name = mnemonic + " " + name
     if request.method == "POST":
         student = tutorMeUser.objects.get(email=request.user.email)
-        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name)
-        schedule, created = ScheduleStudent.objects.get_or_create(student=student, tutor=tutor, class_name=full_name, )
+        tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name, is_tutor=True)
+        schedule, created = ScheduleStudent.objects.get_or_create(
+            student=student,
+            tutor=tutor,
+            class_name=full_name,
+        )
+
         m = []
         tu = []
         w = []
@@ -415,9 +473,9 @@ def calendarStudent(request, tutor, name, mnemonic):
     return redirect(reverse('student_default'))
 
 
-@login_required
-@user_passes_test(not_student)
+
 def tutorRequests(request):
+    checkifTutor(request)
     tutor = tutorMeUser.objects.get(email=request.user.email)
 
     query = ScheduleStudent.objects.filter(tutor=tutor)
@@ -489,6 +547,7 @@ def generateAcceptanceMsgToStudent(student, tutor, class_name):
 
 
 def studentRequests(request):
+    checkifStudent(request)
     student = tutorMeUser.objects.get(email=request.user.email)
 
     query = ScheduleStudent.objects.filter(student=student)
@@ -541,12 +600,12 @@ def accepted(request, class_name, tutor, student):
     split_tutor = tutor.split()
     tutor_first = split_tutor[0]
     tutor_last = split_tutor[1]
-    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last)
+    tutor_name = tutorMeUser.objects.get(first_name=tutor_first, last_name=tutor_last, is_tutor=True)
 
     split_student = student.split()
     student_first = split_student[0]
     student_last = split_student[1]
-    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last)
+    student_name = tutorMeUser.objects.get(first_name=student_first, last_name=student_last, is_tutor=False)
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
@@ -571,23 +630,58 @@ def deleteRequest(request, class_name, tutor, student):
     splitTutor = tutor.split(" ")
     first_nameT = splitTutor[0]
     last_nameT = splitTutor[1]
-    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT)
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
     splitStudent = student.split(" ")
     first_nameS = splitStudent[0]
     last_nameS = splitStudent[1]
 
-    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS)
-    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+    toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name, )
     generateRejectionMsgToStudent(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
 
     return tutorRequests(request)
 
 
-@login_required
-@user_passes_test(not_student)
+def CancelTutor(request, class_name, tutor, student):
+    checkifTutor(request)
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+    return allAppointmentsTutor(request)
+
+
+def CancelStudent(request, class_name, tutor, student):
+    checkifStudent(request)
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor1 = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+
+    student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+    toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
+    toBeDeleted.delete()
+
+    return allAppointmentsStudent(request)
+
+
+
 def allAppointmentsTutor(request):
+    checkifTutor(request)
     tutor = tutorMeUser.objects.get(email=request.user.email)
 
     query = Appointment.objects.filter(tutor=tutor)
@@ -636,9 +730,8 @@ def allAppointmentsTutor(request):
     return render(request, 'appointmentsTutor.html', {'list': list})
 
 
-@login_required
-@user_passes_test(is_not_tutor)
 def allAppointmentsStudent(request):
+    checkifStudent(request)
     student = tutorMeUser.objects.get(email=request.user.email)
 
     query = Appointment.objects.filter(student=student)
@@ -685,6 +778,185 @@ def allAppointmentsStudent(request):
         each.append(time_slots(i.sunday))
         list.append(each)
     return render(request, 'appointmentsStudent.html', {'list': list})
+
+
+
+def profile(request):
+    user = request.user
+    istutor = is_tutor(user)
+    print(istutor)
+
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    return render(request, 'view_profile.html', {'user': user, 'istutor': istutor, "phone": phone, 'contact': contact, 'first': first, "last": last})
+
+
+def edit_profile(request):
+    user = request.user
+    istutor = is_tutor(user)
+    cur_user = tutorMeUser.objects.get(email=request.user.email)
+
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=cur_user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = EditProfileForm(instance=cur_user)
+
+    first = cur_user.first_name
+    last = cur_user.last_name
+    phone = cur_user.phone_number
+    contact = cur_user.preferred_contact
+
+    context = {'form': form, 'istutor': istutor, 'user': user, "phone": phone, 'contact': contact, 'first': first, "last": last}
+    return render(request, 'edit_profile.html', context)
+
+def StudentChat(request, tutor, student):
+    checkifStudent(request)
+    student_sender = tutorMeUser.objects.get(email=request.user.email)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
+
+    messages = ChatMessage.objects.filter(sender=student_user, receiver=tutor_user) | \
+               ChatMessage.objects.filter(sender=tutor_user, receiver=student_user)
+
+    context = {
+        'user': student_user,
+        'other_user': tutor,
+        'messages': messages,
+    }
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ChatMessage.objects.create(sender=student_user, receiver=tutor_user, content=content)
+            return redirect('StudentChat', tutor=tutor, student=student)
+    return render(request, 'StudentChat.html', context)
+
+
+def TutorChat(request, tutor, student):
+    checkifTutor(request)
+    tutor_sender = tutorMeUser.objects.get(email=request.user.email)
+
+    splitStudent = student.split(" ")
+    first_nameS = splitStudent[0]
+    last_nameS = splitStudent[1]
+    student_user = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
+
+    splitTutor = tutor.split(" ")
+    first_nameT = splitTutor[0]
+    last_nameT = splitTutor[1]
+    tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
+
+    messages = ChatMessage.objects.filter(sender=tutor_user, receiver=student_user) | \
+               ChatMessage.objects.filter(sender=student_user, receiver=tutor_user)
+    context = {
+        'user': tutor_user,
+        'other_user': student,
+        'messages': messages,
+    }
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            ChatMessage.objects.create(sender=tutor_user, receiver=student_user, content=content)
+            return redirect('TutorChat', tutor=tutor, student=student)
+    return render(request, 'TutorChat.html', context)
+
+
+def chat_list(request):
+    student = tutorMeUser.objects.get(email=request.user.email)
+    student_name = student.first_name + " " + student.last_name
+    chats = ChatMessage.objects.filter(sender=student) | ChatMessage.objects.filter(receiver=student)
+    unique_chats = []
+    unique_names = []
+    for chat in chats:
+        if chat.sender == student:
+            if chat.receiver not in unique_chats:
+                tutor_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                unique_chats.append(chat.receiver)
+                unique_names.append(tutor_name)
+        elif chat.receiver == student:
+            if chat.sender not in unique_chats:
+                tutor_name = chat.sender.first_name + " " + chat.sender.last_name
+                unique_chats.append(chat.sender)
+                unique_names.append(tutor_name)
+
+    return render(request, 'StudentChat_list.html', {'unique_names': unique_names, 'student_name': student_name})
+
+
+def Tutor_chat_list(request):
+    checkifTutor(request)
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+    tutor_name = tutor.first_name + " " + tutor.last_name
+    chats = ChatMessage.objects.filter(sender=tutor) | ChatMessage.objects.filter(receiver=tutor)
+    unique_chats = []
+    unique_names = []
+    for chat in chats:
+        if chat.sender == tutor:
+            if chat.receiver not in unique_chats:
+                student_name = chat.receiver.first_name + " " + chat.receiver.last_name
+                unique_chats.append(chat.receiver)
+                unique_names.append(student_name)
+        elif chat.receiver == tutor:
+            if chat.sender not in unique_chats:
+                student_name = chat.sender.first_name + " " + chat.sender.last_name
+                unique_chats.append(chat.sender)
+                unique_names.append(student_name)
+
+    return render(request, 'TutorChat_list.html', {'unique_names': unique_names, 'tutor_name': tutor_name})
+
+
+
+
+def page_not_found_view(request, exception):
+    return render(request, '404.html', status=404) #taken from https://levelup.gitconnected.com/django-customize-404-error-page-72c6b6277317
+
+def send_to_home(request):
+    if not isinstance(request.user, AnonymousUser):
+        Curr_user=tutorMeUser.objects.get(email=request.user.email)
+        if Curr_user.is_tutor:
+            return redirect("tutor")
+        else:
+            return redirect("student_default")
+    else:
+        return redirect("index")
+
+
+@login_required
+def bug_report_view(request):
+    name = tutorMeUser.objects.get(email=request.user.email)
+    if request.method == 'POST':
+        form = BugReportForm(request.POST)
+        if form.is_valid():
+
+            fullName = name.first_name + " " + name.last_name
+            email = name.email
+            bug_description = form.cleaned_data['bug_description']
+            message = f"{fullName} with email: ({email}) has reported a bug: {bug_description}"
+
+            send_mail(f"Bug report by {fullName}",message, "settings.EMAIL_HOST_USER",["errorsherokututor@gmail.com"], fail_silently=False)
+            if name.is_tutor:
+                return redirect("tutor")
+            else:
+                return redirect("student_default")
+
+    else:
+        form = BugReportForm()
+    return render(request, 'bug_report.html', {'form': form,"name":name})
+
 
 
 @login_required

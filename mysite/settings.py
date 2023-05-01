@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import platform
 from django.urls import reverse
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +27,19 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@rrwgn5#191&17
 #SECRET_KEY = 'django-insecure-@rrwgn5#191&17b67^o!wx8ln*9q67$8e(u95b9)e-27hv^drh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
+if platform.system() == 'Linux' and 'DYNO' in os.environ:
+    # Running on Heroku, set DEBUG to False
+    DEBUG = False
+    SECURE_SSL_REDIRECT=True
+    ADMIN_ENABLED = False
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+
+else:
+    # Not running on Heroku, use default DEBUG setting
+    DEBUG = True
+    SECURE_SSL_REDIRECT = False
+    ADMIN_ENABLED = True
 ALLOWED_HOSTS = ['tutorfinder.herokuapp.com', '127.0.0.1', 'localhost']
 
 
@@ -211,3 +221,9 @@ LOGIN_REDIRECT_URL = '/tutorMe/tutorCheck'
 LOGOUT_REDIRECT_URL='/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='errorsherokututor@gmail.com'
+EMAIL_HOST_PASSWORD="eaoxcigwnvyrksnh"
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
