@@ -37,7 +37,7 @@ urlpatterns = [
     path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
-    path('student/appointments/<str:tutor>/<str:state>/<str:className>', views.deleteNotification, name="deleteNotific"),
+    path('student/appointments/<str:tutor>/<str:state>/<str:className>/<str:time>', views.deleteNotification, name="deleteNotific"),
 
     path('student/inbox', views.allMessagesStudent, name='student_messages'),
     path('tutor/inbox', views.allMessagesTutor, name='tutor_messages'),

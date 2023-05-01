@@ -487,6 +487,15 @@ def generateAcceptanceMsgToStudent(student, tutor, class_name):
                                       class_name=class_name)
     msg.save()
 
+def deleteNotification(request, state, tutor, className,time):
+    theEmail = request.user.email
+    student = tutorMeUser.objects.get(email=theEmail)
+    toBeDeleted=Notification.objects.get(state=state, tutor__email=tutor, student=student,
+                                      class_name=className, time=time)
+    toBeDeleted.delete()
+    return allMessagesStudent(request)
+
+
 
 def studentRequests(request):
     student = tutorMeUser.objects.get(email=request.user.email)
@@ -700,16 +709,19 @@ def allMessagesStudent(request):
 
         print("State: ", n.state, " Tutor: ", n.tutor.first_name, " ClassName: ", n.class_name)
         if n.state == "Rejected":
-            msg.append(False)
+            msg.append("Rejected")
         elif n.state == "Accepted":
-            msg.append(True)
+            msg.append("Accepted")
 
         fullName = n.tutor.first_name + ' ' + n.tutor.last_name
         msg.append(fullName)
         msg.append(n.class_name)
         timeStr = ' at ' + str(n.time)[11:16] + ' on ' + str(n.time)[:10]
         msg.append(timeStr)
+        msg.append(n.tutor)
+        msg.append(n.time)
         msgs.append(msg)
+
 
     return render(request, 'inbox.html', {'msgs': msgs})
 
