@@ -2,7 +2,9 @@
 <html>
 <title>Welcome Student</title>
 <head>
-
+<link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
@@ -20,7 +22,7 @@
 
 <form action="/tutorMe/student/classes" class="form" method="POST">
     {% csrf_token %}
-    <div class="container">
+    <div class="container" style="font-family: 'Inter', sans-serif;">
         <div class="row justify-content-center align-items-center" style="height: 60vh;">
             <div class="col-lg-7">
                 <div class="input-group input-group-lg">
@@ -31,6 +33,39 @@
                     <button class="btn btn-primary" style="border-top-right-radius:20px;
 border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i></button>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <i class="fa fa-list-alt"> </i> &emsp;Find a class!
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <div>
+                    <i class="fa fa-address-book"> </i> &emsp;Choose a tutor!
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <i class="fa fa-calendar"> </i> &emsp; Choose appointment time!
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <i class="fa fa-handshake-o"> </i>&emsp; Wait for request to be accepted!
             </div>
         </div>
     </div>

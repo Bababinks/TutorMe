@@ -20,8 +20,6 @@
 {% include "nav.html" %}
 
 
-
-
 <form action="/tutorMe/tutor/classes" class="form" method="POST">
     {% csrf_token %}
     <div class="container" style="font-family: 'Inter', sans-serif;">
@@ -34,9 +32,42 @@
                            name="searchBar" placeholder="Search for a class"
                            style="border-top-left-radius:20px; border-bottom-left-radius:20px;" type="text">
                     <button class="btn btn-primary" style="border-top-right-radius:20px;
-                      border-bottom-right-radius:20px;" type="submit">Search
+                      border-bottom-right-radius:20px;" type="submit"><i class="fa fa-search"></i>
                     </button>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <i class="fa fa-list-alt"> </i> &emsp;Find a class!
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <div>
+                   <i class="fa fa-calendar-check-o"> </i> &emsp;Choose hourly and availability!
+                </div>
+                <div>
+
+                </div>
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <i class="fa fa-clock-o"> </i> &emsp; Wait for students!
+            </div>
+            <div class="col">
+                <i class="fa fa-arrow-right"> </i>
+            </div>
+            <div class="col">
+                <i class="fa fa-check-square-o"> </i>&emsp;Finally accept the request!
             </div>
         </div>
     </div>
