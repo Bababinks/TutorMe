@@ -548,7 +548,7 @@ def deleteNotification(request, state, tutor, className, time):
 def deleteNotificationtutor(request, student, state, className, time):
     theEmail = request.user.email
     tutor = tutorMeUser.objects.get(email=theEmail)
-    toBeDeleted=Notification.objects.get(state=state,
+    toBeDeleted=Notification.objects.get(state=state, tutor=tutor,
                                       class_name=className, time=time)
     toBeDeleted.delete()
     return allMessagesTutor(request)
