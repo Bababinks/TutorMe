@@ -27,42 +27,6 @@
     <div style="margin-bottom:3.5rem">
 
         <div class="card mb-3 shadow">
-            {% if msg.0 == "Accepted" %}
-            <div class="card-header text-white bg-success">
-                Important! Request status <i class="fa fa-check-circle"></i>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title"> You have accepted {{ msg.1 }}'s {{ msg.2 }}
-                    tutoring request! </h5>
-                <p class="d-flex card-text">
-                    <small class="text-muted me-auto p-2">
-                        Recieved {{msg.3}}
-                    </small>
-                    <small class="text-muted ms-3 mt-3">
-                        <a href="{% url 'deleteNotifictutor' msg.4  msg.0  msg.2 msg.5 %}"><i class="fa fa-trash-o"></i></a>
-                    </small>
-                </p>
-            </div>
-            {% endif %}
-
-            {% if msg.0 == "Rejected" %}
-            <div class="card-header text-white bg-danger">
-                Important! Request status <i class="fa fa-times-circle"></i>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">You have rejected {{ msg.1 }}'s {{ msg.2 }}
-                    tutoring request! </h5>
-                <p class="d-flex card-text">
-                    <small class="text-muted me-auto p-2">
-                        Recieved {{msg.3}}
-                    </small>
-                    <small class="text-muted ms-3 mt-3">
-                        <a href="{% url 'deleteNotifictutor' msg.4  msg.0  msg.2 msg.5 %}"><i class="fa fa-trash-o"></i></a>
-                    </small>
-                </p>
-            </div>
-            {% endif %}
-
             {% if msg.0 == "Canceled" %}
             <div class="card-header text-white bg-danger">
                 Important! Cancellation status <i class="fa fa-times-circle"></i>
