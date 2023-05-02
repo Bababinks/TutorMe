@@ -1,13 +1,12 @@
-
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 {% if messages %}
-        {% for message in messages %}
-            <span {% if message.tags %} class="{{ message.tags }}" style="border-bottom:-0.2rem"{% endif %}></span>
-        {% endfor %}
-
+{% for message in messages %}
+<span %} %} class="{{ message.tags }}" endif if message.tags style="border-bottom:0.2rem;" {% {%></span>
+{% endfor %}
 {% endif %}
-<nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;">
+
+<nav class="navbar shadow navbar-expand-lg navbar-light"
+     style="background-color:white; font-family: 'Inter', sans-serif;">
 
     <div class="container-fluid ">
         <a class="navbar-brand" href="/tutorMe/student">
@@ -28,7 +27,8 @@
 
                 </li>
                 <li class="nav-item active flex-fill ">
-                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i>&emsp; Scheduled Appointments</a>
+                    <a class="nav-link " href="/tutorMe/student/appointments"><i class="fa fa-calendar"></i>&emsp;
+                        Scheduled Appointments</a>
                 </li>
                 <li class="nav-item active flex-fill ">
                     <a class="nav-link " href="/tutorMe/student"><i class="fa fa-search-plus"></i>&emsp; Search Classes</a>
@@ -37,7 +37,7 @@
                     <a class="nav-link " href="{% url 'chat_list' %}"><i class="fa fa-comments"></i>&emsp; Chat </a>
 
                 </li>
-                
+
             </ul>
 
             <div class="dropdown dropdown-menu-end dropdown-menu-lg-start" style="margin-left:7em; margin-right:13em">
@@ -73,16 +73,20 @@
                         <hr/>
                     </a></li>
 
-                    <li><a class="dropdown-item" href="/tutorMe/student/profile" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>Profile</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>Sign
+                    <li><a class="dropdown-item" href="/tutorMe/student/profile"
+                           style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>&emsp; Profile</a></li>
+                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i
+                            class="fa fa-sign-out"></i>&emsp; Sign
 
                         Out</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/reportBug" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>&emsp; Report a Bug</a>
+                    <li><a class="dropdown-item" href="/tutorMe/reportBug" style="font-family: 'Inter', sans-serif;"><i
+                            class="fa fa-bug"></i>&emsp; Report a Bug</a>
                     </li>
                 </ul>
                 {% else %}
                 <ul aria-labelledby="options" class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>&emsp; Sign In</a></li>
+                    <li><a class="dropdown-item" href="{% provider_login_url 'google' %}"><i class="fa fa-sign-in"></i>&emsp;
+                        Sign In</a></li>
                 </ul>
                 {% endif %}
             </div>

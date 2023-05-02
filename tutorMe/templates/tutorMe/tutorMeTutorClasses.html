@@ -17,7 +17,6 @@
     <div class="form-group mb-3 p-5">
         <label class="form-label" for="searchBar">Find the class you want to tutor!</label>
         <div class="input-group mb-3">
-          
             <input aria-describedby="searchBtn" class="form-control" formmethod="POST" id="searchBar"
                    name="searchBar"
                    placeholder="Search for classes..." style="max-width: 50%; text-align: center" type="search">
@@ -38,7 +37,7 @@
                     {{result.0}} {{result.2}}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">{{result.1}} {{result.2}}</h5>
+                    <h5 class="card-title">{{result.1}}</h5>
                     <button class="btn btn-primary mt-1" data-bs-target="#confirm{{ forloop.counter }}"
                             data-bs-toggle="modal" style="font-weight: bold"
                             type="button"> Add

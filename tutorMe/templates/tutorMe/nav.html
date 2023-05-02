@@ -1,14 +1,22 @@
+<head>
 
-
+    <title>tutorNav</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+
+
+<nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;  font-family: 'Inter', sans-serif;">
+
 {% if messages %}
         {% for message in messages %}
-            <span {% if message.tags %} class="{{ message.tags }}" style="border-bottom:-0.2rem"{% endif %}></span>
+            <span {% if message.tags %} class="{{ message.tags }}" style="border-bottom:0.2rem;" {% endif %}></span>
         {% endfor %}
-
 {% endif %}
 
-<nav class="navbar shadow navbar-expand-lg navbar-light" style="background-color:white;">
 
     <div class="container-fluid" >
         <a class="navbar-brand" href="/tutorMe/tutor">
@@ -23,6 +31,12 @@
                 </li>
                 <li class="nav-item flex-fill " >
                     <a class="nav-link" href="/tutorMe/tutor/requests"><i class="fa fa-tasks"></i>&emsp; Requests</a>
+                </li>
+                <li class="nav-item flex-fill ">
+                    <a class="nav-link" href="/tutorMe/tutor/inbox">
+                        <i class="fa fa-envelope"><i class="fa fa-exclamation" style="color: red"></i></i>&emsp;
+                        Inbox</a>
+
                 </li>
                 <li class="nav-item flex-fill " >
                     <a class="nav-link " href="/tutorMe/tutor/appointments"><i class="fa fa-calendar"></i>&emsp; Scheduled Appointments</a>
@@ -72,8 +86,8 @@
                         <hr/>
                     </a></li>
 
-                    <li><a class="dropdown-item" href="/tutorMe/tutor/profile" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>Profile</a></li>
-                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>Sign
+                    <li><a class="dropdown-item" href="/tutorMe/tutor/profile" style="font-family: 'Inter', sans-serif;"><i class="fa fa-user"></i>&emsp; Profile</a></li>
+                    <li><a class="dropdown-item" href="/tutorMe/logout" style="font-family: 'Inter', sans-serif;"><i class="fa fa-sign-out"></i>&emsp; Sign
 
                         Out</a></li>
                     <li><a class="dropdown-item" href="/tutorMe/reportBug" style="font-family: 'Inter', sans-serif;"><i class="fa fa-bug"></i>&emsp; Report a Bug</a>

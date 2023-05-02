@@ -1,4 +1,6 @@
-
+html * {
+    font-family: 'Inter', sans-serif;
+}
 
 .divider {
     width: 30em;
@@ -16,6 +18,11 @@
     height:20em;
 }
 
+body {
+    background-color: #1ccdf6;
+    color: #1ccdf6;
+}
+
 .img-fluid {
     max-width: 1.5em;
 }
@@ -29,18 +36,11 @@
     text-align: center;
 }
 
-body {
-    background: center white url("images/login_background.png") no-repeat;
-}
-
 .title {
     padding-top: 1em;
     padding-bottom: 1.2em;
-    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif
-}
+    font-family: 'Inter', sans-serif;
 
-.select{
-    transition: background-image .25s;
 }
 
 

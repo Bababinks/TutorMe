@@ -1,122 +1,80 @@
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
-{% bootstrap_messages %}
+<html lang="">
+<head>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% bootstrap_messages %}
 
+    {% load static %}
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{% static 'tutorMe/apointment.css' %}" rel="stylesheet">
+
+    <title>Requests</title>
+
+</head>
 
 {% include "navStudent.html" %}
-<html>
-<head>
-	<title>Requests</title>
-    <style>
-        /* Define borders for the table */
-table {
-  border-collapse: collapse;
-  border: 2px solid #ccc;
-  width: 100%;
-  margin-bottom: 1rem;
-}
 
-/* Add background color and padding to the table header */
-th {
-  background-color: #eee;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-}
-
-/* Add background color and padding to the table cells */
-td {
-  background-color: #fff;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-}
-
-/* Add hover effect to the table rows */
-tr:hover {
-  background-color: #f5f5f5;
-}
-
-/* Style the first column of the table */
-td:first-child {
-  font-weight: bold;
-}
-
-/* Center the content of the first and second column of the table */
-td:nth-child(1),
-td:nth-child(2),
-td:nth-child(10) {
-  text-align: center;
-}
-
-/* Style the Accept and Reject buttons */
-.btn {
-  margin-right: 0.5rem;
-}
-
-.btn-accept {
-  background-color: #28a745;
-  border-color: #28a745;
-}
-
-.btn-reject {
-  background-color: #dc3545;
-  border-color: #dc3545;
-}
-
-    </style>
-</head>
 <body>
-	<h1>Pending Requests</h1>
-	<table>
-		<thead>
-			<tr>
-				<th>Class Name</th>
-				<th>Tutor Name</th>
-				<th>Monday</th>
-				<th>Tuesday</th>
-				<th>Wednesday</th>
-				<th>Thursday</th>
-				<th>Friday</th>
-				<th>Saturday</th>
-				<th>Sunday</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for schedule in list %}
-			<tr>
-				<td>{{ schedule.0 }}</td>
-				<td>{{ schedule.1 }}</td>
-                <td> {% for times in schedule.3 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.4 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.5 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.6 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.7 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.8 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-				<td> {% for times in schedule.9 %}
-                            {{ times }}
-                    {% endfor %}
-                </td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+<div class="container" style="font-family: 'Inter', sans-serif;">
+
+    <h5 class="text-center pt-5 pb-3" style="font-weight: bold;">
+        Pending Requests
+    </h5>
+</div>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Class Name</th>
+        <th>Tutor Name</th>
+        <th>Monday</th>
+        <th>Tuesday</th>
+        <th>Wednesday</th>
+        <th>Thursday</th>
+        <th>Friday</th>
+        <th>Saturday</th>
+        <th>Sunday</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for schedule in list %}
+    <tr>
+        <td>{{ schedule.0 }}</td>
+        <td>{{ schedule.1 }}</td>
+        <td> {% for times in schedule.3 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.4 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.5 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.6 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.7 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.8 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+        <td> {% for times in schedule.9 %}
+            {{ times }}
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
 </body>
 </html>
