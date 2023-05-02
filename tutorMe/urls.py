@@ -42,6 +42,7 @@ urlpatterns = [
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
     path('student/appointments/<str:tutor>/<str:state>/<str:className>/<str:time>', views.deleteNotification, name="deleteNotific"),
+    path('tutor/appointments/<str:student>/<str:state>/<str:className>/<str:time>', views.deleteNotificationtutor, name="deleteNotifictutor"),
 
 
     path('tutor/profile', views.profile, name='profile'),
