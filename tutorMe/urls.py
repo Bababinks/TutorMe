@@ -22,7 +22,7 @@ urlpatterns = [
     path('student/classes', views.Student_Classes_View),
     # path('tutor/classes', views.Tutor_Classes_View),
 
-    path('student/classes/list', views.Student_Classes_List_View,  name='student_classes_list_view'),
+    path('student/classes/list', views.Student_Classes_List_View, name='student_classes_list_view'),
     path('tutor/classes/list', views.Tutor_Classes_List_View, name='tutor_classes_list_view'),
     path('tutor/classes', views.searchView),
     path('check/<str:mnemonic>/<str:name>/<str:number>/', views.Student_Classes_List_View, name='check'),
@@ -33,6 +33,7 @@ urlpatterns = [
     path('tutor/classes/<str:class_name>/times', views.calendar_times, name='calendar_times'),
 
     path('schedule/<str:tutor>/<str:name>/<str:mnemonic>/times', views.calendarStudent, name='calendar_student'),
+
     path('tutor/requests', views.tutorRequests, name='tutor_requests'),
     path('student/requests', views.studentRequests, name='student_requests'),
 
@@ -40,6 +41,8 @@ urlpatterns = [
     path('accept/<str:class_name>/<str:tutor>/<str:student>/', views.accepted, name='accepted'),
     path('tutor/appointments', views.allAppointmentsTutor),
     path('student/appointments', views.allAppointmentsStudent),
+    path('student/appointments/<str:tutor>/<str:state>/<str:className>/<str:time>', views.deleteNotification, name="deleteNotific"),
+
 
     path('tutor/profile', views.profile, name='profile'),
     path('tutor/profile/edit', views.edit_profile, name='edit_profile'),
@@ -60,7 +63,13 @@ urlpatterns = [
 
     path('canceltutor/<str:class_name>/<str:tutor>/<str:student>/', views.CancelTutor, name='cancel_tutor'),
 
-    path('cancelstudent/<str:class_name>/<str:tutor>/<str:student>/', views.CancelStudent, name='cancel_student')
+    path('cancelstudent/<str:class_name>/<str:tutor>/<str:student>/', views.CancelStudent, name='cancel_student'),
 
-    ]
+    
+
+
+    path('student/inbox', views.allMessagesStudent, name='student_messages'),
+    path('tutor/inbox', views.allMessagesTutor, name='tutor_messages'),
+
+]
 
