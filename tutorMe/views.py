@@ -540,9 +540,17 @@ def generateAcceptanceMsgToStudent(student, tutor, class_name):
 def deleteNotification(request, state, tutor, className, time):
     theEmail = request.user.email
     student = tutorMeUser.objects.get(email=theEmail)
-    toBeDeleted=Notification.objects.get(state=state, tutor__email=tutor, student=student,
-                                      class_name=className, time=time)
-    toBeDeleted.delete()
+
+    if  Notification.objects.filter(state=state, tutor__email=tutor, student=student,
+                                              class_name=className, time=time).exists:
+        toBeDeleted = Notification.objects.filter(state=state, tutor__email=tutor, student=student,
+                                                  class_name=className, time=time)
+
+        toBeDeleted.delete()
+
+
+
+
     return allMessagesStudent(request)
 
 def deleteNotificationtutor(request, student, state, className, time):
@@ -550,7 +558,11 @@ def deleteNotificationtutor(request, student, state, className, time):
     tutor = tutorMeUser.objects.get(email=theEmail)
     toBeDeleted=Notification.objects.get(state=state, tutor=tutor,
                                       class_name=className, time=time)
-    toBeDeleted.delete()
+    if (Notification.objects.filter(state=state, tutor=tutor,
+                                           class_name=className, time=time).exists):
+        toBeDeleted = Notification.objects.get(state=state, tutor=tutor,
+                                               class_name=className, time=time)
+        toBeDeleted.delete()
     return allMessagesTutor(request)
 
 def studentRequests(request):
