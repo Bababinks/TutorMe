@@ -3,6 +3,11 @@ import smtplib
 from django.core.mail import send_mail
 from django.db.models import Model, Q
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from datetime import datetime
+from django.contrib import messages
+from django.db.models import Model, Q, DateTimeField
+from django.db.models.functions import Trunc
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
@@ -12,7 +17,7 @@ from .forms import EditProfileForm
 #     return HttpResponse("Hello, world. You're at the tutorMe index.")
 from tutorMe import Json
 from tutorMe.Json import get_JSON_Subjects, Searchereds
-from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent
+from tutorMe.models import tutorMeUser, TutorClasses, ScheduleStudent, Notification
 from django.shortcuts import render, redirect
 from .forms import ScheduleForm, BugReportForm
 import requests
@@ -23,7 +28,6 @@ from django.urls import reverse
 import traceback
 
 from django.contrib.auth.models import AnonymousUser
-
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -44,6 +48,7 @@ def not_student(user):
 def not_tutor(user):
     return not tutorMeUser.objects.filter(email=user.email, is_tutor=True).exists()
 
+
 def checkifTutor(request):
     if not isinstance(request.user, AnonymousUser):
         if not tutorMeUser.objects.filter(email=request.user.email, is_tutor=False).exists():
@@ -62,6 +67,8 @@ def checkifStudent(request):
             raise Http404()
     else:
         raise Http404()
+
+
 class Index(TemplateView):
     template_name = "index.html"
 
@@ -106,8 +113,6 @@ def TutorView(request):
     return render(request, 'tutorMeTutor.html')
 
 
-
-
 def Tutor_Classes_View(request):
     checkifTutor(request)
     choice = request.POST.get("choice")
@@ -135,7 +140,6 @@ def deleteClass(request, Class):
     return Tutor_Classes_List_View(request)
 
 
-
 def searchView(request):
     checkifTutor(request)
 
@@ -154,11 +158,9 @@ def searchView(request):
             for j in range(len(searchResults[i])):
                 if ("/" in str(searchResults[i][j])):
                     print(searchResults[i][j])
-                    searchResults[i][j] = searchResults[i][j].replace("/", " ")
-        # print(searchResults)
+                    searchResults[i][j] = searchResults[i][j].replace("/", " ")  # print(searchResults)
 
     return render(request, 'tutorMeTutorClasses.html', {'searchResults': searchResults, 'slash': "%2F"})
-
 
 
 def Tutor_Classes_List_View(request):
@@ -230,7 +232,6 @@ def StudentView(request):
     return render(request, 'tutorMeStudent.html')
 
 
-
 def Student_Classes_View(request):
     checkifStudent(request)
     if request.method == 'POST':
@@ -250,7 +251,6 @@ def Student_Classes_View(request):
                 searchResults[i][j] = searchResults[i][j].replace("/", " ")
 
     return render(request, 'tutorMeStudentClasses.html', {'searchResults': searchResults})
-
 
 
 def Student_Classes_List_View(request, mnemonic, name, number):
@@ -280,11 +280,9 @@ def schedule_view(request, name):
 def calendar_times(request, class_name):
     if request.method == "POST":
         tutor = tutorMeUser.objects.get(email=request.user.email)
-        schedule, created = Schedule.objects.get_or_create(
-            tutor=tutor,
-            class_name=class_name,
+        schedule, created = Schedule.objects.get_or_create(tutor=tutor, class_name=class_name,
 
-        )
+                                                           )
         schedule.input_rate = request.POST.get('inputRate')
         m = []
         tu = []
@@ -340,13 +338,11 @@ def EditClass(request, name):
     return render(request, 'TutorEdit.html', {'name': name, 'prev': prev})
 
 
-
-
 def StudentMakeSchedule(request, tutor, name, mnemonic):
     checkifStudent(request)
     if " " in tutor:
         tutor_name = tutor.split(' ')
-        query = tutorMeUser.objects.get(is_tutor=True,first_name=tutor_name[0], last_name=tutor_name[1])
+        query = tutorMeUser.objects.get(is_tutor=True, first_name=tutor_name[0], last_name=tutor_name[1])
     else:
         query = tutorMeUser.objects.get(is_tutor=True, first_name=tutor)
 
@@ -416,7 +412,6 @@ def StudentMakeSchedule(request, tutor, name, mnemonic):
                   {'tutor': tutor, 'name': name, 'mnemonic': mnemonic, 'tutor_schedule': tutor_schedule})
 
 
-
 def calendarStudent(request, tutor, name, mnemonic):
     checkifStudent(request)
     split = tutor.split(" ")
@@ -432,6 +427,7 @@ def calendarStudent(request, tutor, name, mnemonic):
             tutor=tutor,
             class_name=full_name,
         )
+
         m = []
         tu = []
         w = []
@@ -467,7 +463,6 @@ def calendarStudent(request, tutor, name, mnemonic):
         schedule.save()
 
     return redirect(reverse('student_default'))
-
 
 
 def tutorRequests(request):
@@ -519,6 +514,36 @@ def tutorRequests(request):
         list.append(each)
     return render(request, 'tutorRequests.html', {'list': list})
 
+
+def generateRejectionMsgToStudent(student, tutor, class_name):
+    """
+
+    :param app:
+    """
+    print('WORKING Rejecion')
+    msg = Notification.objects.create(state=Notification.requestState.REJ, tutor=tutor, student=student,
+                                      class_name=class_name)
+    msg.save()
+
+
+def generateAcceptanceMsgToStudent(student, tutor, class_name):
+    """
+
+    :param app:
+    """
+    print('WORKING Acceptance')
+    msg = Notification.objects.create(state=Notification.requestState.ACC, tutor=tutor, student=student,
+                                      class_name=class_name)
+    msg.save()
+
+
+def deleteNotification(request, state, tutor, className,time):
+    theEmail = request.user.email
+    student = tutorMeUser.objects.get(email=theEmail)
+    toBeDeleted=Notification.objects.get(state=state, tutor__email=tutor, student=student,
+                                      class_name=className, time=time)
+    toBeDeleted.delete()
+    return allMessagesStudent(request)
 
 def studentRequests(request):
     checkifStudent(request)
@@ -583,11 +608,9 @@ def accepted(request, class_name, tutor, student):
 
     x = ScheduleStudent.objects.get(class_name=class_name, tutor=tutor_name, student=student_name)
 
-    apt = Appointment.objects.create(
-        student=x.student,
-        tutor=x.tutor,
-        class_name=x.class_name,
-    )
+    generateAcceptanceMsgToStudent(tutor=tutor_name, student=student_name, class_name=class_name)
+
+    apt = Appointment.objects.create(student=x.student, tutor=x.tutor, class_name=x.class_name, )
     apt.monday = x.monday
     apt.tuesday = x.tuesday
     apt.wednesday = x.wednesday
@@ -614,6 +637,7 @@ def deleteRequest(request, class_name, tutor, student):
 
     student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
     toBeDeleted = ScheduleStudent.objects.filter(tutor=tutor1, student=student1, class_name=class_name, )
+    generateRejectionMsgToStudent(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
 
     return tutorRequests(request)
@@ -633,6 +657,11 @@ def CancelTutor(request, class_name, tutor, student):
     student1 = tutorMeUser.objects.get(first_name=first_nameS, last_name=last_nameS, is_tutor=False)
     toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
+
+    msg = Notification.objects.create(state=Notification.requestState.CAN, tutor=tutor1, student=student1,
+                                      class_name=class_name)
+    msg.save()
+
     return allAppointmentsTutor(request)
 
 
@@ -651,8 +680,11 @@ def CancelStudent(request, class_name, tutor, student):
     toBeDeleted = Appointment.objects.filter(tutor=tutor1, student=student1, class_name=class_name)
     toBeDeleted.delete()
 
-    return allAppointmentsStudent(request)
+    msg = Notification.objects.create(state=Notification.requestState.CAN, tutor=tutor1, student=student1,
+                                      class_name=class_name)
+    msg.save()
 
+    return allAppointmentsStudent(request)
 
 
 def allAppointmentsTutor(request):
@@ -755,7 +787,6 @@ def allAppointmentsStudent(request):
     return render(request, 'appointmentsStudent.html', {'list': list})
 
 
-
 def profile(request):
     user = request.user
     istutor = is_tutor(user)
@@ -767,7 +798,8 @@ def profile(request):
     phone = cur_user.phone_number
     contact = cur_user.preferred_contact
 
-    return render(request, 'view_profile.html', {'user': user, 'istutor': istutor, "phone": phone, 'contact': contact, 'first': first, "last": last})
+    return render(request, 'view_profile.html',
+                  {'user': user, 'istutor': istutor, "phone": phone, 'contact': contact, 'first': first, "last": last})
 
 
 def edit_profile(request):
@@ -788,8 +820,10 @@ def edit_profile(request):
     phone = cur_user.phone_number
     contact = cur_user.preferred_contact
 
-    context = {'form': form, 'istutor': istutor, 'user': user, "phone": phone, 'contact': contact, 'first': first, "last": last}
+    context = {'form': form, 'istutor': istutor, 'user': user, "phone": phone, 'contact': contact, 'first': first,
+               "last": last}
     return render(request, 'edit_profile.html', context)
+
 
 def StudentChat(request, tutor, student):
     checkifStudent(request)
@@ -805,14 +839,10 @@ def StudentChat(request, tutor, student):
     last_nameT = splitTutor[1]
     tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
-    messages = ChatMessage.objects.filter(sender=student_user, receiver=tutor_user) | \
-               ChatMessage.objects.filter(sender=tutor_user, receiver=student_user)
+    messages = ChatMessage.objects.filter(sender=student_user, receiver=tutor_user) | ChatMessage.objects.filter(
+        sender=tutor_user, receiver=student_user)
 
-    context = {
-        'user': student_user,
-        'other_user': tutor,
-        'messages': messages,
-    }
+    context = {'user': student_user, 'other_user': tutor, 'messages': messages, }
     if request.method == 'POST':
         content = request.POST.get('content')
         if content:
@@ -835,13 +865,9 @@ def TutorChat(request, tutor, student):
     last_nameT = splitTutor[1]
     tutor_user = tutorMeUser.objects.get(first_name=first_nameT, last_name=last_nameT, is_tutor=True)
 
-    messages = ChatMessage.objects.filter(sender=tutor_user, receiver=student_user) | \
-               ChatMessage.objects.filter(sender=student_user, receiver=tutor_user)
-    context = {
-        'user': tutor_user,
-        'other_user': student,
-        'messages': messages,
-    }
+    messages = ChatMessage.objects.filter(sender=tutor_user, receiver=student_user) | ChatMessage.objects.filter(
+        sender=student_user, receiver=tutor_user)
+    context = {'user': tutor_user, 'other_user': student, 'messages': messages, }
 
     if request.method == 'POST':
         content = request.POST.get('content')
@@ -894,14 +920,14 @@ def Tutor_chat_list(request):
     return render(request, 'TutorChat_list.html', {'unique_names': unique_names, 'tutor_name': tutor_name})
 
 
-
-
 def page_not_found_view(request, exception):
-    return render(request, '404.html', status=404) #taken from https://levelup.gitconnected.com/django-customize-404-error-page-72c6b6277317
+    return render(request, '404.html',
+                  status=404)  # taken from https://levelup.gitconnected.com/django-customize-404-error-page-72c6b6277317
+
 
 def send_to_home(request):
     if not isinstance(request.user, AnonymousUser):
-        Curr_user=tutorMeUser.objects.get(email=request.user.email)
+        Curr_user = tutorMeUser.objects.get(email=request.user.email)
         if Curr_user.is_tutor:
             return redirect("tutor")
         else:
@@ -922,14 +948,87 @@ def bug_report_view(request):
             bug_description = form.cleaned_data['bug_description']
             message = f"{fullName} with email: ({email}) has reported a bug: {bug_description}"
 
-            send_mail(f"Bug report by {fullName}",message, "settings.EMAIL_HOST_USER",["errorsherokututor@gmail.com"], fail_silently=False)
+            send_mail(f"Bug report by {fullName}", message, "settings.EMAIL_HOST_USER", ["errorsherokututor@gmail.com"],
+                      fail_silently=False)
             if name.is_tutor:
+                messages.success(request, 'Form submitted successfully!')
                 return redirect("tutor")
             else:
+                messages.success(request, 'Form submitted successfully!')
                 return redirect("student_default")
 
     else:
         form = BugReportForm()
-    return render(request, 'bug_report.html', {'form': form,"name":name})
+    return render(request, 'bug_report.html', {'form': form, "name": name})
 
+
+@login_required
+@user_passes_test(is_not_tutor)
+def allMessagesStudent(request):
+    student = tutorMeUser.objects.get(email=request.user.email)
+
+    notifications = Notification.objects.filter(student=student).order_by('-time')
+
+    msgs = []
+    for n in notifications:
+        msg = []
+
+        # print("State: ", n.state, " Tutor: ", n.tutor.first_name, " ClassName: ", n.class_name)
+
+        if n.state == "Rejected":
+            msg.append("Rejected")
+        elif n.state == "Accepted":
+            msg.append("Accepted")
+        elif n.state == "Canceled":
+            msg.append("Canceled")
+
+        fullName = n.tutor.first_name + ' ' + n.tutor.last_name
+        msg.append(fullName)
+        msg.append(n.class_name)
+        timeStr = ' at ' + str(n.time)[11:16] + ' on ' + str(n.time)[:10]
+        msg.append(timeStr)
+        msg.append(n.tutor)
+        msg.append(n.time)
+        msgs.append(msg)
+
+    return render(request, 'inboxStudent.html', {'msgs': msgs})
+
+
+@login_required
+@user_passes_test(is_tutor)
+def allMessagesTutor(request):
+    tutor = tutorMeUser.objects.get(email=request.user.email)
+
+    notifications = Notification.objects.filter(tutor=tutor).order_by('-time')
+
+
+    msgs = []
+    for n in notifications:
+        msg = []
+
+
+        # print("State: ", n.state, " Tutor: ", n.tutor.first_name, " ClassName: ", n.class_name)
+
+        if n.state == "Rejected":
+            msg.append("Rejected")
+            print("Rejected")
+        elif n.state == "Accepted":
+            msg.append("Accepted")
+            print("Accepted")
+        elif n.state == "Canceled":
+            msg.append("Canceled")
+            print("Canceled")
+
+        fullName = n.student.first_name + ' ' + n.student.last_name
+
+        msg.append(fullName)
+        msg.append(n.class_name)
+        timeStr = ' at ' + str(n.time)[11:16] + ' on ' + str(n.time)[:10]
+        msg.append(timeStr)
+
+        msg.append(n.student)
+        msg.append(n.time)
+        msgs.append(msg)
+
+    return render(request, 'inboxTutor.html', {'msgs': msgs})
 
