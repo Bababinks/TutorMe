@@ -16,6 +16,8 @@
 {% load static %}
 
 <link href="{% static 'tutorMe/homePage.css' %}" rel="stylesheet">
+<link href="{% static 'tutorMe/typeeffect.css' %}" rel="stylesheet">
+
 
 {% include "nav.html" %}
 
@@ -23,6 +25,15 @@
 <form action="/tutorMe/tutor/classes" class="form" method="POST">
     {% csrf_token %}
     <div class="container" style="font-family: 'Inter', sans-serif;">
+        <!-- /* Taken from */
+/* https://blog.hubspot.com/website/typing-animation-css#:~:text=How%20to%20Create%20a%20Typing%20Animation%20in%20CSS,cursor%20blink.%20...%205%20Center%20the%20text.%20 */
+/* sole purpose to have animation on home pages */ -->
+         <div class="cont">
+            <p class="typed" style="font-family: 'Inter', sans-serif; font-weight: bold; color: cornflowerblue;">
+                <text>Welcome to TutorMe.</text>
+                <text>Digitize your tutoring experience!</text>
+            </p>
+        </div>
         <div class="row justify-content-center align-items-center" style="height: 60vh;">
             <div class="col-lg-7">
                 <div class="input-group input-group-lg">
@@ -51,7 +62,7 @@
             </div>
             <div class="col">
                 <div>
-                   <i class="fa fa-calendar-check-o"> </i> &emsp;Choose hourly and availability!
+                    <i class="fa fa-calendar-check-o"> </i> &emsp;Choose hourly and availability!
                 </div>
                 <div>
 
