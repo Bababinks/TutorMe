@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-@rrwgn5#191&17
 # SECURITY WARNING: don't run with debug turned on in production!
 if platform.system() == 'Linux' and 'DYNO' in os.environ:
     # Running on Heroku, set DEBUG to False
-    DEBUG = False
+    DEBUG = True
     SECURE_SSL_REDIRECT=True
     ADMIN_ENABLED = False
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
