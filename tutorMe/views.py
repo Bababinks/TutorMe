@@ -422,7 +422,11 @@ def calendarStudent(request, tutor, name, mnemonic):
     if request.method == "POST":
         student = tutorMeUser.objects.get(email=request.user.email)
         tutor = tutorMeUser.objects.get(first_name=first_name, last_name=last_name, is_tutor=True)
-        schedule, created = ScheduleStudent.objects.get_or_create(student=student, tutor=tutor, class_name=full_name, )
+        schedule, created = ScheduleStudent.objects.get_or_create(
+            student=student,
+            tutor=tutor,
+            class_name=full_name,
+        )
 
         m = []
         tu = []
@@ -533,14 +537,13 @@ def generateAcceptanceMsgToStudent(student, tutor, class_name):
     msg.save()
 
 
-def deleteNotificationStudent(request, state, tutor, className, time):
+def deleteNotification(request, state, tutor, className,time):
     theEmail = request.user.email
     student = tutorMeUser.objects.get(email=theEmail)
-    toBeDeleted = Notification.objects.get(state=state, tutor__email=tutor, student=student, class_name=className,
-                                           time=time)
+    toBeDeleted=Notification.objects.get(state=state, tutor__email=tutor, student=student,
+                                      class_name=className, time=time)
     toBeDeleted.delete()
     return allMessagesStudent(request)
-
 
 def studentRequests(request):
     checkifStudent(request)
@@ -998,9 +1001,11 @@ def allMessagesTutor(request):
 
     notifications = Notification.objects.filter(tutor=tutor).order_by('-time')
 
+
     msgs = []
     for n in notifications:
         msg = []
+
 
         # print("State: ", n.state, " Tutor: ", n.tutor.first_name, " ClassName: ", n.class_name)
 
@@ -1027,26 +1032,3 @@ def allMessagesTutor(request):
 
     return render(request, 'inboxTutor.html', {'msgs': msgs})
 
-
-@login_required
-@user_passes_test(is_not_tutor)
-def checkEnvelopeStudent(request):
-    envelope = []
-    student = tutorMeUser.objects.get(email=request.user.email)
-    n = Notification.objects.filter(student=student)
-    if len(n) > 0:
-        envelope.append('on')
-
-    return render(request, 'navStudent.html', {'envelope', envelope})
-
-
-@login_required
-@user_passes_test(is_tutor)
-def checkEnvelopeTutor(request):
-    envelope = []
-    tutor = tutorMeUser.objects.get(email=request.user.email)
-    n = Notification.objects.filter(tutor=tutor)
-    if len(n) > 0:
-        envelope.append('on')
-
-    return render(request, 'nav.html', {'envelope', envelope})
